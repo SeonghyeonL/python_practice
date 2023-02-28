@@ -66,10 +66,91 @@ for m in range(M):
         b[idx] = k
 for n in range(N):
     print(b[n], end=" ")
-"""
+
 
 # 10813
 
 import sys
 input = sys.stdin.readline
+N, M = map(int, input().split())
+b = []
+temp = 0
+for n in range(N):
+    b.append(n+1)
+for m in range(M):
+    i, j = map(int, input().split())
+    temp = b[i-1]
+    b[i-1] = b[j-1]
+    b[j-1] = temp
+for n in range(N):
+    print(b[n], end=" ")
+
+
+# 5597
+
+import sys
+input = sys.stdin.readline
+b = []
+temp = 0
+for i in range(30):
+    b.append(0)
+for i in range(28):
+    temp = int(input())
+    b[temp-1] = 1
+for i in range(30):
+    if b[i]==0: print(i+1)
+
+
+# 3052
+
+import sys
+input = sys.stdin.readline
+a = []
+temp = 0
+cnt = 0
+for i in range(42):
+    a.append(0)
+for i in range(10):
+    temp = int(input())
+    a[temp%42] = 1
+for i in range(42):
+    if a[i]==1: cnt += 1
+print(cnt)
+
+
+# 10811
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+a = []
+temp = 0
+for n in range(N):
+    a.append(n+1)
+for m in range(M):
+    i, j = map(int, input().split())
+    while i < j:
+        temp = a[i-1]
+        a[i-1] = a[j-1]
+        a[j-1] = temp
+        i += 1
+        j -= 1
+for n in range(N):
+    print(a[n], end=" ")
+"""
+
+# 1546
+
+import sys
+input = sys.stdin.readline
+n = int(input())
+score = list(map(int, input().split()))
+max = -1
+sum = 0
+for i in range(n):
+    if score[i]>max: max = score[i]
+for i in range(n):
+    sum += score[i] / max * 100
+print(sum/n)
+
 
