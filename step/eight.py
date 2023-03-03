@@ -43,13 +43,73 @@ if V > A:
     if (V-A)%(A-B)==0: day = temp + 1
     else: day = temp + 2
 print(day)
-"""
+
 
 # 10250
 
 import sys
 input = sys.stdin.readline
+T = int(input())
+for t in range(T):
+    H, W, N = map(int, input().split())
+    h = (N-1) % H + 1
+    w = (N-1) // H + 1
+    print(h*100+w)
 
 
+# 2775
 
-# https://www.acmicpc.net/step/8
+a = []
+for i in range(15):
+    list = []
+    list.append(1)
+    if i == 0:
+        for j in range(2, 15):
+            list.append(j)
+    else:
+        for j in range(2, 15):
+            list.append(0)
+    a.append(list)
+
+def apart(k, n):
+    if a[k][n] == 0:
+        a[k][n] = apart(k, n-1) + apart(k-1, n)
+    return a[k][n]
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+for t in range(T):
+    k = int(input())    # k층
+    n = int(input())    # n호
+    # 3층) 1 / 5 / 15 / 35 / 70
+    # 2층) 1 / 4 / 10 / 20 / 35
+    # 1층) 1 / 3 /  6 / 10 / 15
+    # 0층) 1 / 2 /  3 /  4 /  5
+    print(apart(k, n-1))
+
+
+# 2839
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+five = N//5
+cant = False
+while True:
+    if (N-five*5)%3 == 0: break
+    else: five -= 1
+    if five<0:
+        cant = True
+        break
+if cant: print(-1)
+else: print(int(five+(N-five*5)/3))
+"""
+
+# 10757
+
+import sys
+input = sys.stdin.readline
+A, B = map(int, input().split())
+print(A+B)
+
