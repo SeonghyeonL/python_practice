@@ -196,15 +196,128 @@ for i in range(len(N)):
 lst.sort(reverse=True)
 for i in range(len(N)):
     print(lst[i], end="")
-"""
+
 
 # 11650
 
 import sys
 input = sys.stdin.readline
 N = int(input())
+a = []
 for n in range(N):
     x, y = map(int, input().split())
+    a.append((x, y))
+a.sort(key=lambda tu: (tu[0], tu[1]))
+for n in range(N):
+    print(a[n][0], a[n][1])
 
 
+# 11651
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+a = []
+for n in range(N):
+    x, y = map(int, input().split())
+    a.append((x, y))
+a.sort(key=lambda tu: (tu[1], tu[0]))
+for n in range(N):
+    print(a[n][0], a[n][1])
+
+
+# 1181
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+a = []
+for n in range(N):
+    temp = input().strip()
+    if temp not in a:
+        a.append(temp)
+a.sort()
+a.sort(key=len)
+for n in range(len(a)):
+    print(a[n])
+
+
+# 10814
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+a = []
+for n in range(N):
+    x, y = map(str, input().strip().split())
+    x = int(x)
+    a.append((x, y))
+a.sort(key=lambda tu: tu[0])
+for n in range(N):
+    print(a[n][0], a[n][1])
+
+
+# 18870
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+X = list(map(int, input().split()))
+X2 = sorted(X)
+dic = {}
+cnt = 0
+for i in range(N):
+    if X2[i] not in dic.keys():
+        dic[X2[i]] = cnt
+        cnt += 1
+for i in range(N):
+    print(dic[X[i]], end=" ")
+
+
+# -----------------------------------
+# twelve
+
+
+# 10872
+
+res = [1]
+for i in range(12):
+    res.append(0)
+
+def fac(N):
+    if res[N] != 0: return res[N]
+    else: return fac(N-1)*N
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+print(fac(N))
+
+
+# 10870
+
+res = [0, 1]
+for i in range(20):
+    res.append(-1)
+
+def fib(N):
+    if res[N] == -1: res[N] = fib(N-2)+fib(N-1)
+    return res[N]
+
+import sys
+input = sys.stdin.readline
+n = int(input())
+print(fib(n))
+"""
+
+# 25501
+
+import sys
+input = sys.stdin.readline
+
+
+
+
+
+# https://www.acmicpc.net/step/19
 
