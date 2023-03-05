@@ -328,17 +328,102 @@ for t in range(T):
     S = input().strip()
     temp = isPalindrome(S)
     print(temp[0], temp[1])
-"""
+
 
 # 24060
+
+def merge_sort(A, p, r, cnt):
+    if p<r:
+        q = int((p+r)/2)
+        cnt1 = merge_sort(A, p, q, cnt)
+        cnt2 = merge_sort(A, q+1, r, cnt1)
+        cnt = merge(A, p, q, r, cnt2)
+    return cnt
+
+def merge(A, p, q, r, cnt):
+    i, j = p, q+1
+    temp = []
+    while i<=q and j<=r:
+        if A[i]<=A[j]:
+            temp.append(A[i])
+            i += 1
+        else:
+            temp.append(A[j])
+            j += 1
+    while i<=q:
+        temp.append(A[i])
+        i += 1
+    while j<=r:
+        temp.append(A[j])
+        j += 1
+    i, t = p, 0
+    while i<=r:
+        A[i] = temp[t]
+        cnt += 1
+        if cnt == K: print(temp[t])
+        i += 1
+        t += 1
+    return cnt
 
 import sys
 input = sys.stdin.readline
 N, K = map(int, input().split())
 A = list(map(int, input().split()))
+cnt = 0
+cnt = merge_sort(A, 0, N-1, cnt)
+if cnt < K: print(-1)
 
 
+# 2447
 
+def makestar(star, A, B, n):
+    step = int(n/3)
+    for a in range(A+step, A+2*step):
+        for b in range(B+step, B+2*step):
+            star[a][b] = 0
+    if step>1:
+        makestar(star, A, B, step)
+        makestar(star, A, B+step, step)
+        makestar(star, A, B+2*step, step)
+        makestar(star, A+step, B, step)
+        makestar(star, A+step, B+2*step, step)
+        makestar(star, A+2*step, B, step)
+        makestar(star, A+2*step, B+step, step)
+        makestar(star, A+2*step, B+2*step, step)
 
-# https://www.acmicpc.net/step/19
+import sys
+input = sys.stdin.readline
+N = int(input())
+star = []
+for i in range(N):
+    temp = []
+    for j in range(N):
+        temp.append(1)
+    star.append(temp)
+makestar(star, 0, 0, N)
+for i in range(N):
+    for j in range(N):
+        if star[i][j]==1: print("*", end="")
+        else: print(" ", end="")
+    print()
+"""
+
+# 11729
+
+def hanoi(now, to, temp, n):
+    if n == 1:
+        print(now, to)
+    else:
+        hanoi(now, temp, to, n-1)
+        hanoi(now, to, temp, 1)
+        hanoi(temp, to, now, n-1)
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+sum = 1
+for _ in range(1, N):
+    sum = sum * 2 + 1
+print(sum)
+hanoi(1, 3, 2, N)
 
