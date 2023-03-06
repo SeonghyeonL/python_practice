@@ -109,7 +109,7 @@ while cnt<N:
     if '666' in str(num): cnt += 1
     num += 1
 print(num-1)
-"""
+
 
 # -----------------------------------
 # fourteen
@@ -119,9 +119,178 @@ print(num-1)
 
 import sys
 input = sys.stdin.readline
+N = int(input())
+card = list(map(int, input().split()))
+card.sort()
+M = int(input())
+test = list(map(int, input().split()))
+for m in range(M):
+    start = 0
+    end = N-1
+    find = False
+    while start<=end:
+        i = int((start + end) / 2)
+        if test[m]==card[i]:
+            find = True
+            break
+        elif test[m]<card[i]: end = i-1
+        elif test[m]>card[i]: start = i+1
+    if find==True: print(1, end=" ")
+    else: print(0, end=" ")
+
+
+# 14425
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+S = []
+cnt = 0
+for _ in range(N):
+    temp = input().strip()
+    S.append(temp)
+S.sort()
+for _ in range(M):
+    temp = input().strip()
+    start = 0
+    end = N - 1
+    find = False
+    while start <= end:
+        i = int((start + end) / 2)
+        if temp == S[i]:
+            cnt += 1
+            break
+        elif temp < S[i]:
+            end = i - 1
+        elif temp > S[i]:
+            start = i + 1
+print(cnt)
+
+
+# 1620
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+mon_1 = []
+mon_2 = []
+for n in range(N):
+    temp = input().strip()
+    mon_1.append((n+1, temp))  # num, name
+    mon_2.append((temp, n+1))  # name, num
+mon_2.sort()
+for _ in range(M):
+    temp = input().strip()
+    if temp[0]>="1" and temp[0]<="9":   # number -> name
+        temp = int(temp)
+        print(mon_1[temp-1][1])
+    else:                               # name -> number
+        start = 0
+        end = N-1
+        while start <= end:
+            i = int((start + end) / 2)
+            if temp == mon_2[i][0]:
+                print(mon_2[i][1])
+                break
+            elif temp < mon_2[i][0]:
+                end = i - 1
+            elif temp > mon_2[i][0]:
+                start = i + 1
+
+
+# 10816
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+card = list(map(int, input().split()))
+card2 = {}
+for n in range(N):
+    if card2.get(card[n])==None: card2[card[n]] = 1
+    else: card2[card[n]] += 1
+M = int(input())
+test = list(map(int, input().split()))
+for m in range(M):
+    if card2.get(test[m])==None: print(0, end=" ")
+    else: print(card2[test[m]], end=" ")
+
+
+# 1764
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+hear = []
+for _ in range(N):
+    temp = input().strip()
+    hear.append(temp)
+hear.sort()
+res = []
+for _ in range(M):
+    temp = input().strip()
+    start = 0
+    end = N - 1
+    while start <= end:
+        i = int((start + end) / 2)
+        if temp == hear[i]:
+            res.append(temp)
+            break
+        elif temp < hear[i]:
+            end = i - 1
+        elif temp > hear[i]:
+            start = i + 1
+res.sort()
+print(len(res))
+for i in range(len(res)): print(res[i])
+
+
+# 1269
+
+import sys
+input = sys.stdin.readline
+Anum, Bnum = map(int, input().split())
+A = list(map(int, input().split()))
+B = list(map(int, input().split()))
+A.sort()
+B.sort()
+AandB = 0
+for bnum in range(Bnum):
+    start = 0
+    end = Anum - 1
+    while start <= end:
+        i = int((start + end) / 2)
+        if B[bnum] == A[i]:
+            AandB += 1
+            break
+        elif B[bnum] < A[i]:
+            end = i - 1
+        elif B[bnum] > A[i]:
+            start = i + 1
+print(Anum+Bnum-2*AandB)
+
+# 11478
+
+import sys
+input = sys.stdin.readline
+S = input().strip()
+res = set()
+for i in range(len(S)):
+    for j in range(i, len(S)):
+        res.add(S[i:j+1])
+print(len(res))
+"""
+
+# -----------------------------------
+# fifteen
+
+
+# 1085
+
+import sys
+input = sys.stdin.readline
 
 
 
-# https://www.acmicpc.net/step/49
 
+# https://www.acmicpc.net/step/50
 
