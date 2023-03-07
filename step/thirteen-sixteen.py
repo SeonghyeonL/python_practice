@@ -375,16 +375,130 @@ for _ in range(T):
         if one==True and two==False: res += 1
         elif one==False and two==True: res += 1
     print(res)
-"""
+
 
 # -----------------------------------
 # sixteen
 
 
-# 5086
+# 15649
+
+def backtracking(num):
+    if num == M:
+        print(' '.join(map(str, result)))
+    else:
+        for i in range(1, 1+N):
+            if visited[i] == False:
+                visited[i] = True
+                result.append(i)
+                backtracking(num+1)
+                visited[i] = False
+                result.pop()
 
 import sys
+sys.setrecursionlimit(10**6)    # 재귀 깊이 제한 늘려서 런타임 에러 방지
 input = sys.stdin.readline
+N, M = map(int, input().split())
+result = []
+visited = [False] * (N+1)
+backtracking(0)
+
+
+# 15650
+
+def backtracking(cnt, start):
+    if cnt == M:
+        print(' '.join(map(str, result)))
+    else:
+        for i in range(start, 1+N):
+            if visited[i] == False:
+                visited[i] = True
+                result.append(i)
+                backtracking(cnt+1, i+1)
+                visited[i] = False
+                result.pop()
+
+import sys
+sys.setrecursionlimit(10**6)
+input = sys.stdin.readline
+N, M = map(int, input().split())
+result = []
+visited = [False] * (N+1)
+backtracking(0, 1)
+
+
+# 15651
+
+def backtracking(cnt):
+    if cnt == M:
+        print(' '.join(map(str, result)))
+    else:
+        for i in range(1, N+1):
+            result.append(i)
+            backtracking(cnt+1)
+            result.pop()
+
+import sys
+sys.setrecursionlimit(10**6)
+input = sys.stdin.readline
+N, M = map(int, input().split())
+result = []
+backtracking(0)
+
+
+# 15652
+
+def backtracking(cnt, start):
+    if cnt == M:
+        print(' '.join(map(str, result)))
+    else:
+        for i in range(start, N+1):
+            result.append(i)
+            backtracking(cnt+1, i)
+            result.pop()
+
+import sys
+sys.setrecursionlimit(10**6)
+input = sys.stdin.readline
+N, M = map(int, input().split())
+result = []
+backtracking(0, 1)
+"""
+
+# 9663
+
+def backtracking(col):
+    if col == N+1:
+        global total
+        total += 1
+    else:
+        for i in range(1, 1+N):
+            chess[col] = i
+            if col == 1:
+                backtracking(col+1)
+            else:
+                check = True
+                for j in range(1, col):
+                    if chess[i]==chess[j] or abs(i-j)==abs(chess[i]-chess[j]):
+                        check = False
+                if check == True:
+                    backtracking(col+1)
+        chess[col] = 0
+
+import sys
+sys.setrecursionlimit(10**6)
+input = sys.stdin.readline
+N = int(input())
+chess = [0] * 16
+# NxN 체스판 위에 퀸 N개이므로 한 열에 하나씩만 두어야 함
+# chess에 저장하는 건 해당 열의 행 값 (0 제외, 1 ~ 15)
+total = 0
+backtracking(1)
+print(total)
 
 
 
+
+
+
+# https://www.acmicpc.net/step/34
