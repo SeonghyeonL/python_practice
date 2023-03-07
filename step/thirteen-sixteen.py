@@ -463,7 +463,7 @@ input = sys.stdin.readline
 N, M = map(int, input().split())
 result = []
 backtracking(0, 1)
-"""
+
 
 # 9663
 
@@ -473,30 +473,36 @@ def backtracking(col):
         total += 1
     else:
         for i in range(1, 1+N):
-            chess[col] = i
-            if col == 1:
-                backtracking(col+1)
-            else:
+            if row[i] == False:
+                chess[col] = i
+                row[i] = True
                 check = True
                 for j in range(1, col):
-                    if chess[i]==chess[j] or abs(i-j)==abs(chess[i]-chess[j]):
+                    if col-j == abs(chess[col]-chess[j]):
                         check = False
+                        break
                 if check == True:
                     backtracking(col+1)
-        chess[col] = 0
+                row[i] = False
+            chess[col] = 0
 
 import sys
 sys.setrecursionlimit(10**6)
 input = sys.stdin.readline
 N = int(input())
-chess = [0] * 16
+chess = [0] * (N+1)
+row = [False] * (N+1)
+total = 0
 # NxN 체스판 위에 퀸 N개이므로 한 열에 하나씩만 두어야 함
 # chess에 저장하는 건 해당 열의 행 값 (0 제외, 1 ~ 15)
-total = 0
 backtracking(1)
 print(total)
+"""
 
+# 2580
 
+import sys
+input = sys.stdin.readline
 
 
 
