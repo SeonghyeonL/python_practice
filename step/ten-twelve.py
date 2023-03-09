@@ -54,6 +54,7 @@ n = int(input())
 print(n*n*n)
 print(3)
 
+
 # 24267
 
 # O(n*(n-1)*(n-2)/6)

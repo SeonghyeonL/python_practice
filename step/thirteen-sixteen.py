@@ -282,7 +282,7 @@ print(len(res))
 
 
 # -----------------------------------
-# fifteen
+# sixteen
 
 
 # 1085
@@ -378,7 +378,7 @@ for _ in range(T):
 
 
 # -----------------------------------
-# sixteen
+# seventeen
 
 
 # 15649
@@ -487,7 +487,6 @@ def backtracking(col):
             chess[col] = 0
 
 import sys
-sys.setrecursionlimit(10**6)
 input = sys.stdin.readline
 N = int(input())
 chess = [0] * (N+1)
@@ -497,14 +496,125 @@ total = 0
 # chess에 저장하는 건 해당 열의 행 값 (0 제외, 1 ~ 15)
 backtracking(1)
 print(total)
-"""
+
 
 # 2580
 
+def checkrowcol(x, y, a):
+    for b in range(9):
+        if total[x][b] == a or total[b][y] == a:
+            return False
+    return True
+
+def check3by3(x, y, a):
+    x = (x // 3) * 3    # 0 1 2 / 3 4 5 / 6 7 8
+    y = (y // 3) * 3
+    for b in range(3):
+        for c in range(3):
+            if total[x+b][y+c] == a:
+                return False
+    return True
+
+def backtracking(idx):
+    if idx == len(zero):
+        for a in range(9):
+            print(' '.join(map(str, total[a])))
+        exit(0)
+    else:
+        x = zero[idx][0]
+        y = zero[idx][1]
+        okay = True
+        for a in range(10):
+            if checkrowcol(x, y, a) and check3by3(x, y, a):
+                total[x][y] = a
+                backtracking(idx+1)
+                total[x][y] = 0
+
 import sys
 input = sys.stdin.readline
+zero = []   # [row, col]
+total = []
+for i in range(9):
+    temp = list(map(int, input().split()))
+    total.append(temp)
+    for j in range(9):
+        if temp[j] == 0:
+            zero.append([i, j])
+backtracking(0)
 
 
+# 14888
 
+def cal(idx, temp):
+    if idx == N:
+        global max
+        global min
+        if temp > max: max = temp
+        if temp < min: min = temp
+    else:
+        if num[0] > 0:
+            num[0] -= 1
+            cal(idx+1, temp+A[idx])
+            num[0] += 1
+        if num[1] > 0:
+            num[1] -= 1
+            cal(idx + 1, temp - A[idx])
+            num[1] += 1
+        if num[2] > 0:
+            num[2] -= 1
+            cal(idx + 1, temp * A[idx])
+            num[2] += 1
+        if num[3] > 0:
+            num[3] -= 1
+            if temp < 0:
+                cal(idx + 1, -1 * (abs(temp) // A[idx]))
+            else:
+                cal(idx + 1, abs(temp) // A[idx])
+            num[3] += 1
 
-# https://www.acmicpc.net/step/34
+import sys
+input = sys.stdin.readline
+N = int(input())
+A = list(map(int, input().split()))
+num = list(map(int, input().split()))
+max = -1000000000
+min = 1000000000
+cal(1, A[0])
+print(max)
+print(min)
+"""
+
+# 14889
+
+def cal(idx):
+    if idx == N:
+        global min
+        gradeA, gradeB = 0, 0
+        for i in range(int(N/2)):
+            for j in range(i+1, int(N/2)):
+                gradeA += S[teamA[i]][teamA[j]] + S[teamA[j]][teamA[i]]
+                gradeB += S[teamB[i]][teamB[j]] + S[teamB[j]][teamB[i]]
+        if abs(gradeA-gradeB) < min: min = abs(gradeA-gradeB)
+    else:
+        if len(teamA) < N/2:
+            teamA.append(idx)
+            cal(idx+1)
+            teamA.pop(-1)
+        if len(teamB) < N/2:
+            teamB.append(idx)
+            cal(idx+1)
+            teamB.pop(-1)
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+S = []
+for _ in range(N):
+    temp = list(map(int, input().split()))
+    S.append(temp)
+min = 100
+teamA = []
+teamB = []
+cal(0)
+print(min)
+

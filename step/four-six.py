@@ -162,12 +162,13 @@ print(sum/n)
 # five
 
 
-# 11654
+# 27866
 
 import sys
 input = sys.stdin.readline
-given = input().strip()
-print(ord(given))
+S = input().strip()
+i = int(input())
+print(S[i-1])
 
 
 # 2743
@@ -189,6 +190,14 @@ for i in range(T):
     res += given[0]
     res += given[len(given)-1]
     print(res)
+
+
+# 11654
+
+import sys
+input = sys.stdin.readline
+given = input().strip()
+print(ord(given))
 
 
 # 11720
@@ -471,4 +480,5 @@ for i in range(20):
     elif grade == 'D0': sum += 1.0 * int_time
     elif grade == 'P': time_sum -= int_time
 print(sum / time_sum)
+
 
