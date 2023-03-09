@@ -326,14 +326,194 @@ hanoi(1, 3, 2, N)
 
 # -----------------------------------
 # fifteen
-"""
-
-#
 
 
+# 1934
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+for _ in range(T):
+    A, B = map(int, input().split())
+    small = min(A, B)
+    large = max(A, B)
+    lst = []
+    for i in range(1, int(small**0.5)+1):
+        if small % i == 0:
+            lst.append(i)
+            if i != small / i:
+                lst.append(small/i)
+    lst.sort(reverse=True)
+    for i in range(0, len(lst)):
+        if large % lst[i] == 0:
+            print(int(lst[i]*(A/lst[i])*(B/lst[i])))
+            break
 
 
-"""
+# 13241
+
+import sys
+input = sys.stdin.readline
+A, B = map(int, input().split())
+small = min(A, B)
+large = max(A, B)
+lst = []
+for i in range(1, int(small**0.5)+1):
+    if small % i == 0:
+        lst.append(i)
+        if i != small / i:
+            lst.append(small/i)
+lst.sort(reverse=True)
+for i in range(0, len(lst)):
+    if large % lst[i] == 0:
+        print(int(lst[i]*(A/lst[i])*(B/lst[i])))
+        break
+
+
+# 1735
+
+def findmax(a, b):
+    small = min(a, b)
+    large = max(a, b)
+    temp = []
+    for j in range(1, int(small ** 0.5) + 1):
+        if small % j == 0:
+            temp.append(j)
+            if j != small / j:
+                temp.append(small / j)
+    temp.sort(reverse=True)
+    for j in range(0, len(temp)):
+        if large % temp[j] == 0:
+            return temp[j]
+
+import sys
+input = sys.stdin.readline
+A = list(map(int, input().split()))
+B = list(map(int, input().split()))
+found = findmax(A[1], B[1])
+temp1 = int(found*(A[1]/found)*(B[1]/found))
+temp2 = int(A[0]*(B[1]/found)+B[0]*(A[1]/found))
+found2 = findmax(temp1, temp2)
+temp1 = int(temp1/found2)
+temp2 = int(temp2/found2)
+print(temp2, temp1)
+
+
+# 2485
+
+def findmax(a, b):
+    small = min(a, b)
+    large = max(a, b)
+    lst = []
+    for j in range(1, int(small ** 0.5) + 1):
+        if small % j == 0:
+            lst.append(j)
+            if j != small / j:
+                lst.append(small / j)
+    lst.sort(reverse=True)
+    for j in range(0, len(lst)):
+        if large % lst[j] == 0:
+            return lst[j]
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+tree = []
+dis = []
+for n in range(N):
+    temp = int(input())
+    tree.append(temp)
+    if n > 0:
+        dis.append(tree[n]-tree[n-1])
+maxdis = 1000000000
+for n in range(N-2):
+    maxtemp = findmax(dis[n], dis[n+1])
+    if maxtemp < maxdis: maxdis = maxtemp
+res = 0
+for n in range(N-1):
+    res += dis[n]/maxdis - 1
+print(int(res))
+
+
+# 4134
+
+def isprime(n):
+    if n == 0 or n == 1:
+        return False
+    else:
+        for i in range(2, int(n**0.5)+1):
+            if n%i==0: return False
+        return True
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+for _ in range(T):
+    n = int(input())
+    while isprime(n) == False:
+        n += 1
+    print(n)
+
+
+# 1929
+
+def isprime(n):
+    if n == 0 or n == 1:
+        return False
+    else:
+        for i in range(2, int(n ** 0.5) + 1):
+            if n % i == 0:
+                return False
+        return True
+
+import sys
+input = sys.stdin.readline
+M, N = map(int, input().split())
+for mn in range(M, N+1):
+    if isprime(mn):
+        print(mn)
+
+
+# 4948
+
+def isprime(n):
+    if n == 0 or n == 1:
+        return False
+    else:
+        for i in range(2, int(n ** 0.5) + 1):
+            if n % i == 0:
+                return False
+        return True
+
+import sys
+input = sys.stdin.readline
+n = int(input())
+while n != 0:
+    cnt = 0
+    for m in range(n+1, 2*n+1):
+        if isprime(m): cnt += 1
+    print(cnt)
+    n = int(input())
+
+
+# 17103
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+check = [False, False]
+check += [True] * 1000000
+for i in range(2, 1000001):
+    if check[i] == True:
+        for j in range(2*i, 1000001, i): check[j] = False
+for _ in range(T):
+    N = int(input())
+    ans = 0
+    for n in range(2, int(N/2)+1):
+        if check[n] and check[N-n]: ans += 1
+    print(ans)
+
+
 # -----------------------------------
 # sixteen
 
@@ -635,7 +815,7 @@ min = 1000000000
 cal(1, A[0])
 print(max)
 print(min)
-
+"""
 
 # 14889
 
@@ -670,5 +850,5 @@ teamA = []
 teamB = []
 cal(0)
 print(min)
-"""
+
 
