@@ -279,152 +279,128 @@ for i in range(N):
 # twelve
 
 
-# 10872
+# 2798
 
-res = [1]
-for i in range(12):
-    res.append(0)
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+cards = list(map(int, input().split()))
+max = 0
+for i in range(len(cards)):
+    for j in range(i+1, len(cards)):
+        for k in range(j+1, len(cards)):
+            if cards[i]+cards[j]+cards[k]>max and cards[i]+cards[j]+cards[k]<=M:
+                max = cards[i]+cards[j]+cards[k]
+print(max)
 
-def fac(N):
-    if res[N] != 0: return res[N]
-    else: return fac(N-1)*N
+
+# 2231
 
 import sys
 input = sys.stdin.readline
 N = int(input())
-print(fac(N))
+found = False
+for i in range(N):
+    sum = i
+    temp2 = i
+    if temp2 >= 10:
+        while temp2>9:
+            sum += temp2%10
+            temp2 = temp2//10
+    sum += temp2
+    if sum == N:
+        print(i)
+        found = True
+        break
+if found==False: print(0)
 
 
-# 10870
-
-res = [0, 1]
-for i in range(20):
-    res.append(-1)
-
-def fib(N):
-    if res[N] == -1: res[N] = fib(N-2)+fib(N-1)
-    return res[N]
-
-import sys
-input = sys.stdin.readline
-n = int(input())
-print(fib(n))
-
-
-# 25501
-
-def recursion(s, l, r, cnt):
-    cnt += 1
-    if l >= r: return 1, cnt
-    elif s[l] != s[r]: return 0, cnt
-    else: return recursion(s, l+1, r-1, cnt)
-
-def isPalindrome(s):
-    return recursion(s, 0, len(s)-1, 0)
+# 7568
 
 import sys
 input = sys.stdin.readline
-T = int(input())
-for t in range(T):
-    S = input().strip()
-    temp = isPalindrome(S)
-    print(temp[0], temp[1])
+N = int(input())
+people = []
+for _ in range(N):
+    x, y = map(int, input().split())
+    people.append([x, y])
+for n in range(N):
+    cnt = 0
+    for i in range(N):
+        if i==n: continue
+        if people[n][0]<people[i][0] and people[n][1]<people[i][1]: cnt += 1
+    print(cnt+1, end=" ")
 
 
-# 24060
+# 1018
 
-def merge_sort(A, p, r, cnt):
-    if p<r:
-        q = int((p+r)/2)
-        cnt1 = merge_sort(A, p, q, cnt)
-        cnt2 = merge_sort(A, q+1, r, cnt1)
-        cnt = merge(A, p, q, r, cnt2)
+def whitecheck(board, a, b):
+    cnt = 0
+    for A in range(a, a+8, 2):
+        for B in range(b, b+8):
+            if B%2==0 and board[A][B]=='B': cnt += 1
+            elif B%2==1 and board[A][B]=='W': cnt += 1
+    for A in range(a+1, a+8, 2):
+        for B in range(b, b+8):
+            if B%2==0 and board[A][B]=='W': cnt += 1
+            elif B%2==1 and board[A][B]=='B': cnt += 1
     return cnt
 
-def merge(A, p, q, r, cnt):
-    i, j = p, q+1
-    temp = []
-    while i<=q and j<=r:
-        if A[i]<=A[j]:
-            temp.append(A[i])
-            i += 1
-        else:
-            temp.append(A[j])
-            j += 1
-    while i<=q:
-        temp.append(A[i])
-        i += 1
-    while j<=r:
-        temp.append(A[j])
-        j += 1
-    i, t = p, 0
-    while i<=r:
-        A[i] = temp[t]
-        cnt += 1
-        if cnt == K: print(temp[t])
-        i += 1
-        t += 1
+def blackcheck(board, a, b):
+    cnt = 0
+    for A in range(a, a+8, 2):
+        for B in range(b, b+8):
+            if B%2==0 and board[A][B]=='W': cnt += 1
+            elif B%2==1 and board[A][B]=='B': cnt += 1
+    for A in range(a+1, a+8, 2):
+        for B in range(b, b+8):
+            if B%2==0 and board[A][B]=='B': cnt += 1
+            elif B%2==1 and board[A][B]=='W': cnt += 1
     return cnt
 
 import sys
 input = sys.stdin.readline
-N, K = map(int, input().split())
-A = list(map(int, input().split()))
+N, M = map(int, input().split())
+board = []
+for _ in range(N):
+    temp = input().strip()
+    board.append(temp)
+minimal = 64
+for a in range(N-7):
+    for b in range(M-7):
+        cnt = min(whitecheck(board, a, b), blackcheck(board, a, b))
+        if cnt<minimal: minimal = cnt
+print(minimal)
+
+
+# 1436
+
+import sys
+input = sys.stdin.readline
+N = int(input())
 cnt = 0
-cnt = merge_sort(A, 0, N-1, cnt)
-if cnt < K: print(-1)
-
-
-# 2447
-
-def makestar(star, A, B, n):
-    step = int(n/3)
-    for a in range(A+step, A+2*step):
-        for b in range(B+step, B+2*step):
-            star[a][b] = 0
-    if step>1:
-        makestar(star, A, B, step)
-        makestar(star, A, B+step, step)
-        makestar(star, A, B+2*step, step)
-        makestar(star, A+step, B, step)
-        makestar(star, A+step, B+2*step, step)
-        makestar(star, A+2*step, B, step)
-        makestar(star, A+2*step, B+step, step)
-        makestar(star, A+2*step, B+2*step, step)
-
-import sys
-input = sys.stdin.readline
-N = int(input())
-star = []
-for i in range(N):
-    temp = []
-    for j in range(N):
-        temp.append(1)
-    star.append(temp)
-makestar(star, 0, 0, N)
-for i in range(N):
-    for j in range(N):
-        if star[i][j]==1: print("*", end="")
-        else: print(" ", end="")
-    print()
+num = 666
+while cnt<N:
+    if '666' in str(num): cnt += 1
+    num += 1
+print(num-1)
 """
 
-# 11729
-
-def hanoi(now, to, temp, n):
-    if n == 1:
-        print(now, to)
-    else:
-        hanoi(now, temp, to, n-1)
-        hanoi(now, to, temp, 1)
-        hanoi(temp, to, now, n-1)
+# 2839
 
 import sys
 input = sys.stdin.readline
 N = int(input())
-sum = 1
-for _ in range(1, N):
-    sum = sum * 2 + 1
-print(sum)
-hanoi(1, 3, 2, N)
+temp = N // 5
+while True:
+    cal = N - temp * 5
+    if cal % 3 == 0:
+        print(temp + int(cal / 3))
+        exit(0)
+    else:
+        temp -= 1
+        if temp < 0:
+            print(-1)
+            exit(0)
+
 
