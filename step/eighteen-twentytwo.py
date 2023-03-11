@@ -168,20 +168,183 @@ for i in range(1, N+1):
         elif i % 2 == 0: cnt[i] = min(cnt[i-1], cnt[i//2]) + 1
         else: cnt[i] = cnt[i-1] + 1
 print(cnt[N])
-"""
+
 
 # 10844
 
 import sys
 input = sys.stdin.readline
+# 9 / 17 ; 10 12 21 23 32 34 43 45 54 56 65 67 76 78 87 89 '98'
+# 32 ; '101' 121 123 210 212 232 234 ... 876 878 '898' 987 989
+# 0 or 9 -> 1개만
 N = int(input())
+stair = []
+for i in range(N+1):
+    if i == 1: temp = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    else: temp = [0] * 10
+    stair.append(temp)
+for i in range(2, N+1):
+    for j in range(10):
+        if j == 0: stair[i][j] = stair[i-1][j+1]
+        elif j == 9: stair[i][j] = stair[i-1][j-1]
+        else: stair[i][j] = (stair[i-1][j-1] + stair[i-1][j+1]) % 1000000000
+ans = 0
+for i in range(1, 10):
+    ans = (ans + stair[N][i]) % 1000000000
+print(ans % 1000000000)
+
+
+# 2156
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+grape = [[0, 0, 0]]  # 0(not), 1(first), 2(last)
+for n in range(N):
+    temp = int(input())
+    zero = max(grape[n][0], grape[n][1], grape[n][2])
+    one = grape[n][0] + temp
+    two = grape[n][1] + temp
+    grape.append([zero, one, two])
+print(max(grape[N][0], grape[N][1], grape[N][2]))
+
+
+# 11053
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+A = list(map(int, input().split()))
+res = [0] * N
+res[0] = 1
+for i in range(1, N):
+    for j in range(i):
+        if A[j]<A[i] and res[j]>res[i]:
+            res[i] = res[j]
+    res[i] += 1
+maxres = 0
+for i in range(N):
+    if res[i]>maxres: maxres = res[i]
+print(maxres)
+
+
+# 11054
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+A = list(map(int, input().split()))
+upres = [0] * N
+upres[0] = 1
+for i in range(1, N):
+    for j in range(i):
+        if A[j]<A[i] and upres[j]>upres[i]:
+            upres[i] = upres[j]
+    upres[i] += 1
+downres = [0] * N
+downres[N-1] = 1
+for i in range(N-2, -1, -1):
+    for j in range(N-1, i, -1):
+        if A[j]<A[i] and downres[j]>downres[i]:
+            downres[i] = downres[j]
+    downres[i] += 1
+maxres = 0
+for i in range(N):
+    if upres[i]+downres[i]-1>maxres:
+        maxres = upres[i]+downres[i]-1
+print(maxres)
+
+
+# 2565
+
+import sys
+input = sys.stdin.readline
+line = int(input())
+match = []
+for _ in range(line):
+    temp = list(map(int, input().split()))
+    match.append(temp)
+match.sort()
+res = [0] * line
+res[0] = 1
+for i in range(1, line):
+    for j in range(i):
+        if match[j][0]<match[i][0] and match[j][1]<match[i][1] and res[j]>res[i]:
+            res[i] = res[j]
+    res[i] += 1
+maxres = 0
+for i in range(line):
+    if res[i]>maxres: maxres = res[i]
+print(line-maxres)
+
+
+# 9251
+
+import sys
+input = sys.stdin.readline
+A = input().strip()
+B = input().strip()
+LCS = []
+#     0 1 2 3 4 5 6
+#     - A C A Y K P
+# 0 - 0 0 0 0 0 0 0
+# 1 C 0 0 1 1 1 1 1
+# 2 A 0 1 1 2 2 2 2
+# 3 P 0 1 1 2 2 2 3
+# 4 C 0 1 2 2 2 2 3
+# 5 A 0 2 2 3 3 3 3
+# 6 K 0 2 2 3 3 4 4
+for _ in range(len(B)+1):
+    temp = [0] * (len(A)+1)
+    LCS.append(temp)
+for i in range(len(B)):
+    for j in range(len(A)):
+        if B[i] == A[j]: LCS[i+1][j+1] = LCS[i][j] + 1
+        else: LCS[i+1][j+1] = max(LCS[i][j+1], LCS[i+1][j])
+print(LCS[len(B)][len(A)])
+
+
+# 12865
+
+import sys
+input = sys.stdin.readline
+N, K = map(int, input().split())
+thing = [[0, 0]]
+for _ in range(N):
+    temp = list(map(int, input().split()))  # W, V
+    thing.append(temp)
+DP = []
+for _ in range(N+1):
+    temp = [0] * (K+1)
+    DP.append(temp)
+# 6 13 / 4 8 / 3 6 / 5 12
+# NK  0  1  2  3  4  5  6  7
+# 0 | 0  0  0  0  0  0  0  0
+# 1 | 0  0  0  0  0  0 13 13
+# 2 | 0  0  0  0  8  8 13 13
+# 3 | 0  0  0  6  8  8 13 14
+# 4 | 0  0  0  6  8 12 13 14
+for n in range(1, N+1):
+    for k in range(K+1):
+        if k < thing[n][0]: DP[n][k] = DP[n-1][k]
+        else:
+            DP[n][k] = max(DP[n-1][k], DP[n-1][k-thing[n][0]]+thing[n][1])
+print(DP[N][K])
+"""
+
+# -----------------------------------
+# nineteen (누적 합)
+
+
+# 11659
+
+import sys
+input = sys.stdin.readline
 
 
 
 
 
 
-
-
-# https://www.acmicpc.net/step/16
+# https://www.acmicpc.net/step/48
 
