@@ -3,6 +3,7 @@
 # -----------------------------------
 # eighteen (동적 계획법 1)
 
+
 # 24416
 
 import sys
@@ -330,7 +331,7 @@ for n in range(1, N+1):
         else:
             DP[n][k] = max(DP[n-1][k], DP[n-1][k-thing[n][0]]+thing[n][1])
 print(DP[N][K])
-"""
+
 
 # -----------------------------------
 # nineteen (누적 합)
@@ -340,11 +341,132 @@ print(DP[N][K])
 
 import sys
 input = sys.stdin.readline
+N, M = map(int, input().split())
+Ns = list(map(int, input().split()))
+for n in range(1, N):
+    Ns[n] += Ns[n-1]
+for _ in range(M):
+    i, j = map(int, input().split())
+    if i == 1: print(Ns[j-1])
+    else: print(Ns[j-1]-Ns[i-2])
+
+
+# 2559
+
+import sys
+input = sys.stdin.readline
+N, K = map(int, input().split())
+Ns = list(map(int, input().split()))
+for n in range(1, N):
+    Ns[n] += Ns[n-1]
+maxi = Ns[K-1]
+for k in range(N-K):
+    temp = Ns[k+K] - Ns[k]
+    if temp > maxi: maxi = temp
+print(maxi)
+
+
+# 16139
+
+import sys
+input = sys.stdin.readline
+S = input().strip()
+q = int(input())
+alpha = []  # a ~ z -> 26개
+temp = [0] * 26
+temp[ord(S[0])-ord('a')] += 1
+alpha.append(temp)
+for s in range(1, len(S)):
+    temp = alpha[s-1].copy()
+    temp[ord(S[s])-ord('a')] += 1
+    alpha.append(temp)
+for _ in range(q):
+    a, l, r = map(str, input().strip().split())
+    l = int(l)
+    r = int(r)
+    if l == 0: print(alpha[r][ord(a)-ord('a')])
+    else: print(alpha[r][ord(a)-ord('a')]-alpha[l-1][ord(a)-ord('a')])
+
+
+# 10986
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+cnt = [0] * 1000
+sum = 0
+A = list(map(int, input().split()))
+for n in range(N):
+    sum += A[n]
+    sum %= M
+    cnt[sum] += 1
+ans = cnt[0]  # already remain is zero
+for i in range(1000):
+    ans += int(cnt[i] * (cnt[i] - 1) / 2)  # nC2 = n*(n-1)/2
+print(ans)
+
+
+# 11660
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+Ns = []
+temp = [0] * (N+1)
+Ns.append(temp)
+for i in range(N):
+    temp = list(map(int, input().split()))
+    temp2 = [0]
+    for j in range(N):
+        temp2.append(Ns[i][j+1]+temp2[j]+temp[j]-Ns[i][j])
+    Ns.append(temp2)
+for _ in range(M):
+    x1, y1, x2, y2 = map(int, input().split())
+    print(Ns[x2][y2]-Ns[x1-1][y2]-Ns[x2][y1-1]+Ns[x1-1][y1-1])
+
+
+# 25682
+
+import sys
+input = sys.stdin.readline
+N, M, K = map(int, input().split())
+board = []  # B로 시작하는 거 기준
+temp = [0] * (M+1)
+board.append(temp)
+for i in range(N):
+    s = input().strip()
+    temp = [0]
+    for j in range(M):
+        if (i % 2 == 0 and j % 2 == 0) or (i % 2 == 1 and j % 2 == 1):
+            if s[j] == 'B': temp.append(board[i][j+1]+temp[j]+0-board[i][j])
+            else: temp.append(board[i][j+1]+temp[j]+1-board[i][j])
+        else:
+            if s[j] == 'W': temp.append(board[i][j+1]+temp[j]+0-board[i][j])
+            else: temp.append(board[i][j+1]+temp[j]+1-board[i][j])
+    board.append(temp)
+maxi = 0
+mini = M * N
+for i in range(N-K+1):
+    for j in range(M-K+1):
+        cal = board[i+K][j+K]-board[i][j+K]-board[i+K][j]+board[i][j]
+        if cal>maxi: maxi = cal
+        if cal<mini: mini = cal
+print(min(K*K-maxi, mini))
+"""
+
+# -----------------------------------
+# twenty (그리디 알고리즘)
+
+
+# 11047
+
+import sys
+input = sys.stdin.readline
 
 
 
 
 
 
-# https://www.acmicpc.net/step/48
+# https://www.acmicpc.net/step/33
 
