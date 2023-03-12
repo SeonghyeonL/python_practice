@@ -452,7 +452,7 @@ for i in range(N-K+1):
         if cal>maxi: maxi = cal
         if cal<mini: mini = cal
 print(min(K*K-maxi, mini))
-"""
+
 
 # -----------------------------------
 # twenty (그리디 알고리즘)
@@ -462,11 +462,99 @@ print(min(K*K-maxi, mini))
 
 import sys
 input = sys.stdin.readline
+N, K = map(int, input().split())
+A = []
+for _ in range(N):
+    A.append(int(input()))
+cnt = 0
+for i in range(N-1, -1, -1):
+    if K == 0: continue
+    cnt += K // A[i]
+    K %= A[i]
+print(cnt)
+
+
+# 1931
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+time = []
+for _ in range(N):
+    time.append(list(map(int, input().split())))
+time.sort(key=lambda x : (x[1], x[0]))
+cnt = 1
+last = time[0]
+for i in range(1, N):
+    if time[i][0] >= last[1]:
+        cnt += 1
+        last = time[i]
+print(cnt)
+
+
+# 11399
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+P = list(map(int, input().split()))
+P.sort()
+sum = P[0]
+for n in range(1, N):
+    P[n] += P[n-1]
+    sum += P[n]
+print(sum)
+
+
+# 1541
+
+import sys
+input = sys.stdin.readline
+S = input().strip()
+start = 0
+sum = 0
+minus = False
+for i in range(len(S)):
+    if S[i] == '+' or S[i] == '-' or i == len(S)-1:
+        if i == len(S)-1:
+            i += 1
+        if minus:
+            sum -= int(S[start:i])
+            start = i+1
+        else:  # never
+            sum += int(S[start:i])
+            start = i+1
+            if i < len(S)-1:
+                if S[i] == '-': minus = True
+print(sum)
+
+
+# 13305
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+length = list(map(int, input().split()))
+price = list(map(int, input().split()))
+minprice = 1000000000
+sum = 0
+for i in range(N-1):
+    if price[i]<minprice: minprice = price[i]
+    sum += minprice * length[i]
+print(sum)
+"""
+
+# -----------------------------------
+# twentyone (스택)
+
+
+# 10828
+
+import sys
+input = sys.stdin.readline
 
 
 
 
-
-
-# https://www.acmicpc.net/step/33
+# https://www.acmicpc.net/step/11
 
