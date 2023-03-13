@@ -836,7 +836,7 @@ for _ in range(N):
             queue.appendleft(int(X))
         elif push == "push_back":
             queue.append(int(X))
-"""
+
 
 # 1021
 
@@ -845,10 +845,58 @@ from collections import deque
 input = sys.stdin.readline
 N, M = map(int, input().split())
 idx = list(map(int, input().split()))
+queue = deque([])
+for i in range(1, N+1): queue.append(i)
+ans = 0
+for i in range(M):
+    cnt = 0
+    while queue[0] != idx[i]:
+        cnt += 1
+        queue.append(queue[0])
+        queue.popleft()
+    cnt = min(cnt, len(queue)-cnt)
+    queue.popleft()
+    ans += cnt
+print(ans)
+"""
 
+# 5430
 
+import sys
+from collections import deque
+input = sys.stdin.readline
+T = int(input())
+for _ in range(T):
+    p = input().strip()
+    n = int(input())
+    temp = input().strip()[1:-1]
+    if len(temp) > 0: x = deque(list(map(int, temp.split(','))))
+    else: x = deque([])
+    left = True
+    error = False
+    for i in range(len(p)):
+        if p[i] == "R":
+            if left: left = False
+            else: left = True
+        elif p[i] == "D":
+            if len(x) == 0:
+                error = True
+                break
+            else:
+                if left: x.popleft()
+                else: x.pop()
+    if error: print("error")
+    else:
+        print("[", end="")
+        if len(x) != 0:
+            if left:
+                print(x[0], end="")
+                for i in range(1, len(x)):
+                    print(",%d" % x[i], end="")
+            else:
+                print(x[-1], end="")
+                for i in range(len(x)-2, -1, -1):
+                    print(",%d" % x[i], end="")
+        print("]")
 
-
-
-# https://www.acmicpc.net/step/12
 
