@@ -542,7 +542,7 @@ for i in range(N-1):
     if price[i]<minprice: minprice = price[i]
     sum += minprice * length[i]
 print(sum)
-"""
+
 
 # -----------------------------------
 # twentyone (스택)
@@ -552,9 +552,303 @@ print(sum)
 
 import sys
 input = sys.stdin.readline
+N = int(input())
+stack = []
+for _ in range(N):
+    S = input().strip()
+    if S == "pop":
+        if len(stack) > 0:
+            print(stack[-1])
+            stack.pop()
+        else:
+            print(-1)
+    elif S == "size":
+        print(len(stack))
+    elif S == "empty":
+        if len(stack) == 0:
+            print(1)
+        else:
+            print(0)
+    elif S == "top":
+        if len(stack) > 0:
+            print(stack[-1])
+        else:
+            print(-1)
+    else:
+        push, X = map(str, S.split())
+        stack.append(int(X))
+
+
+# 10773
+
+import sys
+input = sys.stdin.readline
+K = int(input())
+stack = []
+for _ in range(K):
+    temp = int(input())
+    if temp == 0:
+        stack.pop()
+    else:
+        stack.append(temp)
+sum = 0
+for i in range(len(stack)):
+    sum += stack[i]
+print(sum)
+
+
+# 9012
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+for _ in range(T):
+    S = input().strip()
+    stack = []
+    VPS = True
+    for s in range(len(S)):
+        if S[s] == "(":
+            stack.append(S[s])
+        else:
+            if len(stack) == 0:
+                VPS = False
+                break
+            else:
+                stack.pop()
+    if len(stack) != 0: VPS = False
+    if VPS: print("YES")
+    else: print("NO")
+
+
+# 4949
+
+import sys
+input = sys.stdin.readline
+S = input()
+while len(S) > 2:
+    stack = []
+    balance = True
+    needtocheck = False
+    for s in range(len(S)-1):
+        if S[s] in ["(", ")", "[", "]"]:
+            needtocheck = True
+        if S[s] == "(" or S[s] == "[":
+            stack.append(S[s])
+        elif S[s] == ")":
+            if len(stack) > 0 and stack[-1] == "(":
+                stack.pop()
+            else:
+                balance = False
+                break
+        elif S[s] == "]":
+            if len(stack) > 0 and stack[-1] == "[":
+                stack.pop()
+            else:
+                balance = False
+                break
+    if len(stack) != 0: balance = False
+    if not needtocheck: print("yes")
+    elif balance: print("yes")
+    else: print("no")
+    S = input()
+
+
+# 1874
+
+import sys
+input = sys.stdin.readline
+n = int(input())
+stack = []
+now = 0
+ans = []
+for _ in range(n):
+    temp = int(input())
+    if len(stack)==0 or stack[-1]<temp:
+        for i in range(temp-now):
+            now += 1
+            stack.append(now)
+            ans.append("+")
+        stack.pop()
+        ans.append("-")
+    elif stack[-1]==temp:
+        stack.pop()
+        ans.append("-")
+    else:  # stack[-1]>temp
+        print("NO")
+        exit(0)
+for j in range(len(ans)): print(ans[j])
+
+
+# -----------------------------------
+# twentytwo (큐, 덱)
+
+
+# 18258
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+N = int(input())
+queue = deque([])
+for _ in range(N):
+    S = input().strip()
+    if S == "pop":
+        if len(queue) > 0:
+            print(queue[0])
+            queue.popleft()
+        else:
+            print(-1)
+    elif S == "size":
+        print(len(queue))
+    elif S == "empty":
+        if len(queue) == 0:
+            print(1)
+        else:
+            print(0)
+    elif S == "front":
+        if len(queue) > 0:
+            print(queue[0])
+        else:
+            print(-1)
+    elif S == "back":
+        if len(queue) > 0:
+            print(queue[-1])
+        else:
+            print(-1)
+    else:
+        push, X = map(str, S.split())
+        queue.append(int(X))
+
+
+# 2164
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+N = int(input())
+queue = deque([])
+for i in range(1, N+1): queue.append(i)
+while len(queue)>1:
+    queue.popleft()
+    if len(queue)==1:
+        print(queue[0])
+        exit(0)
+    queue.append(queue[0])
+    queue.popleft()
+print(queue[0])
+
+
+# 11866
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+N, K = map(int, input().split())
+queue = deque([])
+ans = []
+for i in range(1, N+1): queue.append(i)
+while len(queue) > 1:
+    for i in range(K-1):
+        queue.append(queue[0])
+        queue.popleft()
+    ans.append(queue[0])
+    queue.popleft()
+ans.append(queue[0])
+print("<%d" % ans[0], end="")
+for i in range(1, len(ans)):
+    print(", %d" % ans[i], end="")
+print(">")
+
+
+# 1966
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+T = int(input())
+for _ in range(T):
+    N, M = map(int, input().split())
+    important = list(map(int, input().split()))
+    important2 = important.copy()
+    important.sort(reverse=True)
+    i_queue = deque(important2)
+    queue = deque([])
+    for i in range(N): queue.append(i)
+    cnt = 0
+    max_idx = 0
+    while max_idx < N:
+        if i_queue[0] == important[max_idx]:
+            cnt += 1
+            if queue[0] == M:
+                print(cnt)
+                break
+            max_idx += 1
+            i_queue.popleft()
+            queue.popleft()
+        else:
+            i_queue.append(i_queue[0])
+            i_queue.popleft()
+            queue.append(queue[0])
+            queue.popleft()
+
+
+# 10866
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+N = int(input())
+queue = deque([])
+for _ in range(N):
+    S = input().strip()
+    if S == "pop_front":
+        if len(queue) > 0:
+            print(queue[0])
+            queue.popleft()
+        else:
+            print(-1)
+    elif S == "pop_back":
+        if len(queue) > 0:
+            print(queue[-1])
+            queue.pop()
+        else:
+            print(-1)
+    elif S == "size":
+        print(len(queue))
+    elif S == "empty":
+        if len(queue) == 0:
+            print(1)
+        else:
+            print(0)
+    elif S == "front":
+        if len(queue) > 0:
+            print(queue[0])
+        else:
+            print(-1)
+    elif S == "back":
+        if len(queue) > 0:
+            print(queue[-1])
+        else:
+            print(-1)
+    else:
+        push, X = map(str, S.split())
+        if push == "push_front":
+            queue.appendleft(int(X))
+        elif push == "push_back":
+            queue.append(int(X))
+"""
+
+# 1021
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+N, M = map(int, input().split())
+idx = list(map(int, input().split()))
 
 
 
 
-# https://www.acmicpc.net/step/11
+
+# https://www.acmicpc.net/step/12
 
