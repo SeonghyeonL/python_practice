@@ -290,7 +290,7 @@ hist = list(map(int, input().split()))
 while hist != [0]:
     print(findmax(1, len(hist) - 1))
     hist = list(map(int, input().split()))
-"""
+
 
 # -----------------------------------
 # twentyfour (이분 탐색)
@@ -300,6 +300,65 @@ while hist != [0]:
 
 import sys
 input = sys.stdin.readline
+N = int(input())
+A = list(map(int, input().split()))
+A.sort()
+M = int(input())
+MS = list(map(int, input().split()))
+for m in range(M):
+    left = 0
+    right = N - 1
+    found = False
+    while left <= right:
+        now = int((left + right) / 2)
+        if MS[m] == A[now]:
+            found = True
+            break
+        elif MS[m] > A[now]:
+            left = now + 1
+        elif MS[m] < A[now]:
+            right = now - 1
+    if found: print(1)
+    else: print(0)
+
+
+# 10816
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+card = list(map(int, input().split()))
+card.sort()
+cnt = {}  # dictionary
+for i in card:
+    if i in cnt: cnt[i] += 1
+    else: cnt[i] = 1
+M = int(input())
+number = list(map(int, input().split()))
+for m in range(M):
+    left = 0
+    right = N - 1
+    found = False
+    while left <= right:
+        now = int((left + right) / 2)
+        if number[m] == card[now]:
+            found = True
+            break
+        elif number[m] > card[now]:
+            left = now + 1
+        elif number[m] < card[now]:
+            right = now - 1
+    if found:
+        print(cnt.get(number[m]), end=" ")
+    else:
+        print(0, end=" ")
+"""
+
+# 1654
+
+import sys
+input = sys.stdin.readline
+
 
 
 
