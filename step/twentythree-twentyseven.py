@@ -352,17 +352,142 @@ for m in range(M):
         print(cnt.get(number[m]), end=" ")
     else:
         print(0, end=" ")
-"""
+
 
 # 1654
 
 import sys
 input = sys.stdin.readline
+K, N = map(int, input().split())
+centi = []
+for _ in range(K):
+    centi.append(int(input()))
+# parametric search -> 이 길이로 자르면 조건을 만족할 수 있는가
+left = 1
+right = max(centi)
+ans = 0
+while left <= right:
+    mid = (left + right) // 2
+    cnt = 0
+    for i in range(K):
+        cnt += centi[i] // mid
+    if cnt >= N:
+        left = mid + 1
+        ans = mid
+    else:
+        right = mid - 1
+print(ans)
+
+
+# 2805
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+tree = list(map(int, input().split()))
+low = 0
+high = max(tree)
+ans = 0
+while low <= high:
+    mid = (low + high) // 2
+    total = 0
+    for i in range(N):
+        total += max(tree[i] - mid, 0)
+    if total >= M:
+        low = mid + 1
+        ans = mid
+    else:
+        high = mid - 1
+print(ans)
+
+
+# 2110
+
+import sys
+input = sys.stdin.readline
+N, C = map(int, input().split())
+x = []
+for _ in range(N):
+    x.append(int(input()))
+x.sort()
+left = 1
+right = x[-1] - x[0]
+answer = 0
+while left <= right:
+    mid = (left + right) // 2
+    cnt = 1  # 1번 집에는 반드시 설치해야 하는 듯
+    lastidx = 0
+    for i in range(1, N):
+        if x[i] - x[lastidx] >= mid:
+            cnt += 1
+            lastidx = i
+    if cnt >= C:
+        answer = mid
+        left = mid + 1
+    else:
+        right = mid - 1
+print(answer)
+
+
+# 1300
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+k = int(input())
+# 1 2  3  4 ; min(10//1,4)=4
+# 2 4  6  8 ; min(10//2,4)=4
+# 3 6  9 12 ; min(10//3,4)=3
+# 4 8 12 16 ; min(10//4,4)=2
+left = 1
+right = N * N
+ans = 0
+while left <= right:
+    mid = (left + right) // 2
+    cnt = 0
+    for i in range(1, N+1):
+        cnt += min(mid // i, N)
+    if cnt >= k:
+        right = mid - 1
+        ans = mid
+    else:
+        left = mid + 1
+print(ans)
+
+
+# 12015
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+A = list(map(int, input().split()))
+ans = [A[0]]
+for i in range(1, N):
+    if A[i] > ans[-1]: ans.append(A[i])
+    else:
+        #for j in range(len(ans)):
+        #    if ans[j] >= A[i]: ans[j] = A[i]
+        left = 0
+        right = len(ans) - 1
+        tempmid = 0
+        while left <= right:
+            mid = (left + right) // 2
+            if ans[mid] >= A[i]:
+                tempmid = mid
+                right = mid - 1
+            else:
+                left = mid + 1
+        ans[tempmid] = A[i]
+print(len(ans))
+"""
+
+# -----------------------------------
+# twentyfive (우선순위 큐)
+
+
+# 11279
 
 
 
-
-
-
-# https://www.acmicpc.net/step/29
+# https://www.acmicpc.net/step/13
 
