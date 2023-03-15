@@ -479,7 +479,7 @@ for i in range(1, N):
                 left = mid + 1
         ans[tempmid] = A[i]
 print(len(ans))
-"""
+
 
 # -----------------------------------
 # twentyfive (우선순위 큐)
@@ -487,7 +487,63 @@ print(len(ans))
 
 # 11279
 
+import sys
+import heapq  # 최소 힙
+input = sys.stdin.readline
+N = int(input())
+# 최소 힙: 부모 노드의 키 < 자식 노드의 키
+# 최대 힙: 부모 노드의 키 > 자식 노드의 키
+heap = []
+for _ in range(N):
+    x = int(input())
+    if x > 0: heapq.heappush(heap, (-x, x))  # 최대 힙으로 만들기 위해
+    else:
+        if len(heap) == 0: print(0)
+        else: print(heapq.heappop(heap)[1])
 
 
-# https://www.acmicpc.net/step/13
+# 1927
+
+import sys
+import heapq
+input = sys.stdin.readline
+N = int(input())
+heap = []
+for _ in range(N):
+    x = int(input())
+    if x > 0: heapq.heappush(heap, x)
+    else:
+        if len(heap) == 0: print(0)
+        else: print(heapq.heappop(heap))
+
+
+# 11286
+
+import sys
+import heapq
+input = sys.stdin.readline
+N = int(input())
+heap = []
+for _ in range(N):
+    x = int(input())
+    if x != 0: heapq.heappush(heap, (abs(x), x))
+    else:
+        if len(heap) == 0: print(0)
+        else: print(heapq.heappop(heap)[1])
+"""
+
+# -----------------------------------
+# twentysix (동적 계획법 2)
+
+
+# 11066
+
+import sys
+input = sys.stdin.readline
+
+
+
+
+
+# https://www.acmicpc.net/step/17
 
