@@ -530,7 +530,7 @@ for _ in range(N):
     else:
         if len(heap) == 0: print(0)
         else: print(heapq.heappop(heap)[1])
-"""
+
 
 # -----------------------------------
 # twentysix (동적 계획법 2)
@@ -540,10 +540,154 @@ for _ in range(N):
 
 import sys
 input = sys.stdin.readline
+T = int(input())
+for _ in range(T):
+    K = int(input())
+    file = list(map(int, input().split()))
+    sum = [0, file[0]]
+    for k in range(1, K): sum.append(sum[k]+file[k])
+    findmin = [[0] * (K+1) for _ in range(K+1)]
+    for size in range(1, K):
+        for start in range(1, K+1-size):
+            end = start + size  # 2 ~ K
+            temp = float("inf")
+            for k in range(start, end):
+                temp = min(temp, findmin[start][k] + findmin[k+1][end] + sum[end] - sum[start - 1])
+            findmin[start][end] = temp
+    print(findmin[1][K])
+
+
+# 11049
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+rc = []
+for _ in range(N):
+    rc.append(list(map(int, input().split())))
+findmin = [[0] * N for _ in range(N)]
+for size in range(1, N):
+    for start in range(N-size):
+        end = start + size  # 1 ~ N-1
+        temp = float("inf")
+        for k in range(start, end):
+            temp = min(temp, findmin[start][k] + findmin[k+1][end] + rc[start][0] * rc[k][1] * rc[end][1])
+        findmin[start][end] = temp
+print(findmin[0][N-1])
+
+
+# 1520
+
+import sys
+input = sys.stdin.readline
+M, N = map(int, input().split())
+height = []
+for _ in range(M):
+    height.append(list(map(int, input().split())))
+# DP → 전체 문제의 최적해가 부분 문제의 최적해로 쪼개질 수 있는가?
+res = [[-1] * N for _ in range(M)]
+udlr = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
+def cal(x, y):
+    if res[x][y] == -1:
+        if x == M-1 and y == N-1:
+            res[x][y] = 1
+        else:
+            res[x][y] = 0
+            for i in range(4):
+                nx = x + udlr[i][0]
+                ny = y + udlr[i][1]
+                if 0 <= nx <= M-1 and 0 <= ny <= N - 1:
+                    if height[nx][ny] < height[x][y]:
+                        res[x][y] += cal(nx, ny)
+    return res[x][y]
+
+print(cal(0, 0))
+
+
+# 2629
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+w = list(map(int, input().split()))
+M = int(input())
+q = list(map(int, input().split()))
+res = [False] * 40001
+res[0] = True
+
+#def cal(now, idx):  # 현재 값, 현재 인덱스
+#    if res[now] == 0: res[now] = 1
+#    if idx <= N-2:
+#        if now - w[idx + 1] >= 0: cal(now - w[idx + 1], idx + 1)
+#        if w[idx + 1] - now >= 0: cal(w[idx + 1] - now, idx + 1)
+#        if now + w[idx + 1] <= 40000: cal(now + w[idx + 1], idx + 1)
+#        cal(now, idx + 1)
+
+#cal(0, -1)
+
+for i in range(N):
+    temp = [False] * 40001
+    for j in range(40001):
+        if res[j]:
+            temp[j] = True
+            if j + w[i] <= 40000: temp[j + w[i]] = True
+            if j - w[i] >= 0: temp[j - w[i]] = True
+            if w[i] - j >= 0: temp[w[i] - j] = True
+    res = temp
+
+for i in range(M):
+    if res[q[i]]: print('Y', end=" ")
+    else: print('N', end=" ")
+
+
+# 2293
+
+import sys
+input = sys.stdin.readline
+n, k = map(int, input().split())
+coin = []
+for _ in range(n): coin.append(int(input()))
+res = [0] * (k+1)
+res[0] = 1
+for i in range(n):
+    for j in range(coin[i], k+1):
+        if j - coin[i] >= 0:
+            res[j] += res[j - coin[i]]
+print(res[k])
+
+
+# 7579
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+m = list(map(int, input().split()))
+c = list(map(int, input().split()))
+findM = [[0] * (sum(c) + 1) for _ in range(N + 1)]
+ans = 10000
+for i in range(1, N+1):
+    for j in range(c[i-1]):  # 앞에도 채워야 함
+        findM[i][j] = findM[i-1][j]
+    for j in range(c[i-1], sum(c) + 1):
+        findM[i][j] = max(findM[i-1][j], findM[i-1][j-c[i-1]]+m[i-1])
+        if findM[i][j] >= M:
+            if j < ans: ans = j
+print(ans)
+"""
+
+# -----------------------------------
+# twentyseven (스택 2)
+
+
+# 9935
+
+import sys
+input = sys.stdin.readline
 
 
 
 
 
-# https://www.acmicpc.net/step/17
+# https://www.acmicpc.net/step/51
 
