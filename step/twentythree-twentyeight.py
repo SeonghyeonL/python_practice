@@ -674,7 +674,7 @@ for i in range(1, N+1):
         if findM[i][j] >= M:
             if j < ans: ans = j
 print(ans)
-"""
+
 
 # -----------------------------------
 # twentyseven (스택 2)
@@ -684,10 +684,153 @@ print(ans)
 
 import sys
 input = sys.stdin.readline
+S = input().strip()
+bomb = input().strip()
+bombdict = {}
+tonum = []
+for i in range(len(bomb)): bombdict[bomb[i]] = i
+for i in range(len(S)):
+    if S[i] in bombdict: tonum.append([bombdict[S[i]], i])
+    else: tonum.append([-1, i])
+    if tonum[-1][0] == len(bomb) - 1 and len(tonum) >= len(bomb):  # 마지막 글자 & 길이 조건
+        found = True
+        for j in range(2, len(bomb)+1):
+            if tonum[-j][0] != len(bomb) - j:
+                found = False
+                break
+        if found == True:
+            for j in range(len(bomb)): tonum.pop()
+if len(tonum) > 0:
+    for i in range(len(tonum)): print(S[tonum[i][1]], end="")
+else: print('FRULA')
+
+
+# 17298
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+A = list(map(int, input().split()))
+stack = [[A[0], 0]]
+ans = [-1] * N
+for i in range(1, N):
+    while True:
+        if len(stack) > 0 and stack[-1][0] < A[i]:
+            ans[stack[-1][1]] = A[i]
+            stack.pop()
+        else: break
+    stack.append([A[i], i])
+print(' '.join(map(str, ans)))
+
+
+# 17299
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+A = list(map(int, input().split()))
+dic = {}
+for i in range(N):
+    if A[i] in dic: dic[A[i]] += 1
+    else: dic[A[i]] = 1
+stack = [[A[0], 0]]
+ans = [-1] * N
+for i in range(1, N):
+    while True:
+        if len(stack) > 0 and dic[stack[-1][0]] < dic[A[i]]:
+            ans[stack[-1][1]] = A[i]
+            stack.pop()
+        else: break
+    stack.append([A[i], i])
+print(' '.join(map(str, ans)))
+
+
+# 1725
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+height = []
+ans = 0
+height.append([0, int(input())])
+for i in range(1, N):
+    temp = int(input())
+    while True:
+        if len(height) == 0: break
+        elif temp >= height[-1][1]: break
+        else:  # temp < height[-1][1]
+            if len(height) == 1:
+                ans = max(ans, i * height[-1][1])
+            else:
+                ans = max(ans, (i - height[-2][0] - 1) * height[-1][1])
+            height.pop()
+    height.append([i, temp])
+while len(height) > 0:
+    if len(height) == 1:
+        ans = max(ans, N * height[-1][1])
+    else:
+        ans = max(ans, (N - height[-2][0] - 1) * height[-1][1])
+    height.pop()
+print(ans)
+
+
+# 3015
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+stack = []
+ans = 0
+for _ in range(N):
+    temp = int(input())
+    # 비어있다면 (지금 값, 1개) 추가
+    if len(stack) == 0:
+        stack.append([temp, 1])
+    # 안 비어있다면 마지막 값 확인
+    else:
+        # 마지막 값 > 지금 값 → 마지막 값은 반드시 지금 값과 마주볼 수 있음
+        if stack[-1][0] > temp:
+            ans += 1
+            stack.append([temp, 1])
+        # 마지막 값 <= 지금 값 → 확인
+        else:  # stack[-1][0] <= temp
+            num = 1
+            while True:
+                # 다 제거하고 비어있음 → 탈출
+                if len(stack) == 0:  # empty
+                    break
+                # 마지막 값 = 지금 값 → 같은 값들은 모두 서로를 볼 수 있음
+                # 해당 값을 제거한다면 비어있거나, 남은 값이 지금 값보다 크거나
+                elif stack[-1][0] == temp:
+                    ans += stack[-1][1]
+                    num = stack[-1][1] + 1
+                    stack.pop()
+                    break
+                # 마지막 값 < 지금 값 → 전부 지금 값과 서로를 볼 수 있음
+                # 그러나 다음 값을 볼 수는 없기 때문에 제거해야 함
+                elif stack[-1][0] < temp:
+                    ans += stack[-1][1]
+                    stack.pop()
+                # 제거 후에 남은 마지막 값이 지금 값보다 커짐 → 탈출
+                else:  # stack[-1][0] > temp
+                    break
+            # 제거 후에 값이 남아있다면 지금 값보다 큰 값이므로 서로를 볼 수 있음
+            if len(stack) > 0: ans += 1
+            # 지금 값을 스택에 추가
+            stack.append([temp, num])
+print(ans)
+"""
+
+# -----------------------------------
+# twentyeight (그래프와 순회)
+
+
+# 24479
+
+import sys
+input = sys.stdin.readline
 
 
 
-
-
-# https://www.acmicpc.net/step/51
+# https://www.acmicpc.net/step/24
 
