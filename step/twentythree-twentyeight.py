@@ -819,7 +819,7 @@ for _ in range(N):
             # 지금 값을 스택에 추가
             stack.append([temp, num])
 print(ans)
-"""
+
 
 # -----------------------------------
 # twentyeight (그래프와 순회)
@@ -829,6 +829,167 @@ print(ans)
 
 import sys
 input = sys.stdin.readline
+sys.setrecursionlimit(10 ** 6)
+N, M, R = map(int, input().split())
+visited = [False] * (N + 1)
+ans = [0] * (N + 1)
+order = 0
+connect = [[0] for _ in range(N + 1)]
+for _ in range(M):
+    u, v = map(int, input().split())
+    connect[u].append(v)
+    connect[v].append(u)
+for i in range(1, N + 1): connect[i] = sorted(connect[i])
+
+def dfs(now):
+    visited[now] = True
+    global order
+    order += 1
+    ans[now] = order
+    for x in range(1, len(connect[now])):
+        X = connect[now][x]
+        if visited[X] == False: dfs(X)
+
+dfs(R)
+print('\n'.join(map(str, ans[1:])))
+
+
+# 24480
+
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(10 ** 6)
+N, M, R = map(int, input().split())
+visited = [False] * (N + 1)
+ans = [0] * (N + 1)
+order = 0
+connect = [[0] for _ in range(N + 1)]
+for _ in range(M):
+    u, v = map(int, input().split())
+    connect[u].append(v)
+    connect[v].append(u)
+for i in range(1, N + 1): connect[i] = sorted(connect[i], reverse=True)
+
+def dfs(now):
+    visited[now] = True
+    global order
+    order += 1
+    ans[now] = order
+    for x in range(len(connect[now]) - 1):
+        X = connect[now][x]
+        if visited[X] == False: dfs(X)
+
+dfs(R)
+print('\n'.join(map(str, ans[1:])))
+
+
+# 24444
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+N, M, R = map(int, input().split())
+visited = [False] * (N + 1)
+ans = [0] * (N + 1)
+order = 0
+connect = [[0] for _ in range(N + 1)]
+queue = deque([])
+for _ in range(M):
+    u, v = map(int, input().split())
+    connect[u].append(v)
+    connect[v].append(u)
+for i in range(1, N + 1): connect[i] = sorted(connect[i])
+
+visited[R] = True
+order += 1
+ans[R] = order
+queue.append(R)
+while len(queue) > 0:
+    temp = queue.popleft()
+    for x in range(1, len(connect[temp])):
+        X = connect[temp][x]
+        if visited[X] == False:
+            visited[X] = True
+            order += 1
+            ans[X] = order
+            queue.append(X)
+
+print('\n'.join(map(str, ans[1:])))
+
+
+# 24445
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+N, M, R = map(int, input().split())
+visited = [False] * (N + 1)
+ans = [0] * (N + 1)
+order = 0
+connect = [[0] for _ in range(N + 1)]
+queue = deque([])
+for _ in range(M):
+    u, v = map(int, input().split())
+    connect[u].append(v)
+    connect[v].append(u)
+for i in range(1, N + 1): connect[i] = sorted(connect[i], reverse=True)
+
+visited[R] = True
+order += 1
+ans[R] = order
+queue.append(R)
+while len(queue) > 0:
+    temp = queue.popleft()
+    for x in range(len(connect[temp]) - 1):
+        X = connect[temp][x]
+        if visited[X] == False:
+            visited[X] = True
+            order += 1
+            ans[X] = order
+            queue.append(X)
+
+print('\n'.join(map(str, ans[1:])))
+
+
+# 2606
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+N = int(input())
+M = int(input())
+connect = [[0] for _ in range(N + 1)]
+visited = [False] * (N + 1)
+queue = deque([])
+for _ in range(M):
+    u, v = map(int, input().split())
+    connect[u].append(v)
+    connect[v].append(u)
+
+visited[1] = True
+queue.append(1)
+while len(queue) > 0:
+    temp = queue.popleft()
+    for x in range(1, len(connect[temp])):
+        X = connect[temp][x]
+        if visited[X] == False:
+            visited[X] = True
+            queue.append(X)
+ans = 0
+for i in range(2, N + 1):
+    if visited[i] == True:
+        ans += 1
+print(ans)
+"""
+
+# 1260
+
+import sys
+input = sys.stdin.readline
+
+
+
+
 
 
 
