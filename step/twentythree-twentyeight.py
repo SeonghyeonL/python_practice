@@ -980,12 +980,154 @@ for i in range(2, N + 1):
     if visited[i] == True:
         ans += 1
 print(ans)
-"""
+
 
 # 1260
 
 import sys
+from collections import deque
+sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
+N, M, V = map(int, input().split())
+connect = [[0] for _ in range(N + 1)]
+for _ in range(M):
+    u, v = map(int, input().split())
+    connect[u].append(v)
+    connect[v].append(u)
+for i in range(1, N + 1): connect[i] = sorted(connect[i])
+
+visited = [False] * (N + 1)
+ans = []
+
+def dfs(now):
+    visited[now] = True
+    ans.append(now)
+    for x in range(1, len(connect[now])):
+        X = connect[now][x]
+        if visited[X] == False: dfs(X)
+
+dfs(V)
+print(' '.join(map(str, ans)))
+
+queue = deque([])
+visited = [False] * (N + 1)
+ans = []
+visited[V] = True
+queue.append(V)
+ans.append(V)
+while len(queue) > 0:
+    temp = queue.popleft()
+    for x in range(1, len(connect[temp])):
+        X = connect[temp][x]
+        if visited[X] == False:
+            visited[X] = True
+            queue.append(X)
+            ans.append(X)
+print(' '.join(map(str, ans)))
+
+
+# 2667
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+home = []
+for _ in range(N): home.append(input().strip())
+visit = [[False] * N for _ in range(N)]
+ans = []
+
+def near(x, y):
+    res = 0
+    if visit[x][y] == False and home[x][y] == '1':
+        visit[x][y] = True
+        res += 1
+        if x > 0: res += near(x - 1, y)
+        if x < N - 1: res += near(x + 1, y)
+        if y > 0: res += near(x, y - 1)
+        if y < N - 1: res += near(x, y + 1)
+    return res
+
+for i in range(N):
+    for j in range(N):
+        if home[i][j] == '0':
+            visit[i][j] = True
+        elif visit[i][j] == False:
+            ans.append(near(i, j))
+ans.sort()
+print(len(ans))
+print('\n'.join(map(str, ans)))
+
+
+# 1012
+
+import sys
+sys.setrecursionlimit(10 ** 6)
+input = sys.stdin.readline
+T = int(input())
+
+def near(y, x):
+    if visit[y][x] == False and plant[y][x] == 1:
+        visit[y][x] = True
+        if y > 0: near(y - 1, x)
+        if y < N - 1: near(y + 1, x)
+        if x > 0: near(y, x - 1)
+        if x < M - 1: near(y, x + 1)
+
+for _ in range(T):
+    M, N, K = map(int, input().split())
+    plant = [[0] * M for _ in range(N)]
+    visit = [[False] * M for _ in range(N)]
+    ans = 0
+    for _ in range(K):
+        X, Y = map(int, input().split())
+        plant[Y][X] = 1
+    for i in range(N):
+        for j in range(M):
+            if plant[i][j] == 0:
+                visit[i][j] = True
+            elif visit[i][j] == False:
+                ans += 1
+                near(i, j)
+    print(ans)
+
+
+# 2178
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+N, M = map(int, input().split())
+maze = []
+for _ in range(N):
+    line = input().strip()
+    temp = []
+    for j in range(M):
+        temp.append(int(line[j]))
+    maze.append(temp)
+visit = [[False] * M for _ in range(N)]
+queue = deque([])
+visit[0][0] = True
+queue.append([0, 0])
+drul = [[1, 0], [0, 1], [-1, 0], [0, -1]]
+while len(queue) > 0:
+    temp = queue.popleft()
+    for i in range(4):
+        a = temp[0] + drul[i][0]
+        b = temp[1] + drul[i][1]
+        if 0 <= a <= N - 1 and 0 <= b <= M - 1:
+            if visit[a][b] == False and maze[a][b] == 1:
+                visit[a][b] = True
+                queue.append([a, b])
+                maze[a][b] = maze[temp[0]][temp[1]] + 1
+print(maze[N-1][M-1])
+"""
+
+# 1697
+
+import sys
+input = sys.stdin.readline
+
+
 
 
 
