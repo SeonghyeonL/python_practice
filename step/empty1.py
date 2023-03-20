@@ -4,30 +4,6 @@
 # missing
 
 
-# 1085
-
-import sys
-input = sys.stdin.readline
-x, y, w, h = map(int, input().split())
-ans = min(x, y, abs(w-x), abs(h-y))
-print(ans)
-
-
-# 3009
-
-import sys
-input = sys.stdin.readline
-x = []
-y = []
-for i in range(3):
-    X, Y = map(int, input().split())
-    if X in x: x.remove(X)
-    else: x.append(X)
-    if Y in y: y.remove(Y)
-    else: y.append(Y)
-print(x[0], y[0])
-
-
 # 2477
 
 import sys

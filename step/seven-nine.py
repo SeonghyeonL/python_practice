@@ -229,14 +229,106 @@ for t in range(T):
         if total[m]==1 and total[n-m]==1:
             print(m, n-m)
             break
-"""
+
 
 # -----------------------------------
 # nine (기하: 직사각형과 삼각형)
 
 # 27323
 
+import sys
+input = sys.stdin.readline
+A = int(input())
+B = int(input())
+print(A * B)
 
 
+# 1085
+
+import sys
+input = sys.stdin.readline
+x, y, w, h = map(int, input().split())
+ans = min(x, y, abs(w-x), abs(h-y))
+print(ans)
+
+
+# 3009
+
+import sys
+input = sys.stdin.readline
+x = []
+y = []
+for i in range(3):
+    X, Y = map(int, input().split())
+    if X in x: x.remove(X)
+    else: x.append(X)
+    if Y in y: y.remove(Y)
+    else: y.append(Y)
+print(x[0], y[0])
+
+
+# 15894
+
+import sys
+input = sys.stdin.readline
+n = int(input())
+print(n * 4)
+
+
+# 9063
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+x, y = map(int, input().split())
+max_x, min_x, max_y, min_y = x, x, y, y
+for _ in range(1, N):
+    x, y = map(int, input().split())
+    if x > max_x: max_x = x
+    if x < min_x: min_x = x
+    if y > max_y: max_y = y
+    if y < min_y: min_y = y
+print((max_x - min_x) * (max_y - min_y))
+
+
+# 10101
+
+import sys
+input = sys.stdin.readline
+a1 = int(input())
+a2 = int(input())
+a3 = int(input())
+if a1 + a2 + a3 == 180:
+    if a1 == 60 and a2 == 60 and a3 == 60: print("Equilateral")
+    elif a1 == a2 or a1 == a3 or a2 == a3: print("Isosceles")
+    else: print("Scalene")
+else:
+    print("Error")
+
+
+# 5073
+
+import sys
+input = sys.stdin.readline
+a, b, c = map(int, input().split())
+while True:
+    if a == 0 and b == 0 and c == 0: exit()
+    elif max(a, b, c) >= a + b + c - max(a, b, c): print("Invalid")
+    else:
+        if a == b == c: print("Equilateral")
+        elif a == b or b == c or a == c: print("Isosceles")
+        else: print("Scalene")
+    a, b, c = map(int, input().split())
+"""
+
+# 14215
+
+import sys
+input = sys.stdin.readline
+a, b, c = map(int, input().split())
+if max(a, b, c) >= a + b + c - max(a, b, c):
+    print(a + b + c - max(a, b, c) + a + b + c - max(a, b, c) - 1)
+else:
+    print(a + b + c)
 
 
