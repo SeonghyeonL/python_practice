@@ -1120,12 +1120,151 @@ while len(queue) > 0:
                 queue.append([a, b])
                 maze[a][b] = maze[temp[0]][temp[1]] + 1
 print(maze[N-1][M-1])
-"""
+
 
 # 1697
 
 import sys
+from collections import deque
 input = sys.stdin.readline
+N, K = map(int, input().split())
+visit = [False] * 100001  # 0 ~ 100000
+time = [0] * 100001
+queue = deque([])
+visit[N] = True
+queue.append(N)
+drul = [[1, 1], [1, -1], [2, 0]]
+while len(queue) > 0:
+    temp = queue.popleft()
+    for i in range(3):
+        a = temp * drul[i][0] + drul[i][1]
+        if 0 <= a <= 100000:
+            if visit[a] == False:
+                visit[a] = True
+                queue.append(a)
+                time[a] = time[temp] + 1
+print(time[K])
+
+
+# 7562
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+T = int(input())
+for _ in range(T):
+    I = int(input())
+    board = [[0] * I for _ in range(I)]
+    visit = [[False] * I for _ in range(I)]
+    x1, y1 = map(int, input().split())
+    x2, y2 = map(int, input().split())
+    queue = deque([[x1, y1]])
+    visit[x1][y1] = True
+    move = [[-2, -1], [-1, -2], [-2, 1], [-1, 2], [2, -1], [1, -2], [2, 1], [1, 2]]
+    while len(queue) > 0:
+        temp = queue.popleft()
+        for i in range(8):
+            a = temp[0] + move[i][0]
+            b = temp[1] + move[i][1]
+            if 0 <= a <= I - 1 and 0 <= b <= I - 1:
+                if visit[a][b] == False:
+                    visit[a][b] = True
+                    queue.append([a, b])
+                    board[a][b] = board[temp[0]][temp[1]] + 1
+    print(board[x2][y2])
+
+
+# 7576
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+M, N = map(int, input().split())
+tomato = []
+for _ in range(N): tomato.append(list(map(int, input().split())))
+day = [[0] * M for _ in range(N)]
+visit = [[False] * M for _ in range(N)]
+queue = deque([])
+for i in range(N):
+    for j in range(M):
+        if tomato[i][j] == 1:
+            queue.append([i, j])
+            visit[i][j] = True
+move = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+while len(queue) > 0:
+    temp = queue.popleft()
+    for i in range(4):
+        a = temp[0] + move[i][0]
+        b = temp[1] + move[i][1]
+        if 0 <= a <= N - 1 and 0 <= b <= M - 1:
+            if visit[a][b] == False and tomato[a][b] == 0:
+                visit[a][b] = True
+                tomato[a][b] = 1
+                queue.append([a, b])
+                day[a][b] = day[temp[0]][temp[1]] + 1
+maximum = 0
+for i in range(N):
+    for j in range(M):
+        if tomato[i][j] == 0:
+            print(-1)
+            exit(0)
+        elif visit[i][j] == True:
+            maximum = max(maximum, day[i][j])
+print(maximum)
+
+
+# 7569
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+M, N, H = map(int, input().split())  # 가로, 세로, 높이
+tomato = []
+for _ in range(H):
+    temp = []
+    for _ in range(N):
+        temp.append(list(map(int, input().split())))
+    tomato.append(temp)
+day = [[[0] * M for _ in range(N)] for _ in range(H)]
+visit = [[[False] * M for _ in range(N)] for _ in range(H)]
+queue = deque([])
+for i in range(H):
+    for j in range(N):
+        for k in range(M):
+            if tomato[i][j][k] == 1:
+                queue.append([i, j, k])
+                visit[i][j][k] = True
+move = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]]
+while len(queue) > 0:
+    temp = queue.popleft()
+    for i in range(6):
+        a = temp[0] + move[i][0]
+        b = temp[1] + move[i][1]
+        c = temp[2] + move[i][2]
+        if 0 <= a <= H - 1 and 0 <= b <= N - 1 and 0 <= c <= M - 1:
+            if visit[a][b][c] == False and tomato[a][b][c] == 0:
+                visit[a][b][c] = True
+                tomato[a][b][c] = 1
+                queue.append([a, b, c])
+                day[a][b][c] = day[temp[0]][temp[1]][temp[2]] + 1
+maximum = 0
+for i in range(H):
+    for j in range(N):
+        for k in range(M):
+            if tomato[i][j][k] == 0:
+                print(-1)
+                exit(0)
+            elif visit[i][j][k] == True:
+                maximum = max(maximum, day[i][j][k])
+print(maximum)
+"""
+
+# 16928
+
+import sys
+input = sys.stdin.readline
+
+
 
 
 
