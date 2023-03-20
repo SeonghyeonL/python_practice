@@ -1,331 +1,7 @@
 
 """
 # -----------------------------------
-# thirteen (집합과 맵)
-
-
-# 10815
-
-import sys
-input = sys.stdin.readline
-N = int(input())
-card = list(map(int, input().split()))
-card.sort()
-M = int(input())
-test = list(map(int, input().split()))
-for m in range(M):
-    start = 0
-    end = N-1
-    find = False
-    while start<=end:
-        i = int((start + end) / 2)
-        if test[m]==card[i]:
-            find = True
-            break
-        elif test[m]<card[i]: end = i-1
-        elif test[m]>card[i]: start = i+1
-    if find==True: print(1, end=" ")
-    else: print(0, end=" ")
-
-
-# 14425
-
-import sys
-input = sys.stdin.readline
-N, M = map(int, input().split())
-S = []
-cnt = 0
-for _ in range(N):
-    temp = input().strip()
-    S.append(temp)
-S.sort()
-for _ in range(M):
-    temp = input().strip()
-    start = 0
-    end = N - 1
-    find = False
-    while start <= end:
-        i = int((start + end) / 2)
-        if temp == S[i]:
-            cnt += 1
-            break
-        elif temp < S[i]:
-            end = i - 1
-        elif temp > S[i]:
-            start = i + 1
-print(cnt)
-
-
-# 1620
-
-import sys
-input = sys.stdin.readline
-N, M = map(int, input().split())
-mon_1 = []
-mon_2 = []
-for n in range(N):
-    temp = input().strip()
-    mon_1.append((n+1, temp))  # num, name
-    mon_2.append((temp, n+1))  # name, num
-mon_2.sort()
-for _ in range(M):
-    temp = input().strip()
-    if temp[0]>="1" and temp[0]<="9":   # number -> name
-        temp = int(temp)
-        print(mon_1[temp-1][1])
-    else:                               # name -> number
-        start = 0
-        end = N-1
-        while start <= end:
-            i = int((start + end) / 2)
-            if temp == mon_2[i][0]:
-                print(mon_2[i][1])
-                break
-            elif temp < mon_2[i][0]:
-                end = i - 1
-            elif temp > mon_2[i][0]:
-                start = i + 1
-
-
-# 10816
-
-import sys
-input = sys.stdin.readline
-N = int(input())
-card = list(map(int, input().split()))
-card2 = {}
-for n in range(N):
-    if card2.get(card[n])==None: card2[card[n]] = 1
-    else: card2[card[n]] += 1
-M = int(input())
-test = list(map(int, input().split()))
-for m in range(M):
-    if card2.get(test[m])==None: print(0, end=" ")
-    else: print(card2[test[m]], end=" ")
-
-
-# 1764
-
-import sys
-input = sys.stdin.readline
-N, M = map(int, input().split())
-hear = []
-for _ in range(N):
-    temp = input().strip()
-    hear.append(temp)
-hear.sort()
-res = []
-for _ in range(M):
-    temp = input().strip()
-    start = 0
-    end = N - 1
-    while start <= end:
-        i = int((start + end) / 2)
-        if temp == hear[i]:
-            res.append(temp)
-            break
-        elif temp < hear[i]:
-            end = i - 1
-        elif temp > hear[i]:
-            start = i + 1
-res.sort()
-print(len(res))
-for i in range(len(res)): print(res[i])
-
-
-# 1269
-
-import sys
-input = sys.stdin.readline
-Anum, Bnum = map(int, input().split())
-A = list(map(int, input().split()))
-B = list(map(int, input().split()))
-A.sort()
-B.sort()
-AandB = 0
-for bnum in range(Bnum):
-    start = 0
-    end = Anum - 1
-    while start <= end:
-        i = int((start + end) / 2)
-        if B[bnum] == A[i]:
-            AandB += 1
-            break
-        elif B[bnum] < A[i]:
-            end = i - 1
-        elif B[bnum] > A[i]:
-            start = i + 1
-print(Anum+Bnum-2*AandB)
-
-
-# 11478
-
-import sys
-input = sys.stdin.readline
-S = input().strip()
-res = set()
-for i in range(len(S)):
-    for j in range(i, len(S)):
-        res.add(S[i:j+1])
-print(len(res))
-
-
-# -----------------------------------
-# fourteen (재귀)
-
-
-# 10872
-
-res = [1]
-for i in range(12):
-    res.append(0)
-
-def fac(N):
-    if res[N] != 0: return res[N]
-    else: return fac(N-1)*N
-
-import sys
-input = sys.stdin.readline
-N = int(input())
-print(fac(N))
-
-
-# 10870
-
-res = [0, 1]
-for i in range(20):
-    res.append(-1)
-
-def fib(N):
-    if res[N] == -1: res[N] = fib(N-2)+fib(N-1)
-    return res[N]
-
-import sys
-input = sys.stdin.readline
-n = int(input())
-print(fib(n))
-
-
-# 25501
-
-def recursion(s, l, r, cnt):
-    cnt += 1
-    if l >= r: return 1, cnt
-    elif s[l] != s[r]: return 0, cnt
-    else: return recursion(s, l+1, r-1, cnt)
-
-def isPalindrome(s):
-    return recursion(s, 0, len(s)-1, 0)
-
-import sys
-input = sys.stdin.readline
-T = int(input())
-for t in range(T):
-    S = input().strip()
-    temp = isPalindrome(S)
-    print(temp[0], temp[1])
-
-
-# 24060
-
-def merge_sort(A, p, r, cnt):
-    if p<r:
-        q = int((p+r)/2)
-        cnt1 = merge_sort(A, p, q, cnt)
-        cnt2 = merge_sort(A, q+1, r, cnt1)
-        cnt = merge(A, p, q, r, cnt2)
-    return cnt
-
-def merge(A, p, q, r, cnt):
-    i, j = p, q+1
-    temp = []
-    while i<=q and j<=r:
-        if A[i]<=A[j]:
-            temp.append(A[i])
-            i += 1
-        else:
-            temp.append(A[j])
-            j += 1
-    while i<=q:
-        temp.append(A[i])
-        i += 1
-    while j<=r:
-        temp.append(A[j])
-        j += 1
-    i, t = p, 0
-    while i<=r:
-        A[i] = temp[t]
-        cnt += 1
-        if cnt == K: print(temp[t])
-        i += 1
-        t += 1
-    return cnt
-
-import sys
-input = sys.stdin.readline
-N, K = map(int, input().split())
-A = list(map(int, input().split()))
-cnt = 0
-cnt = merge_sort(A, 0, N-1, cnt)
-if cnt < K: print(-1)
-
-
-# 2447
-
-def makestar(star, A, B, n):
-    step = int(n/3)
-    for a in range(A+step, A+2*step):
-        for b in range(B+step, B+2*step):
-            star[a][b] = 0
-    if step>1:
-        makestar(star, A, B, step)
-        makestar(star, A, B+step, step)
-        makestar(star, A, B+2*step, step)
-        makestar(star, A+step, B, step)
-        makestar(star, A+step, B+2*step, step)
-        makestar(star, A+2*step, B, step)
-        makestar(star, A+2*step, B+step, step)
-        makestar(star, A+2*step, B+2*step, step)
-
-import sys
-input = sys.stdin.readline
-N = int(input())
-star = []
-for i in range(N):
-    temp = []
-    for j in range(N):
-        temp.append(1)
-    star.append(temp)
-makestar(star, 0, 0, N)
-for i in range(N):
-    for j in range(N):
-        if star[i][j]==1: print("*", end="")
-        else: print(" ", end="")
-    print()
-
-
-# 11729
-
-def hanoi(now, to, temp, n):
-    if n == 1:
-        print(now, to)
-    else:
-        hanoi(now, temp, to, n-1)
-        hanoi(now, to, temp, 1)
-        hanoi(temp, to, now, n-1)
-
-import sys
-input = sys.stdin.readline
-N = int(input())
-sum = 1
-for _ in range(1, N):
-    sum = sum * 2 + 1
-print(sum)
-hanoi(1, 3, 2, N)
-
-
-# -----------------------------------
-# fifteen (약수, 배수와 소수, 더 빠르게)
+# thirteen (약수, 배수와 소수, 더 빠르게)
 
 
 # 1934
@@ -515,7 +191,456 @@ for _ in range(T):
 
 
 # -----------------------------------
-# sixteen (기하 1)
+# fourteen (기본 수학 1)
+
+
+# 2292
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+# 1(1) / 6(7) / 12(19) / 18(37)
+room = 0
+i = 0
+while N > 0:
+    if i == 0: N -= 1
+    else: N -= 6 * i
+    room += 1
+    i += 1
+print(room)
+"""
+
+# 2355
+
+
+
+
+
+"""
+# 1193
+
+import sys
+input = sys.stdin.readline
+X = int(input())
+# 1(1) / 2(3) / 3(6) / 4(10)
+i = 1
+while X > 0:
+    X -= i
+    i += 1
+i -= 1
+X += i
+if i%2==0: print("%d/%d" %(X, i-X+1))
+else: print("%d/%d" %(i-X+1, X))
+
+
+# 2869
+
+import sys
+input = sys.stdin.readline
+A, B, V = map(int, input().split())
+day = 1
+if V > A:
+    temp = (V-A)//(A-B)
+    if (V-A)%(A-B)==0: day = temp + 1
+    else: day = temp + 2
+print(day)
+
+
+# 10250
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+for t in range(T):
+    H, W, N = map(int, input().split())
+    h = (N-1) % H + 1
+    w = (N-1) // H + 1
+    print(h*100+w)
+
+
+# 2775
+
+a = []
+for i in range(15):
+    list = []
+    list.append(1)
+    if i == 0:
+        for j in range(2, 15):
+            list.append(j)
+    else:
+        for j in range(2, 15):
+            list.append(0)
+    a.append(list)
+
+def apart(k, n):
+    if a[k][n] == 0:
+        a[k][n] = apart(k, n-1) + apart(k-1, n)
+    return a[k][n]
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+for t in range(T):
+    k = int(input())    # k층
+    n = int(input())    # n호
+    # 3층) 1 / 5 / 15 / 35 / 70
+    # 2층) 1 / 4 / 10 / 20 / 35
+    # 1층) 1 / 3 /  6 / 10 / 15
+    # 0층) 1 / 2 /  3 /  4 /  5
+    print(apart(k, n-1))
+
+
+# 2839
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+five = N//5
+cant = False
+while True:
+    if (N-five*5)%3 == 0: break
+    else: five -= 1
+    if five<0:
+        cant = True
+        break
+if cant: print(-1)
+else: print(int(five+(N-five*5)/3))
+
+
+# 10757
+
+import sys
+input = sys.stdin.readline
+A, B = map(int, input().split())
+print(A+B)
+
+
+# -----------------------------------
+# fifteen (집합과 맵)
+
+
+# 10815
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+card = list(map(int, input().split()))
+card.sort()
+M = int(input())
+test = list(map(int, input().split()))
+for m in range(M):
+    start = 0
+    end = N-1
+    find = False
+    while start<=end:
+        i = int((start + end) / 2)
+        if test[m]==card[i]:
+            find = True
+            break
+        elif test[m]<card[i]: end = i-1
+        elif test[m]>card[i]: start = i+1
+    if find==True: print(1, end=" ")
+    else: print(0, end=" ")
+
+
+# 14425
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+S = []
+cnt = 0
+for _ in range(N):
+    temp = input().strip()
+    S.append(temp)
+S.sort()
+for _ in range(M):
+    temp = input().strip()
+    start = 0
+    end = N - 1
+    find = False
+    while start <= end:
+        i = int((start + end) / 2)
+        if temp == S[i]:
+            cnt += 1
+            break
+        elif temp < S[i]:
+            end = i - 1
+        elif temp > S[i]:
+            start = i + 1
+print(cnt)
+
+
+# 1620
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+mon_1 = []
+mon_2 = []
+for n in range(N):
+    temp = input().strip()
+    mon_1.append((n+1, temp))  # num, name
+    mon_2.append((temp, n+1))  # name, num
+mon_2.sort()
+for _ in range(M):
+    temp = input().strip()
+    if temp[0]>="1" and temp[0]<="9":   # number -> name
+        temp = int(temp)
+        print(mon_1[temp-1][1])
+    else:                               # name -> number
+        start = 0
+        end = N-1
+        while start <= end:
+            i = int((start + end) / 2)
+            if temp == mon_2[i][0]:
+                print(mon_2[i][1])
+                break
+            elif temp < mon_2[i][0]:
+                end = i - 1
+            elif temp > mon_2[i][0]:
+                start = i + 1
+
+
+# 10816
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+card = list(map(int, input().split()))
+card2 = {}
+for n in range(N):
+    if card2.get(card[n])==None: card2[card[n]] = 1
+    else: card2[card[n]] += 1
+M = int(input())
+test = list(map(int, input().split()))
+for m in range(M):
+    if card2.get(test[m])==None: print(0, end=" ")
+    else: print(card2[test[m]], end=" ")
+
+
+# 1764
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+hear = []
+for _ in range(N):
+    temp = input().strip()
+    hear.append(temp)
+hear.sort()
+res = []
+for _ in range(M):
+    temp = input().strip()
+    start = 0
+    end = N - 1
+    while start <= end:
+        i = int((start + end) / 2)
+        if temp == hear[i]:
+            res.append(temp)
+            break
+        elif temp < hear[i]:
+            end = i - 1
+        elif temp > hear[i]:
+            start = i + 1
+res.sort()
+print(len(res))
+for i in range(len(res)): print(res[i])
+
+
+# 1269
+
+import sys
+input = sys.stdin.readline
+Anum, Bnum = map(int, input().split())
+A = list(map(int, input().split()))
+B = list(map(int, input().split()))
+A.sort()
+B.sort()
+AandB = 0
+for bnum in range(Bnum):
+    start = 0
+    end = Anum - 1
+    while start <= end:
+        i = int((start + end) / 2)
+        if B[bnum] == A[i]:
+            AandB += 1
+            break
+        elif B[bnum] < A[i]:
+            end = i - 1
+        elif B[bnum] > A[i]:
+            start = i + 1
+print(Anum+Bnum-2*AandB)
+
+
+# 11478
+
+import sys
+input = sys.stdin.readline
+S = input().strip()
+res = set()
+for i in range(len(S)):
+    for j in range(i, len(S)):
+        res.add(S[i:j+1])
+print(len(res))
+
+
+# -----------------------------------
+# sixteen (재귀)
+
+
+# 10872
+
+res = [1]
+for i in range(12):
+    res.append(0)
+
+def fac(N):
+    if res[N] != 0: return res[N]
+    else: return fac(N-1)*N
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+print(fac(N))
+
+
+# 10870
+
+res = [0, 1]
+for i in range(20):
+    res.append(-1)
+
+def fib(N):
+    if res[N] == -1: res[N] = fib(N-2)+fib(N-1)
+    return res[N]
+
+import sys
+input = sys.stdin.readline
+n = int(input())
+print(fib(n))
+
+
+# 25501
+
+def recursion(s, l, r, cnt):
+    cnt += 1
+    if l >= r: return 1, cnt
+    elif s[l] != s[r]: return 0, cnt
+    else: return recursion(s, l+1, r-1, cnt)
+
+def isPalindrome(s):
+    return recursion(s, 0, len(s)-1, 0)
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+for t in range(T):
+    S = input().strip()
+    temp = isPalindrome(S)
+    print(temp[0], temp[1])
+
+
+# 24060
+
+def merge_sort(A, p, r, cnt):
+    if p<r:
+        q = int((p+r)/2)
+        cnt1 = merge_sort(A, p, q, cnt)
+        cnt2 = merge_sort(A, q+1, r, cnt1)
+        cnt = merge(A, p, q, r, cnt2)
+    return cnt
+
+def merge(A, p, q, r, cnt):
+    i, j = p, q+1
+    temp = []
+    while i<=q and j<=r:
+        if A[i]<=A[j]:
+            temp.append(A[i])
+            i += 1
+        else:
+            temp.append(A[j])
+            j += 1
+    while i<=q:
+        temp.append(A[i])
+        i += 1
+    while j<=r:
+        temp.append(A[j])
+        j += 1
+    i, t = p, 0
+    while i<=r:
+        A[i] = temp[t]
+        cnt += 1
+        if cnt == K: print(temp[t])
+        i += 1
+        t += 1
+    return cnt
+
+import sys
+input = sys.stdin.readline
+N, K = map(int, input().split())
+A = list(map(int, input().split()))
+cnt = 0
+cnt = merge_sort(A, 0, N-1, cnt)
+if cnt < K: print(-1)
+
+
+# 2447
+
+def makestar(star, A, B, n):
+    step = int(n/3)
+    for a in range(A+step, A+2*step):
+        for b in range(B+step, B+2*step):
+            star[a][b] = 0
+    if step>1:
+        makestar(star, A, B, step)
+        makestar(star, A, B+step, step)
+        makestar(star, A, B+2*step, step)
+        makestar(star, A+step, B, step)
+        makestar(star, A+step, B+2*step, step)
+        makestar(star, A+2*step, B, step)
+        makestar(star, A+2*step, B+step, step)
+        makestar(star, A+2*step, B+2*step, step)
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+star = []
+for i in range(N):
+    temp = []
+    for j in range(N):
+        temp.append(1)
+    star.append(temp)
+makestar(star, 0, 0, N)
+for i in range(N):
+    for j in range(N):
+        if star[i][j]==1: print("*", end="")
+        else: print(" ", end="")
+    print()
+
+
+# 11729
+
+def hanoi(now, to, temp, n):
+    if n == 1:
+        print(now, to)
+    else:
+        hanoi(now, temp, to, n-1)
+        hanoi(now, to, temp, 1)
+        hanoi(temp, to, now, n-1)
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+sum = 1
+for _ in range(1, N):
+    sum = sum * 2 + 1
+print(sum)
+hanoi(1, 3, 2, N)
+
+
+# -----------------------------------
+# missing
 
 
 # 1085
@@ -815,7 +940,7 @@ min = 1000000000
 cal(1, A[0])
 print(max)
 print(min)
-"""
+
 
 # 14889
 
@@ -850,5 +975,5 @@ teamA = []
 teamB = []
 cal(0)
 print(min)
-
+"""
 
