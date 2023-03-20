@@ -208,15 +208,27 @@ while N > 0:
     room += 1
     i += 1
 print(room)
-"""
+
 
 # 2355
 
+import sys
+input = sys.stdin.readline
+A, B = map(int, input().split())
+if A >= 0 and B >= 0:
+    if A <= B: print(B * (B + 1) // 2 - (A - 1) * A // 2)
+    else: print(A * (A + 1) // 2 - (B - 1) * B // 2)
+elif A >= 0 and B < 0:
+    print(A * (A + 1) // 2 - (- B) * (- B + 1) // 2)
+elif A < 0 and B >= 0:
+    print(B * (B + 1) // 2 - (- A) * (- A + 1) // 2)
+else:
+    A = - A
+    B = - B
+    if A <= B: print(- (B * (B + 1) // 2 - (A - 1) * A // 2))
+    else: print(- (A * (A + 1) // 2 - (B - 1) * B // 2))
 
 
-
-
-"""
 # 1193
 
 import sys
@@ -940,7 +952,7 @@ min = 1000000000
 cal(1, A[0])
 print(max)
 print(min)
-
+"""
 
 # 14889
 
@@ -975,5 +987,5 @@ teamA = []
 teamB = []
 cal(0)
 print(min)
-"""
+
 

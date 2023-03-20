@@ -119,7 +119,7 @@ for i in range(N):
         found = True
         break
 if found==False: print(0)
-"""
+
 
 # 19532
 
@@ -131,8 +131,6 @@ y = (a * f - c * d) // (a * e - b * d)
 print(x, y)
 
 
-
-"""
 # 7568
 
 import sys
@@ -397,7 +395,7 @@ for n in range(N):
 a.sort(key=lambda tu: tu[0])
 for n in range(N):
     print(a[n][0], a[n][1])
-
+"""
 
 # 18870
 
@@ -414,5 +412,5 @@ for i in range(N):
         cnt += 1
 for i in range(N):
     print(dic[X[i]], end=" ")
-"""
+
 
