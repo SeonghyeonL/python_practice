@@ -1257,22 +1257,106 @@ for i in range(H):
             elif visit[i][j][k] == True:
                 maximum = max(maximum, day[i][j][k])
 print(maximum)
-"""
+
 
 # 16928
 
 import sys
+from collections import deque
 input = sys.stdin.readline
+N, M = map(int, input().split())
+move = []
+for i in range(101): move.append(i)
+for _ in range(N):
+    x, y = list(map(int, input().split()))
+    move[x] = y
+for _ in range(M):
+    u, v = list(map(int, input().split()))
+    move[u] = v
+visit = [False] * 101
+res = [0] * 101
+queue = deque([1])
+visit[1] = True
+dice = [1, 2, 3, 4, 5, 6]
+while len(queue) > 0:
+    temp = queue.popleft()
+    for i in range(6):
+        a = temp + dice[i]
+        if 1 <= a <= 100:
+            a = move[a]
+            if visit[a] == False:
+                visit[a] = True
+                queue.append(a)
+                res[a] = res[temp] + 1
+print(res[100])
 
 
+# 2206
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+N, M = map(int, input().split())
+matrix = []
+for _ in range(N): matrix.append(list(map(int, input().strip())))
+visit = [[[0] * 2 for _ in range(M)] for _ in range(N)]
+visit[0][0][0] = 1
+moving = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+queue = deque([[0, 0, 0]])
+while len(queue) > 0:
+    temp = queue.popleft()
+    if temp[0] == N - 1 and temp[1] == M - 1:
+        print(visit[temp[0]][temp[1]][temp[2]])
+        exit()
+    for i in range(4):
+        x = temp[0] + moving[i][0]
+        y = temp[1] + moving[i][1]
+        # z = temp[2] ; 0이면 벽 파괴 사용 가능, 1이면 이미 사용함
+        if 0 <= x <= N - 1 and 0 <= y <= M - 1:
+            if matrix[x][y] == 0 and visit[x][y][temp[2]] == 0:
+                visit[x][y][temp[2]] = visit[temp[0]][temp[1]][temp[2]] + 1
+                queue.append([x, y, temp[2]])
+            elif matrix[x][y] == 1 and temp[2] == 0:
+                visit[x][y][1] = visit[temp[0]][temp[1]][temp[2]] + 1
+                queue.append([x, y, 1])
+print(-1)
+"""
+
+# 1707
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+K = int(input())
+
+def cal(start):
+    if visit[start] == 0:
+        visit[start] = 1
+    queue = deque([start])
+    while len(queue) > 0:
+        temp = queue.popleft()
+        for j in connect[temp]:
+            if visit[j] == 0:
+                queue.append(j)
+                if visit[temp] == 1: visit[j] = -1
+                elif visit[temp] == -1: visit[j] = 1
+            elif visit[j] == visit[temp]:
+                return False
+    return True
+
+for _ in range(K):
+    V, E = map(int, input().split())
+    connect = [[] for _ in range(V + 1)]
+    visit = [0] * (V + 1)
+    for _ in range(E):
+        u, v = map(int, input().split())
+        connect[u].append(v)
+        connect[v].append(u)
+    goall = True
+    for i in range(1, V + 1):
+        if goall == True and cal(i) == False: goall = False
+    if goall: print("YES")
+    else: print("NO")
 
 
-
-
-
-
-
-
-# 문제 번호 수정 필요
-# https://www.acmicpc.net/step/24
 
