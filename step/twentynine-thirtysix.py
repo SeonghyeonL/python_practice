@@ -209,9 +209,33 @@ for i in range(1, n + 1):
 # 1956
 
 import sys
+import heapq
+inf = sys.maxsize
 input = sys.stdin.readline
-
-
+V, E = map(int, input().split())
+connect = [[] for _ in range(V + 1)]
+for _ in range(E):
+    a, b, c = map(int, input().split())
+    connect[a].append([b, c])
+result = inf
+for i in range(1, V + 1):
+    distance = [inf] * (V + 1)
+    heap = []
+    for next, dist in connect[i]:
+        distance[next] = dist
+        heapq.heappush(heap, [distance[next], next])
+    while len(heap) > 0:
+        dist, now = heapq.heappop(heap)
+        if now == i: break  # 목적지 도달
+        elif distance[now] < dist: continue  # 기존 게 더 짧음
+        else:
+            for n, n_dist in connect[now]:
+                cost = dist + n_dist
+                if cost < distance[n]:
+                    distance[n] = cost
+                    heapq.heappush(heap, [cost, n])
+    result = min(distance[i], result)
+print(result if result != inf else -1)
 
 
 
