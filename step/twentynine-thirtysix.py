@@ -146,9 +146,67 @@ for _ in range(T):
             ans.append(x[i])
     ans.sort()
     print(' '.join(map(str, ans)))
+
+
+# 11657 (벨만 포드)
+
+import sys
+input = sys.stdin.readline
+inf = sys.maxsize
+N, M = map(int, input().split())
+connect = [[] for _ in range(N + 1)]
+for _ in range(M):
+    A, B, C = map(int, input().split())
+    connect[A].append([B, C])
+dist = [inf] * (N + 1)
+dist[1] = 0
+
+def bellmanFord():
+    for i in range(N):
+        for j in range(1, N + 1):
+            for to, weight in connect[j]:
+                if dist[j] != inf and dist[to] > dist[j] + weight:
+                    dist[to] = dist[j] + weight
+                    # N개의 노드가 있을 때, a에서 b까지 가는 최소값이
+                    # a에서 바로 b로 일 수도 있지만 ( = 1 )
+                    # 모든 노드를 거치고 b로 일 수도 있기 때문에 ( = N - 1 )
+                    # N - 1 번 반복해야 함
+                    if i == N - 1:  # 그리고 N번째는 -inf로 가는 거 있나 확인용
+                        return False
+    return True
+
+res = bellmanFord()
+if not res: print(-1)
+else:
+    for i in dist[2:]:
+        print(i if i != inf else -1)
+
+
+# 11404 (플로이드 워셜)
+
+import sys
+input = sys.stdin.readline
+inf = sys.maxsize
+n = int(input())
+m = int(input())
+dist = [[inf for _ in range(n + 1)] for _ in range(n + 1)]
+for i in range(1, n + 1): dist[i][i] = 0
+connect = [[] for _ in range(n + 1)]
+for _ in range(m):
+    a, b, c = map(int, input().split())
+    connect[a].append([b, c])
+    dist[a][b] = min(dist[a][b], c)  # 두 도시를 연결하는 노선은 하나가 아닐 수 있음
+for i in range(1, n + 1):
+    for j in range(1, n + 1):
+        for k in range(1, n + 1):
+            dist[j][k] = min(dist[j][k], dist[j][i] + dist[i][k])
+for i in range(1, n + 1):
+    for j in range(1, n + 1):
+        print(dist[i][j] if dist[i][j] != inf else 0, end=" ")
+    print()
 """
 
-# 11657
+# 1956
 
 import sys
 input = sys.stdin.readline
