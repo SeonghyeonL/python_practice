@@ -204,7 +204,7 @@ for i in range(1, n + 1):
     for j in range(1, n + 1):
         print(dist[i][j] if dist[i][j] != inf else 0, end=" ")
     print()
-"""
+
 
 # 1956
 
@@ -236,9 +236,20 @@ for i in range(1, V + 1):
                     heapq.heappush(heap, [cost, n])
     result = min(distance[i], result)
 print(result if result != inf else -1)
+"""
+
+# -----------------------------------
+# thirty (투 포인터)
+
+
+# 3273
+
+import sys
+input = sys.stdin.readline
 
 
 
 
-# https://www.acmicpc.net/step/26
+
+# https://www.acmicpc.net/step/59
 
