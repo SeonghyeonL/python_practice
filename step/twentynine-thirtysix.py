@@ -236,7 +236,7 @@ for i in range(1, V + 1):
                     heapq.heappush(heap, [cost, n])
     result = min(distance[i], result)
 print(result if result != inf else -1)
-"""
+
 
 # -----------------------------------
 # thirty (투 포인터)
@@ -251,11 +251,26 @@ a = list(map(int, input().split()))
 x = int(input())
 a.sort()
 ans = 0
-for i in range(n - 1):
-    for j in range(i + 1, n):
-        if a[i] + a[j] == x:
-            ans += 1
+start = 0
+end = n - 1
+while start < end:
+    temp = a[start] + a[end]
+    if temp == x:
+        ans += 1
+        start += 1
+        end -= 1
+    elif temp > x:
+        end -= 1
+    elif temp < x:
+        start += 1
 print(ans)
+"""
+
+# 2470
+
+import sys
+input = sys.stdin.readline
+
 
 
 
