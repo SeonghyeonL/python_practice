@@ -246,7 +246,16 @@ print(result if result != inf else -1)
 
 import sys
 input = sys.stdin.readline
-
+n = int(input())
+a = list(map(int, input().split()))
+x = int(input())
+a.sort()
+ans = 0
+for i in range(n - 1):
+    for j in range(i + 1, n):
+        if a[i] + a[j] == x:
+            ans += 1
+print(ans)
 
 
 
