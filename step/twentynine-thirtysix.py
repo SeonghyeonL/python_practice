@@ -264,12 +264,60 @@ while start < end:
     elif temp < x:
         start += 1
 print(ans)
-"""
+
 
 # 2470
 
 import sys
 input = sys.stdin.readline
+N = int(input())
+num = list(map(int, input().split()))
+num.sort()
+start = 0
+end = N - 1
+ans = [num[start], num[end]]
+while start < end:
+    temp = num[start] + num[end]
+    if temp == 0:
+        ans = [num[start], num[end]]
+        break
+    else:
+        if abs(temp) < abs(ans[1] + ans[0]):
+            ans = [num[start], num[end]]
+        if temp > 0:
+            end -= 1
+        elif temp < 0:
+            start += 1
+print(ans[0], ans[1])
+
+
+# 1806
+
+import sys
+input = sys.stdin.readline
+inf = sys.maxsize
+N, S = map(int, input().split())
+array = list(map(int, input().split()))
+sum = array[0]
+ans = inf
+start, end = 0, 0
+while True:
+    if sum >= S:
+        sum -= array[start]
+        ans = min(ans, end - start + 1)
+        start += 1
+    else:  # sum < S
+        end += 1
+        if end == N: break
+        sum += array[end]
+print(ans if ans != inf else 0)
+"""
+
+# 1644
+
+import sys
+input = sys.stdin.readline
+
 
 
 
