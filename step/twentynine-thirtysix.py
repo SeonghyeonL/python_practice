@@ -356,8 +356,9 @@ print(ans)
 
 import sys
 input = sys.stdin.readline
-
-
+N, C = map(int, input().split())
+w = list(map(int, input().split()))
+# token test
 
 
 
