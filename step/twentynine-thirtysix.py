@@ -311,12 +311,53 @@ while True:
         if end == N: break
         sum += array[end]
 print(ans if ans != inf else 0)
-"""
+
 
 # 1644
 
 import sys
 input = sys.stdin.readline
+N = int(input())
+
+prime = []
+array = [True] * (N + 1)
+array[0] = False
+array[1] = False
+for i in range(2, N + 1):
+    if array[i] == True:
+        prime.append(i)
+        for j in range(2 * i, N + 1, i):
+            array[j] = False
+
+if len(prime) == 0:
+    print(0)
+    exit()
+
+ans = 0
+start, end = 0, 0
+sum = prime[start]
+while True:
+    if sum == N:
+        ans += 1
+        end += 1
+        if end == len(prime): break
+        sum += prime[end]
+    elif sum > N:
+        sum -= prime[start]
+        start += 1
+    else:  # sum < N
+        end += 1
+        if end == len(prime): break
+        sum += prime[end]
+print(ans)
+"""
+
+# 1450
+
+import sys
+input = sys.stdin.readline
+
+
 
 
 
