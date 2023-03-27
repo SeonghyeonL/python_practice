@@ -350,20 +350,61 @@ while True:
         if end == len(prime): break
         sum += prime[end]
 print(ans)
-"""
 
-# 1450
 
+# 1450 (meet in the middle)
+
+# 한 번에 연산하기 어려운 문제를 둘로 나누어 시간 단축
 import sys
 input = sys.stdin.readline
 N, C = map(int, input().split())
 w = list(map(int, input().split()))
-# token test
+aw = w[:N//2]
+bw = w[N//2:]
+asum = []
+bsum = []
+
+# 부분 집합의 합
+def bruteforce(w_arr, sum_arr, idx, w_now):
+    if idx == len(w_arr):
+        sum_arr.append(w_now)
+        return
+    bruteforce(w_arr, sum_arr, idx + 1, w_now)
+    bruteforce(w_arr, sum_arr, idx + 1, w_now + w_arr[idx])
+
+bruteforce(aw, asum, 0, 0)
+bruteforce(bw, bsum, 0, 0)
+bsum.sort()  # binary search를 위해 오름차순 정렬
+
+ans = 0
+for i in asum:
+    if i > C: continue
+    elif i == C: ans += 1
+    else:  # i < C
+        start, end = 0, len(bsum)
+        while start < end:  # binary search
+            mid = (start + end) // 2
+            if bsum[mid] + i <= C:
+                start = mid + 1
+            else:  # bsum[mid] + i > C
+                end = mid
+        ans += end
+print(ans)
+"""
+
+# -----------------------------------
+# thirtyone (동적 계획법과 최단거리 역추적)
+
+
+# 12852
+
+import sys
+input = sys.stdin.readline
 
 
 
 
 
 
-# https://www.acmicpc.net/step/59
+# https://www.acmicpc.net/step/41
 
