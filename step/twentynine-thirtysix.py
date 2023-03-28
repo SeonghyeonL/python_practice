@@ -390,13 +390,70 @@ for i in asum:
                 end = mid
         ans += end
 print(ans)
-"""
+
 
 # -----------------------------------
 # thirtyone (동적 계획법과 최단거리 역추적)
 
 
 # 12852
+
+import sys
+inf = sys.maxsize
+input = sys.stdin.readline
+N = int(input())
+find = [[inf, inf] for _ in range(N + 1)]
+find[1] = [0, 0]
+
+for i in range(2, N + 1):
+    find[i][0] = find[i - 1][0] + 1
+    find[i][1] = i - 1
+    if i % 3 == 0 and find[i // 3][0] < find[i][0]:
+        find[i][0] = find[i // 3][0] + 1
+        find[i][1] = i // 3
+    if i % 2 == 0 and find[i // 2][0] < find[i][0]:
+        find[i][0] = find[i // 2][0] + 1
+        find[i][1] = i // 2
+
+print(find[N][0])
+print(N, end=" ")
+temp = find[N][1]
+while temp > 0:
+    print(temp, end=" ")
+    temp = find[temp][1]
+
+
+# 14002
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+A = list(map(int, input().split()))
+find = [[0, -1] for _ in range(N)]
+find[0] = [1, -1]
+maxlen = 1
+maxidx = 0
+for i in range(1, N):
+    for j in range(i, -1, -1):
+        if A[i] > A[j] and find[i][0] <= find[j][0]:
+            find[i][0] = find[j][0] + 1
+            find[i][1] = j
+    if find[i][0] == 0: find[i][0] = 1  # 제일 작음
+    if find[i][0] > maxlen:
+        maxlen = find[i][0]
+        maxidx = i
+print(maxlen)
+ans = []
+ans.append(A[maxidx])
+temp = find[maxidx][1]
+while temp >= 0:
+    ans.append(A[temp])
+    temp = find[temp][1]
+ans.reverse()
+print(' '.join(map(str, ans)))
+"""
+
+# 14003
 
 import sys
 input = sys.stdin.readline
