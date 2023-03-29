@@ -451,9 +451,53 @@ while temp >= 0:
     temp = find[temp][1]
 ans.reverse()
 print(' '.join(map(str, ans)))
-"""
+
 
 # 14003
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+A = list(map(int, input().split()))
+
+def binary_search(num):
+    start = 0
+    end = len(ans) - 1
+    # 탈출 조건 및 리턴값 주의할 것
+    while start + 1 <= end:
+        mid = (start + end) // 2
+        if num <= ans[mid]: end = mid
+        else: start = mid + 1  # num > ans[mid]
+    return end
+
+ans = [A[0]]
+ans_total = [(A[0], 0)]
+
+for i in range(1, N):
+    temp = A[i]
+    if temp > ans[-1]:
+        ans_total.append((temp, len(ans)))
+        ans.append(temp)
+    else:  # temp <= ans[-1]
+        idx = binary_search(temp)
+        ans[idx] = temp
+        ans_total.append((temp, idx))
+
+real_ans = []
+idx = len(ans) - 1
+# 뒤쪽을 기준으로 최대 길이 만족시키는 숫자들
+for i in range(N - 1, -1, -1):
+    if ans_total[i][1] == idx:
+        real_ans.append(ans_total[i][0])
+        idx -= 1
+        if idx == -1: break
+real_ans.reverse()
+
+print(len(ans))
+print(' '.join(map(str, real_ans)))
+"""
+
+# 9252
 
 import sys
 input = sys.stdin.readline
