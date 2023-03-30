@@ -495,13 +495,59 @@ real_ans.reverse()
 
 print(len(ans))
 print(' '.join(map(str, real_ans)))
-"""
+
 
 # 9252
 
 import sys
 input = sys.stdin.readline
+A = input().strip()
+B = input().strip()
+LCS = []
+for _ in range(len(B) + 1):
+    temp = []
+    for _ in range(len(A) + 1): temp.append([0, 0, 0])
+    LCS.append(temp)
+for i in range(len(B)):
+    for j in range(len(A)):
+        if B[i] == A[j]:
+            LCS[i + 1][j + 1][0] = LCS[i][j][0] + 1
+            LCS[i + 1][j + 1][1] = i
+            LCS[i + 1][j + 1][2] = j
+        else:  # B[i] != A[j]
+            if LCS[i][j+1][0] >= LCS[i+1][j][0]:
+                LCS[i + 1][j + 1][0] = LCS[i][j + 1][0]
+                LCS[i + 1][j + 1][1] = i
+                LCS[i + 1][j + 1][2] = j + 1
+            else:  # LCS[i][j+1][0] < LCS[i+1][j][0]
+                LCS[i + 1][j + 1][0] = LCS[i + 1][j][0]
+                LCS[i + 1][j + 1][1] = i + 1
+                LCS[i + 1][j + 1][2] = j
+print(LCS[len(B)][len(A)][0])
+if LCS[len(B)][len(A)][0] > 0:
+    ans = []
+    nowcnt = LCS[len(B)][len(A)][0]
+    I = len(B)
+    J = len(A)
+    while nowcnt > 0:
+        temp = LCS[I][J]
+        if temp[1] == I - 1 and temp[2] == J - 1:
+            ans.append(B[I - 1])
+        I = temp[1]
+        J = temp[2]
+        nowcnt = LCS[I][J][0]
+    ans.reverse()
+    print(''.join(map(str, ans)))
+"""
 
+# 2618
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+W = int(input())
+for _ in range(W):
+    h, v = map(int, input().split())
 
 
 
