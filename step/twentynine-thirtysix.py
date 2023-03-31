@@ -538,16 +538,56 @@ if LCS[len(B)][len(A)][0] > 0:
         nowcnt = LCS[I][J][0]
     ans.reverse()
     print(''.join(map(str, ans)))
-"""
+
 
 # 2618
 
 import sys
+sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
 N = int(input())
 W = int(input())
-for _ in range(W):
-    h, v = map(int, input().split())
+dp = [[-1] * (W + 2) for _ in range(W + 2)]  # 앞으로의 이동거리 중 최솟값
+task = []
+for _ in range(W): task.append(list(map(int, input().split())))
+task1 = [[1, 1]] + task  # 경찰차1 위치
+task2 = [[N, N]] + task  # 경찰차2 위치
+ans = []
+
+def solve(a, b):
+    if max(a, b) == W: dp[a][b] = 0
+    if dp[a][b] == -1:
+        nextnum = max(a, b) + 1
+        A = solve(nextnum, b) + abs(task1[a][0] - task1[nextnum][0]) \
+            + abs(task1[a][1] - task1[nextnum][1])
+        B = solve(a, nextnum) + abs(task2[b][0] - task2[nextnum][0]) \
+            + abs(task2[b][1] - task2[nextnum][1])
+        dp[a][b] = min(A, B)
+    return dp[a][b]
+
+def path(a, b):
+    if max(a, b) == W: return 0
+    nextnum = max(a, b) + 1
+    A = dp[nextnum][b] + abs(task1[a][0] - task1[nextnum][0]) \
+        + abs(task1[a][1] - task1[nextnum][1])
+    B = dp[a][nextnum] + abs(task2[b][0] - task2[nextnum][0]) \
+        + abs(task2[b][1] - task2[nextnum][1])
+    if A <= B:
+        print(1)
+        path(nextnum, b)
+    else:
+        print(2)
+        path(a, nextnum)
+
+print(solve(0, 0))
+path(0, 0)
+"""
+
+# 13913
+
+import sys
+input = sys.stdin.readline
+
 
 
 
