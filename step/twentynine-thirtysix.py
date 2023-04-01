@@ -581,12 +581,93 @@ def path(a, b):
 
 print(solve(0, 0))
 path(0, 0)
-"""
+
 
 # 13913
 
 import sys
+from collections import deque
+inf = sys.maxsize
 input = sys.stdin.readline
+N, K = map(int, input().split())
+maxi = max(N, K) + 1
+dp = [[inf, -1] for _ in range(maxi + 1)]  # time, last
+dp[N] = [0, -1]
+move = [[2, 0], [1, 1], [1, -1]]
+
+def bfs():
+    q = deque([N])
+    while len(q) > 0:
+        x = q.popleft()
+        if x == K:
+            print(dp[x][0])
+            path(x)
+        else:
+            for m in move:
+                now = x * m[0] + m[1]
+                if 0 <= now <= maxi and dp[now][0] > dp[x][0] + 1:
+                    q.append(now)
+                    dp[now][0] = dp[x][0] + 1
+                    dp[now][1] = x
+
+def path(i):
+    ans = []
+    temp = i
+    while True:
+        ans.append(temp)
+        if temp == N: break
+        temp = dp[temp][1]
+    ans.reverse()
+    print(' '.join(map(str, ans)))
+
+bfs()
+
+
+# 9019
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+T = int(input())
+for _ in range(T):
+    A, B = map(int, input().split())
+    # D -> double (단, 10000으로 나눈 나머지)
+    # S -> n-1 (단, 0의 경우 9999로 대체)
+    # L -> 자릿수를 왼쪽으로 회전
+    # R -> 자릿수를 오른쪽으로 회전
+    q = deque([[A, ""]])
+    visit = [False] * 10000
+
+    while len(q) > 0:
+        num, path = q.popleft()
+        visit[num] = True
+        if num == B:
+            print(path)
+            break
+
+        num_D = (2 * num) % 10000
+        if visit[num_D] == False:
+            q.append([num_D, path + "D"])
+            visit[num_D] = True
+        num_S = num - 1 if num > 0 else 9999
+        if visit[num_S] == False:
+            q.append([num_S, path + "S"])
+            visit[num_S] = True
+        num_L = (10 * num + (num // 1000)) % 10000
+        if visit[num_L] == False:
+            q.append([num_L, path + "L"])
+            visit[num_L] = True
+        num_R = ((num // 10) + 1000 * (num % 10)) % 10000
+        if visit[num_R] == False:
+            q.append([num_R, path + "R"])
+            visit[num_R] = True
+"""
+
+# 11779
+
+import sys
+input = sys.stdin.readline
+
 
 
 
