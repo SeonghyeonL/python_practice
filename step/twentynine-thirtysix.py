@@ -661,7 +661,7 @@ for _ in range(T):
         if visit[num_R] == False:
             q.append([num_R, path + "R"])
             visit[num_R] = True
-"""
+
 
 # 11779
 
@@ -676,23 +676,23 @@ for _ in range(m):
     a, b, c = map(int, input().split())  # 출발지, 도착지, 비용
     bus[a].append([b, c])
 A, B = map(int, input().split())  # 출발점, 도착점
-dp = [[inf, 0] for _ in range(n + 1)]  # 비용, 이전 도시
-dp[A] = [0, 0]
+dp = [(inf, 0) for _ in range(n + 1)]  # 비용, 이전 도시
+dp[A] = (1, 0)
 
 def bfs():
-    q = deque([A])
+    q = deque([(A, 0)])
     while len(q) > 0:
-        x = q.popleft()
+        x, nowcost = q.popleft()
+        if dp[x][0] <= nowcost: continue  # 시간 초과 방지 (찾았던 값이 더 작아서 지금 거 버리기)
         if x != B:
-            for i in bus[x]:  # x에서 출발하는 버스 중
-                if dp[i[0]][0] > dp[x][0] + i[1]:  # x를 거쳐서 가는 게 비용이 적으면
-                    q.append(i[0])
-                    dp[i[0]][0] = dp[x][0] + i[1]
-                    dp[i[0]][1] = x
+            for to, cost in bus[x]:  # x에서 출발하는 버스 중
+                if dp[to][0] > dp[x][0] + cost:  # x를 거쳐서 가는 게 비용이 적으면
+                    q.append((to, nowcost + cost))
+                    dp[to] = (dp[x][0] + cost, x)
 
 bfs()
 
-print(dp[B][0])  # 최소 비용
+print(dp[B][0] - 1)  # 최소 비용 (-1 ; A initial cost)
 
 ans = []
 cnt = 0
@@ -706,9 +706,12 @@ while True:
 print(cnt)  # 최소 비용 경로의 도시 개수 (출발, 도착 도시 포함)
 ans.reverse()
 print(' '.join(map(str, ans)))  # 최소 비용 방문 도시 순서대로
+"""
 
+# 11780
 
-
+import sys
+input = sys.stdin.readline
 
 
 
