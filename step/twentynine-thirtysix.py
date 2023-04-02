@@ -666,7 +666,48 @@ for _ in range(T):
 # 11779
 
 import sys
+from collections import deque
+inf = sys.maxsize
 input = sys.stdin.readline
+n = int(input())  # 도시의 개수
+m = int(input())  # 버스의 개수
+bus = [[] for _ in range(n + 1)]
+for _ in range(m):
+    a, b, c = map(int, input().split())  # 출발지, 도착지, 비용
+    bus[a].append([b, c])
+A, B = map(int, input().split())  # 출발점, 도착점
+dp = [[inf, 0] for _ in range(n + 1)]  # 비용, 이전 도시
+dp[A] = [0, 0]
+
+def bfs():
+    q = deque([A])
+    while len(q) > 0:
+        x = q.popleft()
+        if x != B:
+            for i in bus[x]:  # x에서 출발하는 버스 중
+                if dp[i[0]][0] > dp[x][0] + i[1]:  # x를 거쳐서 가는 게 비용이 적으면
+                    q.append(i[0])
+                    dp[i[0]][0] = dp[x][0] + i[1]
+                    dp[i[0]][1] = x
+
+bfs()
+
+print(dp[B][0])  # 최소 비용
+
+ans = []
+cnt = 0
+temp = B
+while True:
+    ans.append(temp)
+    cnt += 1
+    if temp == A: break
+    temp = dp[temp][1]
+
+print(cnt)  # 최소 비용 경로의 도시 개수 (출발, 도착 도시 포함)
+ans.reverse()
+print(' '.join(map(str, ans)))  # 최소 비용 방문 도시 순서대로
+
+
 
 
 
