@@ -711,9 +711,16 @@ print(' '.join(map(str, ans)))  # 최소 비용 방문 도시 순서대로
 # 11780
 
 import sys
+inf = sys.maxsize
 input = sys.stdin.readline
-
-
+n = int(input())
+m = int(input())
+bus = [[] for _ in range(n + 1)]
+for _ in range(m):
+    a, b, c = map(int, input().split())  # 출발지, 도착지, 비용
+    bus[a].append([b, c])
+dp = [(inf, 0) for _ in range(n + 1)]  # 비용, 이전 도시
+#dp[A] = (1, 0)
 
 
 
