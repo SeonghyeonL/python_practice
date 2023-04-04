@@ -706,7 +706,7 @@ while True:
 print(cnt)  # 최소 비용 경로의 도시 개수 (출발, 도착 도시 포함)
 ans.reverse()
 print(' '.join(map(str, ans)))  # 최소 비용 방문 도시 순서대로
-"""
+
 
 # 11780
 
@@ -715,12 +715,51 @@ inf = sys.maxsize
 input = sys.stdin.readline
 n = int(input())
 m = int(input())
-bus = [[] for _ in range(n + 1)]
+
+dp = [[inf] * (n + 1) for _ in range(n + 1)]  # i에서 j까지 가는 최소 비용
+for i in range(1, n + 1): dp[i][i] = 0  # 시작 = 도착: 0 출력
 for _ in range(m):
     a, b, c = map(int, input().split())  # 출발지, 도착지, 비용
-    bus[a].append([b, c])
-dp = [(inf, 0) for _ in range(n + 1)]  # 비용, 이전 도시
-#dp[A] = (1, 0)
+    dp[a][b] = min(dp[a][b], c)
+
+trace = [[0] * (n + 1) for _ in range(n + 1)]  # i에서 j로 갈 때 거치는 곳
+for k in range(1, n + 1):
+    for i in range(1, n + 1):
+        for j in range(1, n + 1):
+            if dp[i][j] > dp[i][k] + dp[k][j]:
+                dp[i][j] = dp[i][k] + dp[k][j]
+                trace[i][j] = k
+
+for i in range(1, n + 1):
+    for j in range(1, n + 1):
+        print(dp[i][j] if dp[i][j] != inf else 0, end=' ')
+    print()
+
+def find_trace(x, y):
+    z = trace[x][y]
+    if z == 0: return []
+    else: return find_trace(x, z) + [z] + find_trace(z, y)
+
+# 시작 = 도착 or 도시 i에서 j로 갈 수 없음 → "0을 출력"
+for i in range(1, n + 1):
+    for j in range(1, n + 1):
+        if dp[i][j] == 0 or dp[i][j] == inf:  # 시작 = 도착 or 갈 수 없음
+            print(0)  # print(len(path)) ; path is empty
+        else:
+            path = [i] + find_trace(i, j) + [j]
+            print(len(path), end=' ')
+            print(' '.join(map(str, path)))
+"""
+
+# -----------------------------------
+# thirtytwo (트리)
+
+
+# 11725
+
+import sys
+input = sys.stdin.readline
+
 
 
 
