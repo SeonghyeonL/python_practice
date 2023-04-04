@@ -749,7 +749,7 @@ for i in range(1, n + 1):
             path = [i] + find_trace(i, j) + [j]
             print(len(path), end=' ')
             print(' '.join(map(str, path)))
-"""
+
 
 # -----------------------------------
 # thirtytwo (트리)
@@ -758,11 +758,37 @@ for i in range(1, n + 1):
 # 11725
 
 import sys
+from collections import deque
+input = sys.stdin.readline
+N = int(input())
+connect = [[] for _ in range(N + 1)]
+for _ in range(N - 1):
+    a, b = map(int, input().split())
+    connect[a].append(b)
+    connect[b].append(a)
+q = deque([1])  # 루트가 1
+ans = [0] * (N + 1)  # 부모 노드 초기화
+
+# bfs
+while len(q) > 0:
+    now = q.popleft()
+    for next in connect[now]:
+        if ans[next] == 0:
+            ans[next] = now
+            q.append(next)
+
+for i in range(2, N + 1): print(ans[i])
+"""
+
+# 1167
+
+import sys
 input = sys.stdin.readline
 
 
 
 
 
-# https://www.acmicpc.net/step/41
+
+# https://www.acmicpc.net/step/23
 
