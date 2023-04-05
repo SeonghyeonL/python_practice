@@ -778,12 +778,46 @@ while len(q) > 0:
             q.append(next)
 
 for i in range(2, N + 1): print(ans[i])
-"""
+
 
 # 1167
 
 import sys
+from collections import deque
 input = sys.stdin.readline
+V = int(input())
+connect = [[] for _ in range(V + 1)]
+for v in range(V):
+    lst = list(map(int, input().split()))  # 번호, x번과 y거리 * a, -1
+    for i in range(1, len(lst) - 2, 2):
+        connect[lst[0]].append((lst[i], lst[i + 1]))  # 정점 순서대로 들어오는 거 아님 주의
+
+def bfs(start):
+    visit = [-1] * (V + 1)
+    q = deque([start])
+    visit[start] = 0
+    maxi = [0, 0]  # 가장 먼 노드와 거리
+    while len(q) > 0:
+        temp = q.popleft()
+        for node, length in connect[temp]:
+            if visit[node] == -1:
+                visit[node] = visit[temp] + length
+                q.append(node)
+                if maxi[1] < visit[node]:
+                    maxi = [node, visit[node]]
+    return maxi
+
+node1, length1 = bfs(1)
+_, ans = bfs(node1)
+print(ans)
+"""
+
+# 1967
+
+import sys
+input = sys.stdin.readline
+# dfs 사용?
+
 
 
 
