@@ -810,13 +810,85 @@ def bfs(start):
 node1, length1 = bfs(1)
 _, ans = bfs(node1)
 print(ans)
-"""
+
 
 # 1967
 
 import sys
+from collections import deque
 input = sys.stdin.readline
-# dfs 사용?
+n = int(input())
+connect = [[] for _ in range(n + 1)]
+for _ in range(n - 1):
+    a, b, c = map(int, input().split())  # 부모, 자식, 가중치
+    connect[a].append((b, c))
+    connect[b].append((a, c))
+
+def bfs(start):
+    visit = [-1] * (n + 1)
+    q = deque([start])
+    visit[start] = 0
+    maxi = [0, 0]  # 가장 먼 노드와 거리
+    while len(q) > 0:
+        temp = q.popleft()
+        for node, length in connect[temp]:
+            if visit[node] == -1:
+                visit[node] = visit[temp] + length
+                q.append(node)
+                if maxi[1] < visit[node]:
+                    maxi = [node, visit[node]]
+    return maxi
+
+node1, length1 = bfs(1)
+_, ans = bfs(node1)
+print(ans)
+
+
+# 1991
+
+import sys
+input = sys.stdin.readline
+Anum = ord('A')
+N = int(input())
+connect = [(-1, -1) for _ in range(N)]
+for _ in range(N):
+    line = input().strip()
+    a = ord(line[0]) - Anum
+    b = ord(line[2]) - Anum if line[2] != '.' else -1
+    c = ord(line[4]) - Anum if line[4] != '.' else -1
+    connect[a] = (b, c)
+
+def preorder(i):
+    left, right = connect[i]
+    print(chr(i + Anum), end="")
+    if left != -1: preorder(left)
+    if right != -1: preorder(right)
+
+def inorder(i):
+    left, right = connect[i]
+    if left != -1: inorder(left)
+    print(chr(i + Anum), end="")
+    if right != -1: inorder(right)
+
+def postorder(i):
+    left, right = connect[i]
+    if left != -1: postorder(left)
+    if right != -1: postorder(right)
+    print(chr(i + Anum), end="")
+
+preorder(0)
+print()
+inorder(0)
+print()
+postorder(0)
+"""
+
+# 2263
+
+import sys
+input = sys.stdin.readline
+n = int(input())
+
 
 
 
