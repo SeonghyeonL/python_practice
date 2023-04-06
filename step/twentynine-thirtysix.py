@@ -881,13 +881,36 @@ print()
 inorder(0)
 print()
 postorder(0)
-"""
+
 
 # 2263
 
 import sys
+sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
 n = int(input())
+inorder = list(map(int, input().split()))
+postorder = list(map(int, input().split()))
+
+nodenum = [0] * (n + 1)
+for i in range(n): nodenum[inorder[i]] = i  # 시간초과 방지
+
+def preorder(i_start, i_end, p_start, p_end):
+    if i_start <= i_end and p_start <= p_end:
+        root = postorder[p_end]
+        print(root, end=" ")
+        idx = nodenum[root]
+        lefttreesize = idx - i_start
+        preorder(i_start, idx - 1, p_start, p_start + lefttreesize - 1)
+        preorder(idx + 1, i_end, p_start + lefttreesize, p_end - 1)
+
+preorder(0, n - 1, 0, n - 1)
+"""
+
+# 5639
+
+import sys
+input = sys.stdin.readline
 
 
 
