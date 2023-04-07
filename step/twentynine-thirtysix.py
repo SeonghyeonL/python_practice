@@ -905,9 +905,83 @@ def preorder(i_start, i_end, p_start, p_end):
         preorder(idx + 1, i_end, p_start + lefttreesize, p_end - 1)
 
 preorder(0, n - 1, 0, n - 1)
-"""
+
 
 # 5639
+
+import sys
+sys.setrecursionlimit(10 ** 6)
+input = sys.stdin.readline
+preorder = []
+
+while True:
+    try:
+        preorder.append(int(input()))
+    except:
+        break
+
+def postorder(start, end):
+    if start <= end:
+        root = preorder[start]
+        idx = end
+        for i in range(start + 1, end + 1):
+            if root < preorder[i]:
+                idx = i - 1
+                break
+        postorder(start + 1, idx)
+        postorder(idx + 1, end)
+        print(root)
+
+postorder(0, len(preorder) - 1)
+
+
+# 4803 (유니온 파인드)
+
+import sys
+input = sys.stdin.readline
+
+def find(x):  # 루트 찾기
+    if x != connect[x]:  # 연결된 게 있음
+        connect[x] = find(connect[x])
+    return connect[x]
+
+def union(x, y):
+    x = find(x)  # 루트 노드
+    y = find(y)  # 루트 노드
+    connect[x] = y  # 연결시키기
+
+case = 0
+while True:
+    case += 1  # 출력 위함
+    n, m = map(int, input().split())
+    if n == 0 and m == 0: break
+    connect = [i for i in range(n + 1)]
+    cycle = set()  # 중복 방지
+    for _ in range(m):
+        a, b = map(int, input().split())
+        if find(a) == find(b):  # 두 정점이 이어짐으로써 사이클 생김
+            cycle.add(connect[a])
+            cycle.add(connect[b])
+        elif connect[a] in cycle or connect[b] in cycle:  # 두 정점 중 하나라도 사이클에 포함
+            cycle.add(connect[a])
+            cycle.add(connect[b])
+        union(a, b)
+
+    for i in range(n + 1): find(i)  # 루트 갱신
+
+    connect = set(connect)  # 중복 제거
+    treecnt = sum([1 if i not in cycle else 0 for i in connect]) - 1
+
+    if treecnt == 0: print("Case %d: No trees." % case)
+    elif treecnt == 1: print("Case %d: There is one tree." % case)
+    else: print("Case %d: A forest of %d trees." % (case, treecnt))
+"""
+
+# -----------------------------------
+# thirtythree (유니온 파인드)
+
+
+# 1717
 
 import sys
 input = sys.stdin.readline
@@ -918,6 +992,5 @@ input = sys.stdin.readline
 
 
 
-
-# https://www.acmicpc.net/step/23
+# https://www.acmicpc.net/step/14
 
