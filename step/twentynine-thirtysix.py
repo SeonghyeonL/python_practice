@@ -975,7 +975,7 @@ while True:
     if treecnt == 0: print("Case %d: No trees." % case)
     elif treecnt == 1: print("Case %d: There is one tree." % case)
     else: print("Case %d: A forest of %d trees." % (case, treecnt))
-"""
+
 
 # -----------------------------------
 # thirtythree (유니온 파인드)
@@ -984,7 +984,80 @@ while True:
 # 1717
 
 import sys
+sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
+n, m = map(int, input().split())
+connect = [i for i in range(n + 1)]
+
+def find(x):  # 루트 찾기
+    if x != connect[x]:  # 연결된 게 있음
+        connect[x] = find(connect[x])
+    return connect[x]
+
+def union(x, y):
+    x = find(x)  # 루트 노드
+    y = find(y)  # 루트 노드
+    if x == y: return
+    elif x < y: connect[y] = x  # 연결시키기
+    else: connect[x] = y  # 연결시키기
+    # 루트 갱신 생략
+
+for _ in range(m):
+    x, a, b = map(int, input().split())
+
+    if x == 0:
+        union(a, b)
+
+    elif x == 1:
+        if find(a) == find(b): print("YES")
+        else: print("NO")
+
+
+# 1976
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+M = int(input())
+connect = [i for i in range(N + 1)]
+
+def find(x):  # 루트 찾기
+    if x != connect[x]:  # 연결된 게 있음
+        connect[x] = find(connect[x])
+    return connect[x]
+
+def union(x, y):
+    x = find(x)  # 루트 노드
+    y = find(y)  # 루트 노드
+    if x == y: return
+    elif x < y: connect[y] = x  # 연결시키기
+    else: connect[x] = y  # 연결시키기
+
+for n in range(N):
+    ns = list(map(int, input().split()))
+    for i in range(N):
+        if n < i and ns[i] == 1:
+            union(n+1, i+1)
+
+travel = list(map(int, input().split()))
+if M == 1:
+    print("YES")
+    exit(0)
+for m in range(1, M):
+    if find(travel[m-1]) != find(travel[m]):
+        print("NO")
+        exit(0)
+print("YES")
+"""
+
+# 4195
+
+import sys
+input = sys.stdin.readline
+
+
+
+
 
 
 
