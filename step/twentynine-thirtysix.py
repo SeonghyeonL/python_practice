@@ -1048,9 +1048,82 @@ for m in range(1, M):
         print("NO")
         exit(0)
 print("YES")
-"""
+
 
 # 4195
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+
+def find(x):  # 루트 찾기
+    if x != root[x]:  # 연결된 게 있음
+        root[x] = find(root[x])
+    return root[x]
+
+
+def union(x, y):
+    x = find(x)  # 루트 노드
+    y = find(y)  # 루트 노드
+    if x != y:
+        root[x] = root[y]  # x의 루트를 y의 루트로
+        cnt[y] += cnt[x]  # y의 집합 개수 증가
+
+for _ in range(T):
+    F = int(input())
+    root = dict()
+    cnt = dict()
+
+    for _ in range(F):
+        a, b = input().strip().split()
+        if a not in root:
+            root[a] = a
+            cnt[a] = 1
+        if b not in root:
+            root[b] = b
+            cnt[b] = 1
+        union(a, b)
+        print(cnt[find(b)])
+
+
+# 20040
+
+import sys
+input = sys.stdin.readline
+n, m = map(int, input().split())
+connect = [i for i in range(n)]
+
+def find(x):  # 루트 찾기
+    if x != connect[x]:  # 연결된 게 있음
+        connect[x] = find(connect[x])
+    return connect[x]
+
+
+def union(x, y):
+    x = find(x)  # 루트 노드
+    y = find(y)  # 루트 노드
+    if x == y:
+        return
+    elif x < y:
+        connect[y] = x
+    else:  # x > y
+        connect[x] = y
+
+for i in range(1, m + 1):
+    a, b = map(int, input().split())
+    if find(a) == find(b):
+        print(i)
+        exit()
+    union(a, b)
+
+print(0)  # m번 후에도 종료 안 된 경우
+"""
+
+# -----------------------------------
+# thirtyfour (최소 신장 트리)
+
+
+# 9372
 
 import sys
 input = sys.stdin.readline
@@ -1061,9 +1134,5 @@ input = sys.stdin.readline
 
 
 
-
-
-
-
-# https://www.acmicpc.net/step/14
+# https://www.acmicpc.net/step/15
 
