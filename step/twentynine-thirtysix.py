@@ -1117,16 +1117,124 @@ for i in range(1, m + 1):
     union(a, b)
 
 print(0)  # m번 후에도 종료 안 된 경우
-"""
+
 
 # -----------------------------------
 # thirtyfour (최소 신장 트리)
 
 
-# 9372
+# 9372 (N - 1)
 
 import sys
 input = sys.stdin.readline
+T = int(input())
+
+def dfs(x, cnt):
+    visit[x] = True
+    for i in connect[x]:
+        if visit[i] == 0:
+            cnt = dfs(i, cnt + 1)
+    return cnt
+
+for _ in range(T):
+    N, M = map(int, input().split())
+    connect = [[] for _ in range(N + 1)]
+    for _ in range(M):
+        a, b = map(int, input().split())
+        connect[a].append(b)
+        connect[b].append(a)
+    visit = [False] * (N + 1)
+    res = dfs(1, 0)
+    print(res)
+
+
+# 1197 (Kruskal Algorithm)
+
+import sys
+input = sys.stdin.readline
+V, E = map(int, input().split())
+
+edge = []
+for _ in range(E):
+    A, B, C = map(int, input().split())
+    edge.append((A, B, C))
+edge.sort(key=lambda x: x[2])  # C를 기준으로 정렬
+
+parent = [i for i in range(V + 1)]
+
+def find(x):
+    if parent[x] != x:
+        parent[x] = find(parent[x])
+    return parent[x]
+
+def union(a, b):
+    a = find(a)
+    b = find(b)
+    if a == b: return
+    elif a < b: parent[b] = a
+    else: parent[a] = b
+
+answer = 0
+for a, b, c in edge:
+    p_a = find(a)
+    p_b = find(b)
+    if p_a != p_b:  # 사이클을 발생시키지 않을 때만 추가
+        union(a, b)
+        answer += c
+print(answer)
+
+
+# 4386
+
+import sys
+input = sys.stdin.readline
+n = int(input())
+star = []
+for _ in range(n):
+    x, y = map(float, input().split())
+    star.append((x, y))
+edge = []
+for i in range(n):
+    for j in range(i+1, n):
+        dist = ((star[i][0] - star[j][0]) ** 2 + (star[i][1] - star[j][1]) ** 2) ** 0.5
+        edge.append((i, j, dist))
+edge.sort(key=lambda x: x[2])  # 거리 기준 정렬
+
+parent = [i for i in range(n)]
+
+def find(x):
+    if parent[x] != x:
+        parent[x] = find(parent[x])
+    return parent[x]
+
+def union(a, b):
+    a = find(a)
+    b = find(b)
+    if a == b: return
+    elif a < b: parent[b] = a
+    else: parent[a] = b
+
+answer = 0
+for a, b, c in edge:
+    p_a = find(a)
+    p_b = find(b)
+    if p_a != p_b:  # 사이클을 발생시키지 않을 때만 추가
+        union(a, b)
+        answer += c
+print(answer)
+"""
+
+# 1774
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+for _ in range(N):
+    X, Y = map(int, input().split())
+for _ in range(M):
+    a, b = map(int, input().split())
+
+
 
 
 
