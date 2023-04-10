@@ -1222,17 +1222,177 @@ for a, b, c in edge:
         union(a, b)
         answer += c
 print(answer)
-"""
+
 
 # 1774
 
 import sys
 input = sys.stdin.readline
 N, M = map(int, input().split())
+star = []
 for _ in range(N):
     X, Y = map(int, input().split())
+    star.append((X, Y))
+edge = []
+for i in range(N):
+    for j in range(i + 1, N):
+        dist = ((star[i][0] - star[j][0]) ** 2 + (star[i][1] - star[j][1]) ** 2) ** 0.5
+        edge.append((i + 1, j + 1, dist))
+edge.sort(key=lambda x: x[2])  # 거리 기준 정렬
+
+parent = [i for i in range(N + 1)]
+
+def find(x):
+    if parent[x] != x:
+        parent[x] = find(parent[x])
+    return parent[x]
+
+def union(a, b):
+    a = find(a)
+    b = find(b)
+    if a == b: return
+    elif a < b: parent[b] = a
+    else: parent[a] = b
+
 for _ in range(M):
     a, b = map(int, input().split())
+    union(a, b)
+
+answer = 0
+for a, b, c in edge:
+    p_a = find(a)
+    p_b = find(b)
+    if p_a != p_b:  # 사이클을 발생시키지 않을 때만 추가
+        union(a, b)
+        answer += c
+print("{:.2f}".format(answer))
+
+
+# 6497
+
+import sys
+input = sys.stdin.readline
+
+def find(x):
+    if parent[x] != x:
+        parent[x] = find(parent[x])
+    return parent[x]
+
+def union(a, b):
+    a = find(a)
+    b = find(b)
+    if a == b: return
+    elif a < b: parent[b] = a
+    else: parent[a] = b
+
+while True:
+    m, n = map(int, input().split())
+    if m == 0 and n == 0: break
+    edge = []
+    parent = [i for i in range(m)]
+    total = 0
+    for _ in range(n):
+        x, y, z = map(int, input().split())
+        total += z
+        edge.append((x, y, z))
+    edge.sort(key=lambda x: x[2])  # 거리 기준 정렬
+    answer = 0
+    for a, b, c in edge:
+        p_a = find(a)
+        p_b = find(b)
+        if p_a != p_b:  # 사이클을 발생시키지 않을 때만 추가
+            union(a, b)
+            answer += c
+    print(total - answer)
+
+
+# 17472
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+N, M = map(int, input().split())
+map = [list(map(int, input().split())) for _ in range(N)]  # 0은 바다, 1은 땅
+visited = [[False] * M for _ in range(N)]
+move = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+
+def mark_island(y, x, m):
+    q = deque([])
+    q.append((y, x))
+    map[y][x] = m
+    visited[y][x] = True
+    while len(q) > 0:
+        b, a = q.popleft()
+        for my, mx in move:
+            ny, nx = my + b, mx + a
+            if 0 <= ny < N and 0 <= nx < M and map[ny][nx] == 1 and visited[ny][nx] == False:
+                map[ny][nx] = m
+                visited[ny][nx] = True
+                q.append((ny, nx))
+
+mark = 1
+for i in range(N):
+    for j in range(M):
+        if map[i][j] == 1 and visited[i][j] == False:
+            mark_island(i, j, mark)
+            mark += 1
+mark -= 1
+
+bridge = []  # 가능한 모든 다리
+
+def find_bridge(y, x, now):
+    q = deque([])
+    for moving_idx in range(4):
+        q.append((y, x, 0, move[moving_idx]))
+    while len(q) > 0:
+        b, a, cnt, direction = q.popleft()
+        ny, nx = b + direction[0], a + direction[1]
+        if map[b][a] not in (0, now):  # 도착했었음
+            if cnt > 2:  # cnt에는 섬 도달도 포함되어 있음
+                bridge.append((cnt - 1, now, map[b][a]))
+        elif 0 <= ny < N and 0 <= nx < M and map[ny][nx] != now:  # 이동 가능 (도착 포함)
+            q.append((ny, nx, cnt + 1, direction))
+
+for i in range(N):
+    for j in range(M):
+        if map[i][j] != 0:
+            find_bridge(i, j, map[i][j])
+
+bridge.sort()  # 거리 기준 정렬
+parent = [i for i in range(mark + 1)]
+
+def find(x):
+    if parent[x] != x:
+        parent[x] = find(parent[x])
+    return parent[x]
+
+def union(a, b):
+    a = find(a)
+    b = find(b)
+    if a == b: return
+    elif a < b: parent[b] = a
+    else: parent[a] = b
+
+island = 1
+length = 0
+for cost, a, b in bridge:
+    if find(a) != find(b):
+        island += 1
+        union(a, b)
+        length += cost
+
+if length == 0 or island != mark: print(-1)
+else: print(length)
+"""
+
+# -----------------------------------
+# thirtyfive (트리에서의 동적 계획법)
+
+
+# 15681
+
+import sys
+input = sys.stdin.readline
 
 
 
@@ -1241,6 +1401,5 @@ for _ in range(M):
 
 
 
-
-# https://www.acmicpc.net/step/15
+# https://www.acmicpc.net/step/21
 
