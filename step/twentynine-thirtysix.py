@@ -1383,7 +1383,7 @@ for cost, a, b in bridge:
 
 if length == 0 or island != mark: print(-1)
 else: print(length)
-"""
+
 
 # -----------------------------------
 # thirtyfive (트리에서의 동적 계획법)
@@ -1392,9 +1392,81 @@ else: print(length)
 # 15681
 
 import sys
+sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
+N, R, Q = map(int, input().split())
+connect = [[] for i in range(N + 1)]
+for _ in range(N - 1):
+    U, V = map(int, input().split())
+    connect[U].append(V)
+    connect[V].append(U)
+
+visited = [False] * (N + 1)
+child = [0] * (N + 1)
+
+def find_child(x):
+    visited[x] = True
+    sum = 1
+    for i in connect[x]:
+        if visited[i] == False:
+            find_child(i)
+        sum += child[i]
+    child[x] = sum
+
+find_child(R)
+
+for _ in range(Q):
+    U = int(input())
+    print(child[U])
 
 
+# 2213
+
+import sys
+sys.setrecursionlimit(10 ** 6)
+input = sys.stdin.readline
+n = int(input())
+w = [0] + list(map(int, input().split()))
+connect = [[] for i in range(n + 1)]
+for _ in range(n - 1):
+    a, b = map(int, input().split())
+    connect[a].append(b)
+    connect[b].append(a)
+
+visited = [False] * (n + 1)
+dp = [[0, 0] for _ in range(n + 1)]
+path = [[[], []] for _ in range(n + 1)]
+
+def dfs(x):
+    visited[x] = True
+    #dp[x][0] = 0  # 포함 안 함
+    dp[x][1] = w[x]  # 포함
+    path[x][1].append(x)
+    for i in connect[x]:
+        if visited[i] == False:
+            result = dfs(i)
+            dp[x][0] += max(dp[i][0], dp[i][1])  # 현재를 불포함 -> 자식 포함/불포함
+            if dp[i][0] >= dp[i][1]:  # 자식 불포함이 더 큰 경우
+                path[x][0] += result[0]
+            else:  # dp[i][0] < dp[i][1] → 자식 포함이 더 큰 경우
+                path[x][0] += result[1]
+            dp[x][1] += dp[i][0]  # 현재를 포함 -> 자식은 포함 불가
+            path[x][1] += result[0]
+    return path[x]
+
+trace = dfs(1)
+
+if dp[1][0] >= dp[1][1]:
+    print(dp[1][0])
+    trace[0].sort()
+    print(' '.join(map(str, trace[0])))
+else:
+    print(dp[1][1])
+    trace[1].sort()
+    print(' '.join(map(str, trace[1])))
+"""
+
+# 2533
 
 
 
