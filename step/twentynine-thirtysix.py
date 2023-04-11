@@ -1464,14 +1464,82 @@ else:
     print(dp[1][1])
     trace[1].sort()
     print(' '.join(map(str, trace[1])))
-"""
+
 
 # 2533
 
+import sys
+sys.setrecursionlimit(10 ** 6)
+input = sys.stdin.readline
+N = int(input())
+connect = [[] for _ in range(N + 1)]
+for _ in range(N - 1):
+    u, v = map(int, input().split())
+    connect[u].append(v)
+    connect[v].append(u)
+
+visited = [False] * (N + 1)
+dp = [[0, 0] for _ in range(N + 1)]
+
+def dfs(x):
+    visited[x] = True
+    #dp[x][0] = 0  # 자신 포함 안 함 (default = 0)
+    dp[x][1] = 1  # 자신 포함
+    for i in connect[x]:
+        if visited[i] == False:
+            dfs(i)
+            dp[x][0] += dp[i][1]  # 현재를 불포함 -> 자식 포함
+            dp[x][1] += min(dp[i][0], dp[i][1])  # 현재를 포함 -> 자식 포함/불포함
+
+dfs(1)
+print(min(dp[1][0], dp[1][1]))
+
+
+# 1949
+
+import sys
+sys.setrecursionlimit(10 ** 6)
+input = sys.stdin.readline
+N = int(input())
+r = [0] + list(map(int, input().split()))
+connect = [[] for _ in range(N + 1)]
+for _ in range(N - 1):
+    u, v = map(int, input().split())
+    connect[u].append(v)
+    connect[v].append(u)
+
+visited = [False] * (N + 1)
+dp = [[0, 0] for _ in range(N + 1)]
+
+def dfs(x):
+    visited[x] = True
+    #dp[x][0] = 0  # 자신 포함 안 함 (default = 0)
+    dp[x][1] = r[x]  # 자신 포함
+    for i in connect[x]:
+        if visited[i] == False:
+            dfs(i)
+            dp[x][0] += max(dp[i][0], dp[i][1])  # 현재를 불포함 -> 자식 포함
+            dp[x][1] += dp[i][0]  # 현재를 포함 -> 자식 불포함
+
+dfs(1)
+print(max(dp[1][0], dp[1][1]))
+"""
+
+# -----------------------------------
+# thirtysix (기하 2)
+
+
+# 2166
+
+import sys
+input = sys.stdin.readline
 
 
 
 
 
-# https://www.acmicpc.net/step/21
+
+
+
+# https://www.acmicpc.net/step/45
 
