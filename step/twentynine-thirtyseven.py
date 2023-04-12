@@ -1770,7 +1770,7 @@ else:
     ans = (r1 ** 2) * alpha - x * y
     ans += (r2 ** 2) * beta - (d - x) * y
 print('%.3f' % ans)
-"""
+
 
 # 1069
 
@@ -1778,11 +1778,27 @@ import sys
 input = sys.stdin.readline
 X, Y, D, T = map(int, input().split())
 # (X, Y) → (0, 0) / T초에 D만큼 일직선으로만 점프
+d = (X ** 2 + Y ** 2) ** 0.5
+if d >= D:
+    ans = min(T * (d // D) + d % D, T * (d // D + 1), d)
+else:
+    ans = min(T + (D - d), 2 * T, d)
+print(ans)
+"""
+
+# -----------------------------------
+# thirtyseven (동적 계획법 3)
+
+
+# 11723
+
+import sys
+input = sys.stdin.readline
 
 
 
 
 
 
-# https://www.acmicpc.net/step/45
+# https://www.acmicpc.net/step/31
 
