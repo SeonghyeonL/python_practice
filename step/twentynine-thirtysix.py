@@ -1523,7 +1523,7 @@ def dfs(x):
 
 dfs(1)
 print(max(dp[1][0], dp[1][1]))
-"""
+
 
 # -----------------------------------
 # thirtysix (기하 2)
@@ -1533,6 +1533,168 @@ print(max(dp[1][0], dp[1][1]))
 
 import sys
 input = sys.stdin.readline
+N = int(input())
+xy = []
+for _ in range(N):
+    x, y = map(int, input().split())
+    xy.append((x, y))
+xy.append((xy[0][0], xy[0][1]))
+ans = 0
+for i in range(N):
+    ans += xy[i][0] * xy[i + 1][1]
+    ans -= xy[i][1] * xy[i + 1][0]
+ans /= 2
+print('{:.1f}'.format(abs(ans)))
+
+
+# 11758
+
+import sys
+input = sys.stdin.readline
+P = []
+P.append(list(map(int, input().split())))
+P.append(list(map(int, input().split())))
+P.append(list(map(int, input().split())))
+P.append([P[0][0], P[0][1]])
+# 1: 반시계 / -1: 시계 / 0: 일직선
+# 넓이 양수 / 음수 / 0
+ans = 0
+for i in range(3):
+    ans += P[i][0] * P[i + 1][1]
+    ans -= P[i][1] * P[i + 1][0]
+if ans > 0: print(1)
+elif ans < 0: print(-1)
+else: print(0)
+
+
+# 25308
+
+import sys
+from itertools import permutations
+input = sys.stdin.readline
+a = list(map(int, input().split()))
+A = list(permutations(a, 8))
+ans = 0
+
+def fun(x, y):
+    return (2 ** 0.5) * x * y / (x + y)
+
+for i in A:
+    if i[0] < fun(i[7], i[1]): continue
+    okay = True
+    for idx in range(1, 7):  # 1 ~ 6
+        if i[idx] < fun(i[idx - 1], i[idx + 1]):
+            okay = False
+            break
+    if okay == False: continue
+    if i[7] < fun(i[0], i[6]): continue
+    ans += 1
+
+print(ans)
+
+
+# 17386
+
+import sys
+input = sys.stdin.readline
+x1, y1, x2, y2 = map(int, input().split())  # L1
+x3, y3, x4, y4 = map(int, input().split())  # L2
+# L1과 L2가 교차하면 1, 아니면 0을 출력
+
+def ccw(x1, y1, x2, y2, x3, y3):
+    ans = x1 * y2 - x2 * y1 + x2 * y3 - x3 * y2 + x3 * y1 - x1 * y3
+    if ans > 0: return 1
+    elif ans < 0: return -1
+    else: return 0
+
+result = 0
+if ccw(x1, y1, x2, y2, x3, y3) * ccw(x1, y1, x2, y2, x4, y4) < 0:
+    if ccw(x3, y3, x4, y4, x1, y1) * ccw(x3, y3, x4, y4, x2, y2) < 0:
+        result = 1
+
+print(result)
+
+
+# 17387
+
+import sys
+input = sys.stdin.readline
+x1, y1, x2, y2 = map(int, input().split())  # L1
+x3, y3, x4, y4 = map(int, input().split())  # L2
+# L1과 L2가 교차하면 1, 아니면 0을 출력
+
+def ccw(x1, y1, x2, y2, x3, y3):
+    ans = x1 * y2 - x2 * y1 + x2 * y3 - x3 * y2 + x3 * y1 - x1 * y3
+    if ans > 0: return 1
+    elif ans < 0: return -1
+    else: return 0
+
+result = 0
+if ccw(x1, y1, x2, y2, x3, y3) * ccw(x1, y1, x2, y2, x4, y4) < 0 \
+        and ccw(x3, y3, x4, y4, x1, y1) * ccw(x3, y3, x4, y4, x2, y2) < 0:
+    result = 1
+elif ccw(x1, y1, x2, y2, x3, y3) * ccw(x1, y1, x2, y2, x4, y4) <= 0 \
+        and ccw(x3, y3, x4, y4, x1, y1) * ccw(x3, y3, x4, y4, x2, y2) <= 0:
+    if min(x1, x2) <= max(x3, x4) and max(x1, x2) >= min(x3, x4) \
+            and min(y1, y2) <= max(y3, y4) and min(y3, y4) <= max(y1, y2):
+        result = 1
+
+print(result)
+
+
+# 20149
+
+import sys
+inf = sys.maxsize
+input = sys.stdin.readline
+x1, y1, x2, y2 = map(int, input().split())  # L1
+x3, y3, x4, y4 = map(int, input().split())  # L2
+# L1과 L2가 교차하면 1, 아니면 0을 출력
+
+def ccw(x1, y1, x2, y2, x3, y3):
+    ans = x1 * y2 - x2 * y1 + x2 * y3 - x3 * y2 + x3 * y1 - x1 * y3
+    if ans > 0: return 1
+    elif ans < 0: return -1
+    else: return 0
+
+result = 0
+if ccw(x1, y1, x2, y2, x3, y3) * ccw(x1, y1, x2, y2, x4, y4) < 0 \
+        and ccw(x3, y3, x4, y4, x1, y1) * ccw(x3, y3, x4, y4, x2, y2) < 0:
+    result = 1
+elif ccw(x1, y1, x2, y2, x3, y3) * ccw(x1, y1, x2, y2, x4, y4) <= 0 \
+        and ccw(x3, y3, x4, y4, x1, y1) * ccw(x3, y3, x4, y4, x2, y2) <= 0:
+    if min(x1, x2) <= max(x3, x4) and max(x1, x2) >= min(x3, x4) \
+            and min(y1, y2) <= max(y3, y4) and min(y3, y4) <= max(y1, y2):
+        result = 1
+
+print(result)
+
+def findfunc(x1, y1, x2, y2):
+    if x1 == x2: a = inf
+    else: a = (y1 - y2) / (x1 - x2)
+    b = y1 - a * x1
+    return a, b
+
+if result == 1:
+    a, b = findfunc(x1, y1, x2, y2)
+    c, d = findfunc(x3, y3, x4, y4)
+    if c == a:
+        if min(x1, x2) == max(x3, x4) and a * min(x1, x2) + b == c * max(x3, x4) + d:
+            x, y = min(x1, x2), a * min(x1, x2) + b
+        elif max(x1, x2) == min(x3, x4) and a * max(x1, x2) + b == c * min(x3, x4) + d:
+            x, y = min(x3, x4), c * min(x3, x4) + d
+        else: exit()  # 교점 여러개
+    else:
+        x = (b - d) / (c - a)
+        y = (b * c - a * d) / (c - a)
+    print(x, y)
+"""
+
+# 2162
+
+import sys
+input = sys.stdin.readline
+
 
 
 
