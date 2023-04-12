@@ -1688,15 +1688,96 @@ if result == 1:
         x = (b - d) / (c - a)
         y = (b * c - a * d) / (c - a)
     print(x, y)
-"""
+
 
 # 2162
 
 import sys
 input = sys.stdin.readline
+N = int(input())
+line = []
+for _ in range(N):
+    line.append(list(map(int, input().split())))  # x1, y1, x2, y2
+connect = [[i, 1] for i in range(N)]
+
+def ccw(x1, y1, x2, y2, x3, y3):
+    ans = x1 * y2 - x2 * y1 + x2 * y3 - x3 * y2 + x3 * y1 - x1 * y3
+    if ans > 0: return 1
+    elif ans < 0: return -1
+    else: return 0
+
+def check(x1, y1, x2, y2, x3, y3, x4, y4):
+    if ccw(x1, y1, x2, y2, x3, y3) * ccw(x1, y1, x2, y2, x4, y4) < 0 \
+            and ccw(x3, y3, x4, y4, x1, y1) * ccw(x3, y3, x4, y4, x2, y2) < 0:
+        return True
+    elif ccw(x1, y1, x2, y2, x3, y3) * ccw(x1, y1, x2, y2, x4, y4) <= 0 \
+            and ccw(x3, y3, x4, y4, x1, y1) * ccw(x3, y3, x4, y4, x2, y2) <= 0:
+        if min(x1, x2) <= max(x3, x4) and max(x1, x2) >= min(x3, x4) \
+                and min(y1, y2) <= max(y3, y4) and min(y3, y4) <= max(y1, y2):
+            return True
+    return False
+
+def find(x):  # 루트 찾기
+    if x != connect[x][0]:  # 연결된 게 있음
+        connect[x][0] = find(connect[x][0])
+    return connect[x][0]
+
+def union(x, y):
+    x = find(x)  # 루트 노드
+    y = find(y)  # 루트 노드
+    if x == y: return
+    elif x < y:
+        connect[y][0] = x  # 연결시키기
+        connect[x][1] += connect[y][1]
+    else:
+        connect[x][0] = y  # 연결시키기
+        connect[y][1] += connect[x][1]
+
+for i in range(N - 1):
+    for j in range(i + 1, N):
+        x1, y1, x2, y2 = line[i]
+        x3, y3, x4, y4 = line[j]
+        if check(x1, y1, x2, y2, x3, y3, x4, y4):
+            union(i, j)
+
+g_cnt = 0
+max_cnt = 0
+for i in range(N):
+    if connect[i][0] == i:
+        g_cnt += 1
+        max_cnt = max(max_cnt, connect[i][1])
+print(g_cnt)
+print(max_cnt)
 
 
+# 7869
 
+import sys
+from math import pi, atan2
+# atan: 출력 범위가 [-pi/2, pi/2] / atan2: 출력 범위가 [-pi, pi]
+input = sys.stdin.readline
+x1, y1, r1, x2, y2, r2 = map(float, input().split())
+d = ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
+if d >= r1 + r2:
+    ans = 0
+elif d <= abs(r1 - r2):
+    ans = pi * (min(r1, r2) ** 2)
+else:
+    x = (r1 ** 2 - r2 ** 2 + d ** 2) / (2 * d)
+    y = (r1 ** 2 - x ** 2) ** 0.5
+    alpha = atan2(y, x)
+    beta = atan2(y, (d - x))
+    ans = (r1 ** 2) * alpha - x * y
+    ans += (r2 ** 2) * beta - (d - x) * y
+print('%.3f' % ans)
+"""
+
+# 1069
+
+import sys
+input = sys.stdin.readline
+X, Y, D, T = map(int, input().split())
+# (X, Y) → (0, 0) / T초에 D만큼 일직선으로만 점프
 
 
 
