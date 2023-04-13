@@ -70,6 +70,102 @@ for _ in range(T):
         if one==True and two==False: res += 1
         elif one==False and two==True: res += 1
     print(res)
+
+
+
+# -----------------------------------
+# fourteen (기본 수학 1)
+
+
+
+# 2355
+
+import sys
+input = sys.stdin.readline
+A, B = map(int, input().split())
+if A >= 0 and B >= 0:
+    if A <= B: print(B * (B + 1) // 2 - (A - 1) * A // 2)
+    else: print(A * (A + 1) // 2 - (B - 1) * B // 2)
+elif A >= 0 and B < 0:
+    print(A * (A + 1) // 2 - (- B) * (- B + 1) // 2)
+elif A < 0 and B >= 0:
+    print(B * (B + 1) // 2 - (- A) * (- A + 1) // 2)
+else:
+    A = - A
+    B = - B
+    if A <= B: print(- (B * (B + 1) // 2 - (A - 1) * A // 2))
+    else: print(- (A * (A + 1) // 2 - (B - 1) * B // 2))
+
+
+
+
+# 10250
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+for t in range(T):
+    H, W, N = map(int, input().split())
+    h = (N-1) % H + 1
+    w = (N-1) // H + 1
+    print(h*100+w)
+
+
+# 2775
+
+a = []
+for i in range(15):
+    list = []
+    list.append(1)
+    if i == 0:
+        for j in range(2, 15):
+            list.append(j)
+    else:
+        for j in range(2, 15):
+            list.append(0)
+    a.append(list)
+
+def apart(k, n):
+    if a[k][n] == 0:
+        a[k][n] = apart(k, n-1) + apart(k-1, n)
+    return a[k][n]
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+for t in range(T):
+    k = int(input())    # k층
+    n = int(input())    # n호
+    # 3층) 1 / 5 / 15 / 35 / 70
+    # 2층) 1 / 4 / 10 / 20 / 35
+    # 1층) 1 / 3 /  6 / 10 / 15
+    # 0층) 1 / 2 /  3 /  4 /  5
+    print(apart(k, n-1))
+
+
+# 2839
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+five = N//5
+cant = False
+while True:
+    if (N-five*5)%3 == 0: break
+    else: five -= 1
+    if five<0:
+        cant = True
+        break
+if cant: print(-1)
+else: print(int(five+(N-five*5)/3))
+
+
+
+
+
+
+
+
 """
 
 

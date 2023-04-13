@@ -1,7 +1,194 @@
 
 """
 # -----------------------------------
-# thirteen (약수, 배수와 소수, 더 빠르게)
+# fourteen (집합과 맵)
+
+
+# 10815
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+card = list(map(int, input().split()))
+card.sort()
+M = int(input())
+test = list(map(int, input().split()))
+for m in range(M):
+    start = 0
+    end = N-1
+    find = False
+    while start<=end:
+        i = int((start + end) / 2)
+        if test[m]==card[i]:
+            find = True
+            break
+        elif test[m]<card[i]: end = i-1
+        elif test[m]>card[i]: start = i+1
+    if find==True: print(1, end=" ")
+    else: print(0, end=" ")
+
+
+# 14425
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+S = []
+cnt = 0
+for _ in range(N):
+    temp = input().strip()
+    S.append(temp)
+S.sort()
+for _ in range(M):
+    temp = input().strip()
+    start = 0
+    end = N - 1
+    find = False
+    while start <= end:
+        i = int((start + end) / 2)
+        if temp == S[i]:
+            cnt += 1
+            break
+        elif temp < S[i]:
+            end = i - 1
+        elif temp > S[i]:
+            start = i + 1
+print(cnt)
+
+
+# 7785
+
+import sys
+input = sys.stdin.readline
+n = int(input())
+company = dict()
+for _ in range(n):
+    name, log = input().strip().split()
+    if log == "enter":
+        company[name] = 1
+    elif log == "leave":
+        company.pop(name)
+company = list(company.keys())
+company.sort(reverse=True)
+print('\n'.join(map(str, company)))
+
+
+# 1620
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+mon_1 = []
+mon_2 = []
+for n in range(N):
+    temp = input().strip()
+    mon_1.append((n+1, temp))  # num, name
+    mon_2.append((temp, n+1))  # name, num
+mon_2.sort()
+for _ in range(M):
+    temp = input().strip()
+    if temp[0]>="1" and temp[0]<="9":   # number -> name
+        temp = int(temp)
+        print(mon_1[temp-1][1])
+    else:                               # name -> number
+        start = 0
+        end = N-1
+        while start <= end:
+            i = int((start + end) / 2)
+            if temp == mon_2[i][0]:
+                print(mon_2[i][1])
+                break
+            elif temp < mon_2[i][0]:
+                end = i - 1
+            elif temp > mon_2[i][0]:
+                start = i + 1
+
+
+# 10816
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+card = list(map(int, input().split()))
+card2 = {}
+for n in range(N):
+    if card2.get(card[n])==None: card2[card[n]] = 1
+    else: card2[card[n]] += 1
+M = int(input())
+test = list(map(int, input().split()))
+for m in range(M):
+    if card2.get(test[m])==None: print(0, end=" ")
+    else: print(card2[test[m]], end=" ")
+
+
+# 1764
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+hear = []
+for _ in range(N):
+    temp = input().strip()
+    hear.append(temp)
+hear.sort()
+res = []
+for _ in range(M):
+    temp = input().strip()
+    start = 0
+    end = N - 1
+    while start <= end:
+        i = int((start + end) / 2)
+        if temp == hear[i]:
+            res.append(temp)
+            break
+        elif temp < hear[i]:
+            end = i - 1
+        elif temp > hear[i]:
+            start = i + 1
+res.sort()
+print(len(res))
+for i in range(len(res)): print(res[i])
+
+
+# 1269
+
+import sys
+input = sys.stdin.readline
+Anum, Bnum = map(int, input().split())
+A = list(map(int, input().split()))
+B = list(map(int, input().split()))
+A.sort()
+B.sort()
+AandB = 0
+for bnum in range(Bnum):
+    start = 0
+    end = Anum - 1
+    while start <= end:
+        i = int((start + end) / 2)
+        if B[bnum] == A[i]:
+            AandB += 1
+            break
+        elif B[bnum] < A[i]:
+            end = i - 1
+        elif B[bnum] > A[i]:
+            start = i + 1
+print(Anum+Bnum-2*AandB)
+
+
+# 11478
+
+import sys
+input = sys.stdin.readline
+S = input().strip()
+res = set()
+for i in range(len(S)):
+    for j in range(i, len(S)):
+        res.add(S[i:j+1])
+print(len(res))
+
+
+# -----------------------------------
+# fifteen (약수, 배수와 소수 2)
 
 
 # 1934
@@ -190,315 +377,17 @@ for _ in range(T):
     print(ans)
 
 
-# -----------------------------------
-# fourteen (기본 수학 1)
-
-
-# 2292
+# 13909
 
 import sys
 input = sys.stdin.readline
 N = int(input())
-# 1(1) / 6(7) / 12(19) / 18(37)
-room = 0
-i = 0
-while N > 0:
-    if i == 0: N -= 1
-    else: N -= 6 * i
-    room += 1
-    i += 1
-print(room)
-
-
-# 2355
-
-import sys
-input = sys.stdin.readline
-A, B = map(int, input().split())
-if A >= 0 and B >= 0:
-    if A <= B: print(B * (B + 1) // 2 - (A - 1) * A // 2)
-    else: print(A * (A + 1) // 2 - (B - 1) * B // 2)
-elif A >= 0 and B < 0:
-    print(A * (A + 1) // 2 - (- B) * (- B + 1) // 2)
-elif A < 0 and B >= 0:
-    print(B * (B + 1) // 2 - (- A) * (- A + 1) // 2)
-else:
-    A = - A
-    B = - B
-    if A <= B: print(- (B * (B + 1) // 2 - (A - 1) * A // 2))
-    else: print(- (A * (A + 1) // 2 - (B - 1) * B // 2))
-
-
-# 1193
-
-import sys
-input = sys.stdin.readline
-X = int(input())
-# 1(1) / 2(3) / 3(6) / 4(10)
-i = 1
-while X > 0:
-    X -= i
-    i += 1
-i -= 1
-X += i
-if i%2==0: print("%d/%d" %(X, i-X+1))
-else: print("%d/%d" %(i-X+1, X))
-
-
-# 2869
-
-import sys
-input = sys.stdin.readline
-A, B, V = map(int, input().split())
-day = 1
-if V > A:
-    temp = (V-A)//(A-B)
-    if (V-A)%(A-B)==0: day = temp + 1
-    else: day = temp + 2
-print(day)
-
-
-# 10250
-
-import sys
-input = sys.stdin.readline
-T = int(input())
-for t in range(T):
-    H, W, N = map(int, input().split())
-    h = (N-1) % H + 1
-    w = (N-1) // H + 1
-    print(h*100+w)
-
-
-# 2775
-
-a = []
-for i in range(15):
-    list = []
-    list.append(1)
-    if i == 0:
-        for j in range(2, 15):
-            list.append(j)
-    else:
-        for j in range(2, 15):
-            list.append(0)
-    a.append(list)
-
-def apart(k, n):
-    if a[k][n] == 0:
-        a[k][n] = apart(k, n-1) + apart(k-1, n)
-    return a[k][n]
-
-import sys
-input = sys.stdin.readline
-T = int(input())
-for t in range(T):
-    k = int(input())    # k층
-    n = int(input())    # n호
-    # 3층) 1 / 5 / 15 / 35 / 70
-    # 2층) 1 / 4 / 10 / 20 / 35
-    # 1층) 1 / 3 /  6 / 10 / 15
-    # 0층) 1 / 2 /  3 /  4 /  5
-    print(apart(k, n-1))
-
-
-# 2839
-
-import sys
-input = sys.stdin.readline
-N = int(input())
-five = N//5
-cant = False
-while True:
-    if (N-five*5)%3 == 0: break
-    else: five -= 1
-    if five<0:
-        cant = True
-        break
-if cant: print(-1)
-else: print(int(five+(N-five*5)/3))
-
-
-# 10757
-
-import sys
-input = sys.stdin.readline
-A, B = map(int, input().split())
-print(A+B)
+ans = int(N ** 0.5)
+print(ans)
 
 
 # -----------------------------------
-# fifteen (집합과 맵)
-
-
-# 10815
-
-import sys
-input = sys.stdin.readline
-N = int(input())
-card = list(map(int, input().split()))
-card.sort()
-M = int(input())
-test = list(map(int, input().split()))
-for m in range(M):
-    start = 0
-    end = N-1
-    find = False
-    while start<=end:
-        i = int((start + end) / 2)
-        if test[m]==card[i]:
-            find = True
-            break
-        elif test[m]<card[i]: end = i-1
-        elif test[m]>card[i]: start = i+1
-    if find==True: print(1, end=" ")
-    else: print(0, end=" ")
-
-
-# 14425
-
-import sys
-input = sys.stdin.readline
-N, M = map(int, input().split())
-S = []
-cnt = 0
-for _ in range(N):
-    temp = input().strip()
-    S.append(temp)
-S.sort()
-for _ in range(M):
-    temp = input().strip()
-    start = 0
-    end = N - 1
-    find = False
-    while start <= end:
-        i = int((start + end) / 2)
-        if temp == S[i]:
-            cnt += 1
-            break
-        elif temp < S[i]:
-            end = i - 1
-        elif temp > S[i]:
-            start = i + 1
-print(cnt)
-
-
-# 1620
-
-import sys
-input = sys.stdin.readline
-N, M = map(int, input().split())
-mon_1 = []
-mon_2 = []
-for n in range(N):
-    temp = input().strip()
-    mon_1.append((n+1, temp))  # num, name
-    mon_2.append((temp, n+1))  # name, num
-mon_2.sort()
-for _ in range(M):
-    temp = input().strip()
-    if temp[0]>="1" and temp[0]<="9":   # number -> name
-        temp = int(temp)
-        print(mon_1[temp-1][1])
-    else:                               # name -> number
-        start = 0
-        end = N-1
-        while start <= end:
-            i = int((start + end) / 2)
-            if temp == mon_2[i][0]:
-                print(mon_2[i][1])
-                break
-            elif temp < mon_2[i][0]:
-                end = i - 1
-            elif temp > mon_2[i][0]:
-                start = i + 1
-
-
-# 10816
-
-import sys
-input = sys.stdin.readline
-N = int(input())
-card = list(map(int, input().split()))
-card2 = {}
-for n in range(N):
-    if card2.get(card[n])==None: card2[card[n]] = 1
-    else: card2[card[n]] += 1
-M = int(input())
-test = list(map(int, input().split()))
-for m in range(M):
-    if card2.get(test[m])==None: print(0, end=" ")
-    else: print(card2[test[m]], end=" ")
-
-
-# 1764
-
-import sys
-input = sys.stdin.readline
-N, M = map(int, input().split())
-hear = []
-for _ in range(N):
-    temp = input().strip()
-    hear.append(temp)
-hear.sort()
-res = []
-for _ in range(M):
-    temp = input().strip()
-    start = 0
-    end = N - 1
-    while start <= end:
-        i = int((start + end) / 2)
-        if temp == hear[i]:
-            res.append(temp)
-            break
-        elif temp < hear[i]:
-            end = i - 1
-        elif temp > hear[i]:
-            start = i + 1
-res.sort()
-print(len(res))
-for i in range(len(res)): print(res[i])
-
-
-# 1269
-
-import sys
-input = sys.stdin.readline
-Anum, Bnum = map(int, input().split())
-A = list(map(int, input().split()))
-B = list(map(int, input().split()))
-A.sort()
-B.sort()
-AandB = 0
-for bnum in range(Bnum):
-    start = 0
-    end = Anum - 1
-    while start <= end:
-        i = int((start + end) / 2)
-        if B[bnum] == A[i]:
-            AandB += 1
-            break
-        elif B[bnum] < A[i]:
-            end = i - 1
-        elif B[bnum] > A[i]:
-            start = i + 1
-print(Anum+Bnum-2*AandB)
-
-
-# 11478
-
-import sys
-input = sys.stdin.readline
-S = input().strip()
-res = set()
-for i in range(len(S)):
-    for j in range(i, len(S)):
-        res.add(S[i:j+1])
-print(len(res))
-
-
-# -----------------------------------
-# sixteen (재귀)
+# sixteen (재귀) - 이후부터 수정 필요
 
 
 # 10872
@@ -856,7 +745,7 @@ min = 1000000000
 cal(1, A[0])
 print(max)
 print(min)
-"""
+
 
 # 14889
 
@@ -891,5 +780,6 @@ teamA = []
 teamB = []
 cal(0)
 print(min)
+"""
 
 

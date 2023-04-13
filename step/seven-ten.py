@@ -103,7 +103,131 @@ print(sum)
 
 
 # -----------------------------------
-# eight (약수, 배수와 소수)
+# eight (일반 수학 1)
+
+
+# 2745
+
+import sys
+input = sys.stdin.readline
+N, B = map(str, input().split())
+B = int(B)
+ans = 0
+number = dict()
+abc = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",\
+       "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+for i in range(10):
+    number[str(i)] = i
+for i in range(10, 36):
+    number[abc[i - 10]] = i
+for i in range(len(N)):
+    ans += number[N[-(i+1)]] * (B ** i)
+print(ans)
+
+
+# 11005
+
+import sys
+input = sys.stdin.readline
+N, B = map(int, input().split())
+number = dict()
+abc = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",\
+       "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+for i in range(10):
+    number[i] = str(i)
+for i in range(10, 36):
+    number[i] = abc[i - 10]
+ans = ""
+while N > 0:
+    ans += number[N % B]
+    N = N // B
+print(ans[::-1])
+
+
+# 2720
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+for _ in range(T):
+    C = int(input())
+    # q(25), d(10), n(5), p(1)
+    q = C // 25
+    C -= q * 25
+    d = C // 10
+    C -= d * 10
+    n = C // 5
+    C -= n * 5
+    p = C
+    print(q, d, n, p)
+
+
+# 2903
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+ini = 2
+for _ in range(N):
+    ini = ini * 2 - 1
+print(ini ** 2)
+
+
+# 2292
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+# 1(1) / 6(7) / 12(19) / 18(37)
+room = 0
+i = 0
+while N > 0:
+    if i == 0: N -= 1
+    else: N -= 6 * i
+    room += 1
+    i += 1
+print(room)
+
+
+# 1193
+
+import sys
+input = sys.stdin.readline
+X = int(input())
+# 1(1) / 2(3) / 3(6) / 4(10)
+i = 1
+while X > 0:
+    X -= i
+    i += 1
+i -= 1
+X += i
+if i%2==0: print("%d/%d" %(X, i-X+1))
+else: print("%d/%d" %(i-X+1, X))
+
+
+# 2869
+
+import sys
+input = sys.stdin.readline
+A, B, V = map(int, input().split())
+day = 1
+if V > A:
+    temp = (V-A)//(A-B)
+    if (V-A)%(A-B)==0: day = temp + 1
+    else: day = temp + 2
+print(day)
+
+
+# 10757
+
+import sys
+input = sys.stdin.readline
+A, B = map(int, input().split())
+print(A+B)
+
+
+# -----------------------------------
+# nine (약수, 배수와 소수)
 
 
 # 5086
@@ -232,7 +356,7 @@ for t in range(T):
 
 
 # -----------------------------------
-# nine (기하: 직사각형과 삼각형)
+# ten (기하: 직사각형과 삼각형)
 
 # 27323
 
@@ -319,7 +443,7 @@ while True:
         elif a == b or b == c or a == c: print("Isosceles")
         else: print("Scalene")
     a, b, c = map(int, input().split())
-"""
+
 
 # 14215
 
@@ -330,5 +454,5 @@ if max(a, b, c) >= a + b + c - max(a, b, c):
     print(a + b + c - max(a, b, c) + a + b + c - max(a, b, c) - 1)
 else:
     print(a + b + c)
-
+"""
 
