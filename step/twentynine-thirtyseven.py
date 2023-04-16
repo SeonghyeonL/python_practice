@@ -1794,6 +1794,29 @@ print(ans)
 
 import sys
 input = sys.stdin.readline
+M = int(input())
+S = set()
+for _ in range(M):
+    order = input().strip()
+    if order == "all":
+        for i in range(1, 21): S.add(i)
+    elif order == "empty":
+        S.clear()
+    else:
+        order, num = order.split()
+        num = int(num)
+        if order == "add": S.add(num)
+        elif order == "remove": S.discard(num)  # remove는 없으면 에러
+        elif order == "check":
+            if num in S: print(1)
+            else: print(0)
+        elif order == "toggle":
+            if num in S: S.remove(num)
+            else: S.add(num)
+
+
+
+
 
 # 0414 - coding test practice using other website
 # 0415 - naver coding test
