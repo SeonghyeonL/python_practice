@@ -1784,35 +1784,38 @@ if d >= D:
 else:
     ans = min(T + (D - d), 2 * T, d)
 print(ans)
-"""
+
 
 # -----------------------------------
 # thirtyseven (동적 계획법 3)
 
 
-# 11723
+# 11723 (bitmask)
 
 import sys
 input = sys.stdin.readline
 M = int(input())
-S = set()
+S = [0] * 21
 for _ in range(M):
     order = input().strip()
-    if order == "all":
-        for i in range(1, 21): S.add(i)
-    elif order == "empty":
-        S.clear()
+    if order == "all": S = [1] * 21
+    elif order == "empty": S = [0] * 21
     else:
         order, num = order.split()
         num = int(num)
-        if order == "add": S.add(num)
-        elif order == "remove": S.discard(num)  # remove는 없으면 에러
-        elif order == "check":
-            if num in S: print(1)
-            else: print(0)
-        elif order == "toggle":
-            if num in S: S.remove(num)
-            else: S.add(num)
+        if order == "add": S[num] = 1
+        elif order == "remove": S[num] = 0
+        elif order == "check": print(S[num])
+        elif order == "toggle": S[num] = 0 if S[num] == 1 else 1
+"""
+
+# 1311
+
+import sys
+input = sys.stdin.readline
+
+
+
 
 
 
@@ -1820,9 +1823,6 @@ for _ in range(M):
 
 # 0414 - coding test practice using other website
 # 0415 - naver coding test
-
-
-
 
 # https://www.acmicpc.net/step/31
 
