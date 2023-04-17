@@ -1807,14 +1807,38 @@ for _ in range(M):
         elif order == "remove": S[num] = 0
         elif order == "check": print(S[num])
         elif order == "toggle": S[num] = 0 if S[num] == 1 else 1
-"""
+
 
 # 1311
 
 import sys
+inf = sys.maxsize
 input = sys.stdin.readline
+N = int(input())
+# 활성화: b | (1 << i)
+# 해제: b & !(1 << i)
+# 활성화 확인: b & (1 << i)
+D = []
+for _ in range(N): D.append(list(map(int, input().split())))
+dp = [inf] * (1 << N)
+dp[0] = 0
 
+for i in range(1 << N):
+    bit_cnt = 0  # i에 있는 1의 개수
+    for j in range(N):
+        if i & (1 << j):
+            bit_cnt += 1
+    for j in range(N):
+        if i & (1 << j) == 0:  # i의 (뒤에서) j번째 비트가 0이라면
+            dp[i | (1 << j)] = min(dp[i | (1 << j)], dp[i] + D[bit_cnt][j])
 
+print(dp[-1])  # value error 방지
+"""
+
+# 2098
+
+import sys
+input = sys.stdin.readline
 
 
 
