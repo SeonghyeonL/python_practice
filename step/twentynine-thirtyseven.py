@@ -1833,12 +1833,57 @@ for i in range(1 << N):
             dp[i | (1 << j)] = min(dp[i | (1 << j)], dp[i] + D[bit_cnt][j])
 
 print(dp[-1])  # value error 방지
-"""
+
 
 # 2098
 
 import sys
+inf = sys.maxsize
 input = sys.stdin.readline
+N = int(input())
+W = []  # W[i][j]: 도시 i에서 도시 j로 가기 위한 비용
+for _ in range(N): W.append(list(map(int, input().split())))
+size = 2 ** (N - 1)  # size-1을 사용 (N-1자리)
+dp = [[inf] * size for _ in range(N)]  # dp[a][b]: a에서 0으로 b의 도시들을 지나서 가는 최소 비용
+
+for i in range(N):
+    for j in range(N):
+        if W[i][j] == 0: W[i][j] = inf  # 갈 수 없는 경로
+
+for i in range(1, N): dp[i][0] = W[i][0]  # i에서 바로 0으로 (그 사이에 아무 도시도 안 지나고)
+
+def get_minimum(i, route):  # i에서 route(i 제외) 안의 점들을 지나 0으로 가는 최소 비용
+    minimum_dist = inf
+    for j in range(1, N):
+        if route & (1 << j - 1) != 0:  # 해당 점을 포함
+            before_route = route & ~(1 << j - 1)  # 이전 루트 = 해당 점 제외
+            dist = W[i][j] + dp[j][before_route]
+            if minimum_dist > dist:  # 최솟값 갱신
+                minimum_dist = dist
+    return minimum_dist
+
+for k in range(1, N - 1):  # 1 (점이 1개) ~ N-2 (시작점(=0=끝점)과 자신(=i) 제외 모든 점)
+    for route in range(1, size):  # 0...01 ~ 1...11
+        cnt = 0  # 루트 안 1의 개수
+        for n in range(1, N):
+            if route & (1 << n - 1) != 0:
+                cnt += 1
+        if cnt == k:  # 점이 k개 들은 루트
+            for i in range(1, N):
+                if route & (1 << i - 1) == 0:
+                    dp[i][route] = get_minimum(i, route)  # route에는 i 불포함
+
+# 모든 점을 지나면서 0에서 0으로
+dp[0][size - 1] = get_minimum(0, size - 1)  # dp[0][2 ** (N - 1) - 1]
+
+print(dp[0][size - 1])
+"""
+
+# 1086
+
+import sys
+input = sys.stdin.readline
+
 
 
 
