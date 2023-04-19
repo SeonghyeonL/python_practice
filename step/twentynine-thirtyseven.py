@@ -1877,9 +1877,45 @@ for k in range(1, N - 1):  # 1 (점이 1개) ~ N-2 (시작점(=0=끝점)과 자�
 dp[0][size - 1] = get_minimum(0, size - 1)  # dp[0][2 ** (N - 1) - 1]
 
 print(dp[0][size - 1])
+
+
+# 1086 (복습 필요)
+
+# 활성화: b | (1 << i)
+# 해제: b & !(1 << i)
+# 활성화 확인: b & (1 << i)
+import sys
+from math import gcd
+input = sys.stdin.readline
+N = int(input())
+S = []
+for _ in range(N): S.append(input().strip())
+K = int(input())
+
+# 수 자체를 저장하지 않고 그 수를 n으로 나눈 나머지인 r만 저장
+# 즉, 항상 0 <= r < n 만족하므로 0 또는 1을 확장해가며 bfs
+# r에 0을 붙이는 경우 나머지는 (r * (10 % n)) % n
+# r에 1을 붙이는 경우 나머지는 (r * (10 % n) + 1) % n
+# 이 경우에는 x = a * 10 ^ len(b) + b ... 나머지는 (a * 10 ^ len(b) + b) % k
+# 아래의 r 배열은 나머지의 전처리 ... r[i][j]: i번째 숫자와 j를 합한 나머지
+r = [[(j * 10 ** len(S[i]) + int(S[i])) % K for j in range(K)] for i in range(N)]
+size = 1 << N
+dp = [[0] * K for _ in range(size)]  # dp[a][b]: a의 숫자들을 합쳤을 때 나머지가 b인 개수
+dp[0][0] = 1
+
+for b in range(size):
+    for i in range(N):
+        if b & (1 << i) == 0:  # i번째 사용 X
+            for j in range(K):
+                dp[b | (1 << i)][r[i][j]] += dp[b][j]  # i번째까지 사용한 거에 더하기
+
+p = dp[size - 1][0]  # 나누어 떨어지는 개수
+q = sum(dp[size - 1])  # 전체 개수
+g = gcd(p, q)
+print("%d/%d" % (p//g, q//g))  # 기약분수로 출력
 """
 
-# 1086
+# 17404
 
 import sys
 input = sys.stdin.readline
