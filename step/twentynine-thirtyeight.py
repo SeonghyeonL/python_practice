@@ -1913,9 +1913,58 @@ p = dp[size - 1][0]  # 나누어 떨어지는 개수
 q = sum(dp[size - 1])  # 전체 개수
 g = gcd(p, q)
 print("%d/%d" % (p//g, q//g))  # 기약분수로 출력
-"""
+
 
 # 17404
+
+import sys
+input = sys.stdin.readline
+inf = sys.maxsize
+N = int(input())
+rgb = []
+for _ in range(N):
+    rgb.append(list(map(int, input().split())))
+dp = [[inf, inf, inf] for _ in range(N)]  # i번째 집을 r, g, b로 칠하는 비용
+mini = inf
+for i in range(3):
+    dp[0] = [inf, inf, inf]  # reset 필요
+    dp[0][i] = rgb[0][i]
+    for j in range(1, N):
+        dp[j][0] = min(dp[j - 1][1], dp[j - 1][2]) + rgb[j][0]
+        dp[j][1] = min(dp[j - 1][0], dp[j - 1][2]) + rgb[j][1]
+        dp[j][2] = min(dp[j - 1][1], dp[j - 1][0]) + rgb[j][2]
+    for j in range(3):
+        if j != i:
+            mini = min(mini, dp[N - 1][j])
+print(mini)
+
+
+# 2482
+
+import sys
+input = sys.stdin.readline
+N = int(input())
+K = int(input())
+dp = [[0 for _ in range(K + 1)] for _ in range(N + 1)]
+# dp[i][j] = i개 중에 j개를 선택하는 경우의 수
+# dp[i][j] = dp[i-2][j-1] + dp[i-1][j] ; i번째 색을 포함 할 때 + 포함 안 할 때
+# if i == n, dp[i-3][j-1] + dp[i-1][j] ; 첫 번째 색도 선택 못 함
+for i in range(N + 1):
+    dp[i][0] = 1
+    dp[i][1] = i
+for i in range(2, N + 1):
+    for j in range(2, K + 1):
+        if i == N: dp[i][j] = dp[i-3][j-1] + dp[i-1][j]
+        else: dp[i][j] = dp[i-2][j-1] + dp[i-1][j]
+        dp[i][j] %= 1000000003
+print(dp[N][K])
+"""
+
+# -----------------------------------
+# thirtyeight (문자열 알고리즘 1)
+
+
+# 1786
 
 import sys
 input = sys.stdin.readline
@@ -1926,8 +1975,9 @@ input = sys.stdin.readline
 
 
 
+
 # 0414 - coding test practice using other website
 # 0415 - naver coding test
 
-# https://www.acmicpc.net/step/31
+# https://www.acmicpc.net/step/27
 
