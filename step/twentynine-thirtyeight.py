@@ -1958,13 +1958,70 @@ for i in range(2, N + 1):
         else: dp[i][j] = dp[i-2][j-1] + dp[i-1][j]
         dp[i][j] %= 1000000003
 print(dp[N][K])
-"""
+
 
 # -----------------------------------
 # thirtyeight (문자열 알고리즘 1)
 
 
 # 1786
+
+#import sys
+#input = sys.stdin.readline
+#T = input().strip()  # strip가 앞뒤의 공백과 줄바꿈을 모두 제거해 버림
+#P = input().strip()
+# 대체: sys.stdin.readline().replace('\n', '')
+T = input()
+P = input()
+
+p = [0] * len(P)  # 같은 값의 인덱스
+j = 0  # 비교할 이전 값의 인덱스 (단, 연속)
+for i in range(1, len(P)):
+    while j > 0 and P[i] != P[j]:
+        j = p[j - 1]
+    if P[i] == P[j]:
+        j += 1
+        p[i] = j
+
+result = []
+count = 0
+
+j = 0
+for i in range(len(T)):
+    while j > 0 and T[i] != P[j]:
+        j = p[j - 1]
+    if T[i] == P[j]:
+        if j == len(P) - 1:  # P의 마지막 문자
+            result.append(i - len(P) + 2)  # 시작 인덱스 (단, 1부터 시작)
+            count += 1
+            j = p[j]
+        else:
+            j += 1
+
+print(count)
+print(' '.join(map(str, result)))
+
+
+# 1305
+
+import sys
+input = sys.stdin.readline
+L = int(input())
+s = input().strip()
+
+p = [0] * len(s)
+j = 0  # 비교할 이전 값의 인덱스 (단, 연속)
+for i in range(1, len(s)):
+    while j > 0 and s[i] != s[j]:
+        j = p[j - 1]
+    if s[i] == s[j]:
+        j += 1
+        p[i] = j
+
+print(len(s) - p[-1])
+"""
+
+# 14725
 
 import sys
 input = sys.stdin.readline
