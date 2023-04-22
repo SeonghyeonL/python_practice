@@ -1964,7 +1964,7 @@ print(dp[N][K])
 # thirtyeight (문자열 알고리즘 1)
 
 
-# 1786
+# 1786 (KMP)
 
 #import sys
 #input = sys.stdin.readline
@@ -2002,7 +2002,7 @@ print(count)
 print(' '.join(map(str, result)))
 
 
-# 1305
+# 1305 (KMP)
 
 import sys
 input = sys.stdin.readline
@@ -2019,12 +2019,85 @@ for i in range(1, len(s)):
         p[i] = j
 
 print(len(s) - p[-1])
-"""
 
-# 14725
+
+# 14725 (Trie)
 
 import sys
 input = sys.stdin.readline
+N = int(input())
+
+class Trie:
+    def __init__(self):
+        self.root = {}
+
+    def insert(self, s):
+        cur_node = self.root
+        for c in s:  # 먹이 정보의 각 글자
+            if c not in cur_node:
+                cur_node[c] = {}  # 없었다면 추가
+            cur_node = cur_node[c]  # 뒤에 덧붙이기
+        cur_node['*'] = {}  # end flag
+
+    def print_trie(self, l, cur_node=None):
+        if l == 0:
+            cur_node = self.root  # 루트 노드
+        for c in sorted(cur_node.keys()):
+            if c != '*':
+                print('--' * l + c)
+            self.print_trie(l + 1, cur_node[c])
+
+trie = Trie()
+for _ in range(N):
+    temp = list(input().strip().split())
+    trie.insert(temp[1:])  # 먹이 정보 개수를 제외한 리스트
+
+trie.print_trie(0)
+
+
+# 14425 (Trie)
+
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())
+
+class Trie:
+    def __init__(self):
+        self.root = {}
+
+    def insert(self, s):
+        cur_node = self.root
+        for c in s:  # 각 글자
+            if c not in cur_node:
+                cur_node[c] = {}  # 없었다면 추가
+            cur_node = cur_node[c]  # 뒤에 덧붙이기
+        cur_node['*'] = {}
+
+    def search(self, s):
+        cur_node = self.root
+        for c in s:
+            if c not in cur_node: return False
+            cur_node = cur_node[c]
+        if '*' in cur_node: return True
+        else: return False
+
+trie = Trie()
+cnt = 0
+for _ in range(N):
+    temp = input().strip()
+    trie.insert(temp)
+for _ in range(M):
+    temp = input().strip()
+    if trie.search(temp) == True:
+        cnt += 1
+print(cnt)
+"""
+
+# 5670
+
+import sys
+input = sys.stdin.readline
+
 
 
 
