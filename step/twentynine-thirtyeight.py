@@ -2098,6 +2098,49 @@ print(cnt)
 import sys
 input = sys.stdin.readline
 
+class Node:
+    def __init__(self, key, count=0):
+        self.key = key
+        self.child = {}
+        self.count = count
+
+class Trie:
+    def __init__(self):
+        self.root = Node(None)
+
+    def insert(self, s):
+        cur_node = self.root
+        for c in s:  # 각 글자
+            if c not in cur_node.child:
+                cur_node.child[c] = Node(c)  # 없었다면 추가
+            cur_node = cur_node.child[c]  # 뒤에 덧붙이기
+            cur_node.count += 1
+        cur_node.child['*'] = True
+
+def search(num, cur):
+    global cnt
+    if len(cur.child) > 1 or num == 0:  # * 외에 다른 child가 있거나 첫 번째
+        for c in cur.child:
+            if c != '*':
+                cnt += cur.child[c].count
+    for c in cur.child:
+        if c != '*':
+            search(num + 1, cur.child[c])
+
+try:
+    while True:
+        N = int(input())
+        trie = Trie()
+        cnt = 0
+
+        for _ in range(N):
+            trie.insert(input().strip())
+
+        search(0, trie.root)
+        print("{:.2f}".format(round(cnt/N, 2)))
+
+except:
+    exit(0)
 
 
 
@@ -2107,7 +2150,7 @@ input = sys.stdin.readline
 
 # 0414 - coding test practice using other website
 # 0415 - naver coding test
-# 0423
+# 0423 - samsung online test (not coding)
 
 # https://www.acmicpc.net/step/27
 
