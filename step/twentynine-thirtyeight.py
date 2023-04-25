@@ -2114,10 +2114,10 @@ class Trie:
             if c not in cur_node.child:
                 cur_node.child[c] = Node(c)  # 없었다면 추가
             cur_node = cur_node.child[c]  # 뒤에 덧붙이기
-            cur_node.count += 1
-        cur_node.child['*'] = True
+            cur_node.count += 1  # 해당 자리에 해당 글자가 나온 개수
+        cur_node.child['*'] = Node(None)
 
-def search(num, cur):
+def search(num, cur):  # num은 맨 첫 요소의 값들만 일단 더해주기 위해서 사용
     global cnt
     if len(cur.child) > 1 or num == 0:  # * 외에 다른 child가 있거나 첫 번째
         for c in cur.child:
@@ -2137,7 +2137,7 @@ try:
             trie.insert(input().strip())
 
         search(0, trie.root)
-        print("{:.2f}".format(round(cnt/N, 2)))
+        print("{:.2f}".format(round(cnt / N, 2)))
 
 except:
     exit(0)
@@ -2152,5 +2152,4 @@ except:
 # 0415 - naver coding test
 # 0423 - samsung online test (not coding)
 
-# https://www.acmicpc.net/step/27
 
