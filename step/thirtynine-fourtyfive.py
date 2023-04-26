@@ -162,13 +162,55 @@ for _ in range(Q):
 # 11438
 
 import sys
+sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
+log = 17  # N, M ≤ 100000 에서 log(m) = 16.609... < 17
 N = int(input())
-for _ in range(N):
+connect = [[] for _ in range(N + 1)]
+parent = [[0] * (log + 1) for _ in range(N + 1)]
+visited = [False] * (N + 1)
+d = [0] * (N + 1)  # 루트 노드로부터의 깊이
+
+for _ in range(N - 1):
     A, B = map(int, input().split())
+    connect[A].append(B)
+    connect[B].append(A)
+
+def dfs(x, depth):  # 루트 노드부터 시작해서 깊이 구하기
+    visited[x] = True
+    d[x] = depth
+    for y in connect[x]:
+        if visited[y] == False:
+            parent[y][0] = x
+            dfs(y, depth + 1)
+
+# 전체 부모 관계 설정
+dfs(1, 0)  # 루트 노드 = 1번 노드
+for i in range(1, log + 1):
+    for j in range(1, N + 1):
+        parent[j][i] = parent[parent[j][i - 1]][i - 1]
+
+def lca(a, b):  # a, b의 최소 공통 조상 찾기 - 공부 필요!!!!!!!
+    if d[a] > d[b]:
+        a, b = b, a  # b가 더 깊도록
+
+    for i in range(log, -1, -1):
+        if d[b] - d[a] >= 1 << i:
+            b = parent[b][i]
+
+    if a == b: return a
+
+    for i in range(log, -1, -1):
+        if parent[a][i] != parent[b][i]:
+            a = parent[a][i]
+            b = parent[b][i]
+
+    return parent[a][0]
+
 M = int(input())
 for _ in range(M):
     A, B = map(int, input().split())
+    print(lca(A, B))
 
 
 
