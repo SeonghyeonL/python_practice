@@ -157,7 +157,7 @@ for _ in range(Q):
             n -= 1 << i  # 2^i을 빼줌
             x = dp[x][i]  # 0이 될때까지 반복
     print(x)
-"""
+
 
 # 11438
 
@@ -190,29 +190,37 @@ for i in range(1, log + 1):
     for j in range(1, N + 1):
         parent[j][i] = parent[parent[j][i - 1]][i - 1]
 
-def lca(a, b):  # a, b의 최소 공통 조상 찾기 - 공부 필요!!!!!!!
+def lca(a, b):  # a, b의 최소 공통 조상 찾기
     if d[a] > d[b]:
         a, b = b, a  # b가 더 깊도록
 
-    for i in range(log, -1, -1):
+    for i in range(log, -1, -1):  # a와 b를 같은 depth로 만들기
         if d[b] - d[a] >= 1 << i:
             b = parent[b][i]
 
-    if a == b: return a
+    if a == b: return a  # depth가 같을 때 a==b라면 최소 공통 조상 찾음
 
-    for i in range(log, -1, -1):
+    for i in range(log, -1, -1):  # a!=b라면 depth 하나씩 줄이면서 확인
         if parent[a][i] != parent[b][i]:
             a = parent[a][i]
             b = parent[b][i]
 
-    return parent[a][0]
+    return parent[a][0]  # 최소 공통 조상 (= parent[b][0])
 
 M = int(input())
 for _ in range(M):
     A, B = map(int, input().split())
     print(lca(A, B))
+"""
 
-##
+# 3176
+
+import sys
+input = sys.stdin.readline
+
+
+
+
 
 
 
