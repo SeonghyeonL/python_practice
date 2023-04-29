@@ -211,12 +211,82 @@ M = int(input())
 for _ in range(M):
     A, B = map(int, input().split())
     print(lca(A, B))
-"""
+
 
 # 3176
 
 import sys
+from collections import deque
 input = sys.stdin.readline
+inf = sys.maxsize
+N = int(input())
+log = 17  # 2 ≤ N ≤ 100000 → log(100000) = 16.6... > 17
+connect = [[] for _ in range(N + 1)]
+for _ in range(N - 1):
+    A, B, C = map(int, input().split())  # A와 B 사이에 길이가 C인 도로가 있다
+    connect[A].append((B, C))
+    connect[B].append((A, C))
+
+# DFS
+q = deque([1])
+parent = [[0, 0] for _ in range(N + 1)]
+visited = [False] * (N + 1)
+visited[1] = True
+depth = [0] * (N + 1)
+while len(q) > 0:
+    temp = q.popleft()
+    for b, c in connect[temp]:
+        if visited[b] == False:
+            q.append(b)
+            depth[b] = depth[temp] + 1
+            visited[b] = True
+            parent[b] = [temp, c]
+
+# 부모 노드, 가장 짧은 도로, 가장 긴 도로
+DP = [[[0, 0, 0] for _ in range(log + 1)] for _ in range(N + 1)]
+for i in range(1, N + 1):
+    DP[i][0] = [parent[i][0], parent[i][1], parent[i][1]]  # 초기화
+for j in range(1, log + 1):
+    for i in range(1, N + 1):
+        DP[i][j][0] = DP[DP[i][j - 1][0]][j - 1][0]
+        DP[i][j][1] = min(DP[i][j - 1][1], DP[DP[i][j - 1][0]][j - 1][1])
+        DP[i][j][2] = max(DP[i][j - 1][2], DP[DP[i][j - 1][0]][j - 1][2])
+
+K = int(input())
+for _ in range(K):
+    D, E = map(int, input().split())  # D와 E를 연결하는 경로에서 가장 짧고, 가장 긴 도로 출력
+    if depth[D] > depth[E]: D, E = E, D  # E가 더 깊도록
+
+    mini = inf
+    maxi = 0
+    for i in range(log, -1, -1):  # D와 E를 같은 depth로 만들기
+        if depth[E] - depth[D] >= 1 << i:
+            mini = min(mini, DP[E][i][1])
+            maxi = max(maxi, DP[E][i][2])
+            E = DP[E][i][0]
+
+    if D == E:  # depth가 같을 때 D==E라면 최소 공통 조상 찾음
+        print(mini, maxi)
+        continue
+
+    for i in range(log, -1, -1):  # D!=E라면 depth 하나씩 줄이면서 확인
+        if DP[D][i][0] != DP[E][i][0]:
+            mini = min(mini, DP[D][i][1], DP[E][i][1])
+            maxi = max(maxi, DP[D][i][2], DP[E][i][2])
+            D = DP[D][i][0]
+            E = DP[E][i][0]
+
+    mini = min(mini, DP[D][0][1], DP[E][0][1])  # 최소 공통 조상
+    maxi = max(maxi, DP[D][0][2], DP[E][0][2])  # 최소 공통 조상
+    print(mini, maxi)
+"""
+
+# 13511
+
+import sys
+input = sys.stdin.readline
+
+
 
 
 
