@@ -316,7 +316,8 @@ for i in range(1, N + 1):
     DP[i][0] = [parent[i][0], parent[i][1]]  # 초기화
 for j in range(1, log + 1):
     for i in range(1, N + 1):
-        DP[i][j] = DP[DP[i][j - 1][0]][j - 1]
+        DP[i][j][0] = DP[DP[i][j - 1][0]][j - 1][0]
+        DP[i][j][1] = DP[i][j - 1][1] + DP[DP[i][j - 1][0]][j - 1][1]
 
 M = int(input())
 for _ in range(M):
@@ -325,51 +326,46 @@ for _ in range(M):
     A, B = query[1], query[2]
     if depth[A] > depth[B]: A, B = B, A  # B가 더 깊도록
 
-    cost = 0
-    A_list, B_list = [A], [B]
     for i in range(log, -1, -1):  # A와 B를 같은 depth로 만들기
         if depth[B] - depth[A] >= 1 << i:
-            cost += DP[B][i][1]
             B = DP[B][i][0]
-            B_list.append(B)
 
-    if A == B:  # depth가 같을 때 D==E라면 최소 공통 조상 찾음
-        if query[0] == 1:
-            print(cost)
-        elif query[0] == 2:
-            k = query[3]
-            # B_list = [B, B의부모, B의부모의부모, ..., A] → k번째 = B_list[k-1]
-            if depth[query[1]] > depth[query[2]]: print(B_list[k - 1])  # 반대로
-            else: print(B_list[-k])  # 그대로
-        continue
+    if A == B:  # depth가 같을 때 A==B라면 최소 공통 조상 찾음
+        root = A
+    else:  # A!=B라면 depth 하나씩 줄이면서 확인
+        for i in range(log, -1, -1):
+            if DP[A][i][0] != DP[B][i][0]:
+                A = DP[A][i][0]
+                B = DP[B][i][0]
+        root = DP[A][0][0]
 
-    for i in range(log, -1, -1):  # A!=B라면 depth 하나씩 줄이면서 확인
-        if DP[A][i][0] != DP[B][i][0]:
-            cost += DP[A][i][1] + DP[B][i][1]
-            A = DP[A][i][0]
-            B = DP[B][i][0]
-            A_list.append(A)
-            B_list.append(B)
-
-    cost += DP[A][0][1] + DP[B][0][1]
-    B_list.append(DP[B][0][0])
+    A, B = query[1], query[2]
 
     if query[0] == 1:  # u에서 v로 가는 경로의 비용
+        cost = 0
+        for i in range(log, -1, -1):
+            if depth[A] - depth[root] >= 1 << i:
+                cost += DP[A][i][1]
+                A = DP[A][i][0]
+            if depth[B] - depth[root] >= 1 << i:
+                cost += DP[B][i][1]
+                B = DP[B][i][0]
         print(cost)
+
     elif query[0] == 2:  # u에서 v로 가는 경로에 존재하는 정점 중에서 k번째 정점
         k = query[3]
-        if depth[query[1]] > depth[query[2]]:  # 반대로
-            # B_list = [B, B의부모, B의부모의부모, ..., 공통부모] → k번째 = B_list[k-1]
-            # A_list = [A, A의부모, A의부모의부모, ...]
-            if len(B_list) >= k: print(B_list[k - 1])
-            else:
-                k -= len(B_list)  # A_list의 뒤에서 k번째를 출력
-                print(A_list[-k])
-        else:  # 그대로
-            if len(A_list) >= k: print(A_list[k - 1])
-            else:
-                k -= len(A_list)  # B_list의 뒤에서 k번째를 출력
-                print(B_list[-k])
+        if k <= depth[A] - depth[root]:  # A의 k-1번째 조상 출력
+            K = k - 1
+            for i in range(log, -1, -1):
+                if K >= 1 << i:
+                    A = DP[A][i][0]
+            print(A)
+        else:  # 남은 거리를 B부터 계산
+            K = depth[B] + depth[A] - 2 * depth[root] - k + 1
+            for i in range(log - 1, -1, -1):
+                if K >= 1 << i:
+                    B = DP[B][i][0]
+            print(B)
 
 
 
