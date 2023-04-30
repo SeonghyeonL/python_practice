@@ -279,7 +279,7 @@ for _ in range(K):
     mini = min(mini, DP[D][0][1], DP[E][0][1])  # 최소 공통 조상
     maxi = max(maxi, DP[D][0][2], DP[E][0][2])  # 최소 공통 조상
     print(mini, maxi)
-"""
+
 
 # 13511
 
@@ -356,16 +356,26 @@ for _ in range(M):
         k = query[3]
         if k <= depth[A] - depth[root]:  # A의 k-1번째 조상 출력
             K = k - 1
-            for i in range(log, -1, -1):
-                if K >= 1 << i:
+            for i in range(log + 1):
+                if K & 1 << i:
                     A = DP[A][i][0]
             print(A)
-        else:  # 남은 거리를 B부터 계산
-            K = depth[B] + depth[A] - 2 * depth[root] - k + 1
-            for i in range(log - 1, -1, -1):
-                if K >= 1 << i:
+        else:  # 남은 거리를 B의 끝부터 계산
+            K = depth[B] + depth[A] - 2 * depth[root] - (k - 1)
+            for i in range(log, -1, -1):
+                if K & 1 << i:
                     B = DP[B][i][0]
             print(B)
+"""
+
+# -----------------------------------
+# fourtyone (강한 연결 요소)
+
+
+# 2150
+
+import sys
+input = sys.stdin.readline
 
 
 
@@ -374,4 +384,6 @@ for _ in range(M):
 
 
 
-# https://www.acmicpc.net/step/40
+
+
+# https://www.acmicpc.net/step/43
