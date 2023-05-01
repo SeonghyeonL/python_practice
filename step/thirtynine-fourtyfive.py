@@ -366,16 +366,67 @@ for _ in range(M):
                 if K & 1 << i:
                     B = DP[B][i][0]
             print(B)
-"""
+
 
 # -----------------------------------
 # fourtyone (강한 연결 요소)
 
 
-# 2150
+# 2150 (Kosaraju)
+
+import sys
+from collections import defaultdict, deque
+sys.setrecursionlimit(10 ** 6)
+input = sys.stdin.readline
+V, E = map(int, input().split())
+forward = defaultdict(list)
+backward = defaultdict(list)
+for _ in range(E):
+    A, B = map(int, input().split())
+    forward[A].append(B)
+    backward[B].append(A)
+
+def dfs(n):
+    visited[n] = True
+    for nxt in forward[n]:
+        if visited[nxt] == False:
+            dfs(nxt)
+    stack.append(n)
+
+visited = [False] * (V + 1)
+stack = []
+for i in range(1, V + 1):
+    if visited[i] == False:
+        dfs(i)
+
+def reverseDfs(n, group):
+    visited[n] = True
+    group.append(n)
+    for nxt in backward[n]:
+        if visited[nxt] == False:
+            group = reverseDfs(nxt, group)
+    return group
+
+visited = [False] * (V + 1)
+answer = []
+while len(stack) > 0:
+    now = stack.pop()
+    if visited[now] == True:
+        continue
+    answer.append(sorted(reverseDfs(now, [])))
+
+print(len(answer))
+for scc in sorted(answer):
+    print(' '.join(map(str, scc)), end=" -1\n")
+"""
+
+# 2150 (Tarjan)
 
 import sys
 input = sys.stdin.readline
+
+
+
 
 
 
