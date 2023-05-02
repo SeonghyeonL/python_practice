@@ -418,16 +418,65 @@ while len(stack) > 0:
 print(len(answer))
 for scc in sorted(answer):
     print(' '.join(map(str, scc)), end=" -1\n")
-"""
+
 
 # 2150 (Tarjan)
 
 import sys
+from collections import defaultdict, deque
+sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
+V, E = map(int, input().split())
+connect = defaultdict(list)
 
+for _ in range(E):
+    A, B = map(int, input().split())
+    connect[A].append(B)
 
+def scc(now):
+    global visitcnt
+    global scccnt
+    visitorder[now] = visitcnt
+    visitcnt += 1
+    stack.append(now)
+    minidx = visitorder[now]
+    for nxt in connect[now]:
+        if visitorder[nxt] == -1:  # 방문하지 않은 노드
+            minidx = min(minidx, scc(nxt))
+        elif sccorder[nxt] == -1:  # 방문했지만 scc 번호가 없는 노드
+            minidx = min(minidx, visitorder[nxt])
+    if minidx == visitorder[now]:  # 가장 이른 노드가 자기 자신이라면
+        while stack[-1] != now:
+            sccorder[stack.pop()] = scccnt
+        sccorder[stack.pop()] = scccnt
+        scccnt += 1
+    return minidx
 
+visitcnt, scccnt = 0, 0
+visitorder = [-1] * (V + 1)
+sccorder = [-1] * (V + 1)
+stack = []
+for i in range(1, V + 1):
+    if visitorder[i] == -1:
+        scc(i)
 
+print(scccnt)
+ans = [[] for _ in range(scccnt)]
+for i in range(1, V + 1):
+    ans[sccorder[i]].append(i)
+for scc in sorted(ans):
+    print(' '.join(map(str, scc)), end=" -1\n")
+"""
+
+# 4196
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+for _ in range(T):
+    N, M = map(int, input().split())
+    for _ in range(M):
+        x, y = map(int, input().split())
 
 
 
