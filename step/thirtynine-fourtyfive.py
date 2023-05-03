@@ -466,7 +466,7 @@ for i in range(1, V + 1):
     ans[sccorder[i]].append(i)
 for scc in sorted(ans):
     print(' '.join(map(str, scc)), end=" -1\n")
-"""
+
 
 # 4196
 
@@ -476,44 +476,66 @@ sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
 T = int(input())
 
-def scc(now):
-    global visitcnt
-    global scccnt
-    visitorder[now] = visitcnt
-    visitcnt += 1
-    stack.append(now)
-    minidx = visitorder[now]
-    for nxt in connect[now]:
-        if visitorder[nxt] == -1:  # 방문하지 않은 노드
-            minidx = min(minidx, scc(nxt))
-        elif sccorder[nxt] == -1:  # 방문했지만 scc 번호가 없는 노드
-            minidx = min(minidx, visitorder[nxt])
-        else:  # 방문했고 scc 번호도 있는 노드 (추가)
-            combine.add(sccorder[nxt])
-    if minidx == visitorder[now]:  # 가장 이른 노드가 자기 자신이라면
-        while stack[-1] != now:
-            sccorder[stack.pop()] = scccnt
-        sccorder[stack.pop()] = scccnt
-        scccnt += 1
-    return minidx
+def dfs(n):
+    visited[n] = True
+    for nxt in forward[n]:
+        if visited[nxt] == False:
+            dfs(nxt)
+    stack.append(n)
+
+def reverseDfs(n, group):
+    global idx
+    ids[n] = idx
+    visited[n] = True
+    group.append(n)
+    for nxt in backward[n]:
+        if visited[nxt] == False:
+            group = reverseDfs(nxt, group)
+    return group
 
 for _ in range(T):
     N, M = map(int, input().split())
-    connect = defaultdict(list)
+    forward = defaultdict(list)
+    backward = defaultdict(list)
     for _ in range(M):
         x, y = map(int, input().split())
-        connect[x].append(y)
+        forward[x].append(y)
+        backward[y].append(x)
 
-    visitcnt, scccnt = 0, 0
-    visitorder = [-1] * (N + 1)
-    sccorder = [-1] * (N + 1)
+    visited = [False] * (N + 1)
     stack = []
-    combine = set()
     for i in range(1, N + 1):
-        if visitorder[i] == -1:
-            scc(i)
+        if visited[i] == False:
+            dfs(i)
 
-    print(scccnt - len(combine))
+    idx = 0
+    ids = [-1] * (N + 1)
+    visited = [False] * (N + 1)
+    answer = []
+    while len(stack) > 0:
+        now = stack.pop()
+        if visited[now] == False:
+            idx += 1
+            answer.append(reverseDfs(now, []))
+
+    scc_indegree = [0] * (idx + 1)
+    for i in range(1, N + 1):
+        for ed in forward[i]:
+            if ids[i] != ids[ed]:
+                scc_indegree[ids[ed]] += 1
+
+    cnt = 0
+    for i in range(1, len(scc_indegree)):
+        if scc_indegree[i] == 0:
+            cnt += 1
+
+    print(cnt)
+"""
+
+# 3977
+
+import sys
+input = sys.stdin.readline
 
 
 
