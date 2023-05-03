@@ -471,12 +471,49 @@ for scc in sorted(ans):
 # 4196
 
 import sys
+from collections import defaultdict
+sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
 T = int(input())
+
+def scc(now):
+    global visitcnt
+    global scccnt
+    visitorder[now] = visitcnt
+    visitcnt += 1
+    stack.append(now)
+    minidx = visitorder[now]
+    for nxt in connect[now]:
+        if visitorder[nxt] == -1:  # 방문하지 않은 노드
+            minidx = min(minidx, scc(nxt))
+        elif sccorder[nxt] == -1:  # 방문했지만 scc 번호가 없는 노드
+            minidx = min(minidx, visitorder[nxt])
+        else:  # 방문했고 scc 번호도 있는 노드 (추가)
+            combine.add(sccorder[nxt])
+    if minidx == visitorder[now]:  # 가장 이른 노드가 자기 자신이라면
+        while stack[-1] != now:
+            sccorder[stack.pop()] = scccnt
+        sccorder[stack.pop()] = scccnt
+        scccnt += 1
+    return minidx
+
 for _ in range(T):
     N, M = map(int, input().split())
+    connect = defaultdict(list)
     for _ in range(M):
         x, y = map(int, input().split())
+        connect[x].append(y)
+
+    visitcnt, scccnt = 0, 0
+    visitorder = [-1] * (N + 1)
+    sccorder = [-1] * (N + 1)
+    stack = []
+    combine = set()
+    for i in range(1, N + 1):
+        if visitorder[i] == -1:
+            scc(i)
+
+    print(scccnt - len(combine))
 
 
 
