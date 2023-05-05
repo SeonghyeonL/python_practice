@@ -530,15 +530,89 @@ for _ in range(T):
             cnt += 1
 
     print(cnt)
-"""
+
 
 # 3977
+
+import sys
+from collections import defaultdict
+sys.setrecursionlimit(10 ** 6)
+input = sys.stdin.readline
+T = int(input())
+
+def dfs(n):
+    visited[n] = True
+    for nxt in forward[n]:
+        if visited[nxt] == False:
+            dfs(nxt)
+    stack.append(n)
+
+def reverseDfs(n, group):
+    global idx
+    ids[n] = idx
+    visited[n] = True
+    group.append(n)
+    for nxt in backward[n]:
+        if visited[nxt] == False:
+            group = reverseDfs(nxt, group)
+    return group
+
+for t in range(T):
+    N, M = map(int, input().split())
+    forward = defaultdict(list)
+    backward = defaultdict(list)
+    for _ in range(M):
+        A, B = map(int, input().split())  # A to B
+        forward[A].append(B)
+        backward[B].append(A)
+
+    visited = [False] * N
+    stack = []
+    for i in range(N):
+        if visited[i] == False:
+            dfs(i)
+
+    idx = -1
+    ids = [-1] * N
+    visited = [False] * N
+    answer = []
+    while len(stack) > 0:
+        now = stack.pop()
+        if visited[now] == False:
+            idx += 1
+            answer.append(reverseDfs(now, []))
+
+    scc_indegree = [0] * (idx + 1)
+    for i in range(N):
+        for ed in forward[i]:
+            if ids[i] != ids[ed]:
+                scc_indegree[ids[ed]] += 1
+
+    cnt = 0
+    possible_list = []
+    for i in range(len(scc_indegree)):
+        if scc_indegree[i] == 0:  # 해당 아이디로 향하는 것은 아이디가 같거나 향하는 게 없음
+            cnt += 1
+            for j in answer[i]:
+                possible_list.append(j)
+
+    if cnt == 1: print('\n'.join(map(str, sorted(possible_list))))
+    else: print("Confused")  # cnt == 0 or cnt > 1
+
+    if t == T - 1: break  # last one
+    else:  # t < T - 1
+        print()
+        _ = input()
+"""
+
+# 4013
 
 import sys
 input = sys.stdin.readline
 
 
-#
+
+
 
 
 
