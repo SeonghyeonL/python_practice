@@ -603,14 +603,84 @@ for t in range(T):
     else:  # t < T - 1
         print()
         _ = input()
-"""
+
 
 # 4013
 
 import sys
+from collections import defaultdict, deque
+sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
 
+def dfs(n):
+    visited[n] = True
+    for nxt in forward[n]:
+        if visited[nxt] == False:
+            dfs(nxt)
+    stack.append(n)
 
+def reverseDfs(n, idx):
+    ids[n] = idx
+    scc_sum[idx] += money[n]
+    for nxt in backward[n]:
+        if ids[nxt] == -1:
+            reverseDfs(nxt, idx)
+        elif ids[n] != ids[nxt]:
+            group[ids[nxt]].append(ids[n])
+
+forward = defaultdict(list)
+backward = defaultdict(list)
+N, M = map(int, input().split())
+for _ in range(M):
+    start, end = map(int, input().split())
+    forward[start].append(end)
+    backward[end].append(start)
+
+visited = [False] * (N + 1)
+stack = []
+for i in range(1, N + 1):
+    if visited[i] == False:
+        dfs(i)
+
+money = [0]  # 0 이상 4,000 이하
+for _ in range(N): money.append(int(input()))
+
+idx = 0
+ids = [-1] * (N + 1)
+group = [[]]
+scc_sum = [0]
+while len(stack) > 0:
+    now = stack.pop()
+    if ids[now] == -1:
+        idx += 1
+        group.append([])
+        scc_sum.append(0)
+        reverseDfs(now, idx)
+
+S, P = map(int, input().split())  # 출발 장소(현금 인출의 시작 장소)인 교차로 번호, 레스토랑의 개수
+p = list(map(int, input().split()))  # 각 레스토랑이 있는 교차로의 번호
+
+q = deque([ids[S]])
+dp = [0] * (idx + 1)
+dp[ids[S]] = scc_sum[ids[S]]
+while len(q) > 0:
+    now = q.popleft()
+    for n in group[now]:
+        if dp[n] < dp[now] + scc_sum[n]:
+            dp[n] = dp[now] + scc_sum[n]
+            q.append(n)
+
+answer = 0
+for r in p:
+    answer = max(answer, dp[ids[r]])
+print(answer)
+# 출력: 반디치가 출발 장소에서 어떤 레스토랑까지 이동하면서 인출할 수 있는 현금의 최대 액수
+"""
+
+# 11280
+
+import sys
+input = sys.stdin.readline
 
 
 
