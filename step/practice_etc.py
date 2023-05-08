@@ -44,10 +44,57 @@ for _ in range(N):
 # 3197
 
 import sys
+sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
+inf = sys.maxsize
+R, C = map(int, input().split())
+visit = [[False for _ in range(C)] for _ in range(R)]
+day = [[0 for _ in range(C)] for _ in range(R)]
+bird = []
+move = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+for r in range(R):
+    line = input().strip()
+    for c in range(C):
+        if line[c] == "L":
+            bird.append((r, c))
+            visit[r][c] = True
+        elif line[c] == ".":
+            visit[r][c] = True
 
+def ice(y, x):
+    ans = inf
+    for dy, dx in move:
+        ny = y + dy
+        nx = x + dx
+        if 0 <= ny < R and 0 <= nx < C and visit[ny][nx] == True:
+            ans = min(ans, day[ny][nx] + 1)
+    day[y][x] = ans
 
+for r in range(R):
+    for c in range(C):
+        if visit[r][c] == False:
+            ice(r, c)
+            visit[r][c] = True
 
+def solving(y, x, maxi):
+    if y == bird[1][0] and x == bird[1][1]:
+        global mini
+        mini = min(mini, maxi)
+    else:
+        for dy, dx in move:
+            ny = y + dy
+            nx = x + dx
+            if 0 <= ny < R and 0 <= nx < C and visit[ny][nx] == False:
+                visit[ny][nx] = True
+                maxi = max(maxi, day[ny][nx])
+                solving(ny, nx, maxi)
+                visit[ny][nx] = False
+
+mini = inf
+visit = [[False for _ in range(C)] for _ in range(R)]
+visit[bird[0][0]][bird[0][1]] = True
+solving(bird[0][0], bird[0][1], 0)
+print(mini)
 
 
 
