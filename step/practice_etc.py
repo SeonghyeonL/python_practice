@@ -39,19 +39,17 @@ for _ in range(N):
         heapq.heappush(left, -mini)
         heapq.heappush(right, maxi)
     print(-left[0])
-"""
+
 
 # 3197
 
 import sys
 from collections import deque
-sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
-inf = sys.maxsize
 R, C = map(int, input().split())
 c = [[0 for _ in range(C)] for _ in range(R)]
 wc = [[0 for _ in range(C)] for _ in range(R)]
-lake, swan = [], []
+lake, swan = [], []  # 전체맵, 백조초기위치
 q, q_temp, wq, wq_temp = deque(), deque(), deque(), deque()  # 백조큐, 물큐
 move = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
@@ -77,7 +75,7 @@ def bfs():
         if y == swan[1][0] and x == swan[1][1]: return True
         for i in range(4):
             ny = y + move[i][0]
-            nx = x + move[i][0]
+            nx = x + move[i][1]
             if 0 <= ny < R and 0 <= nx < C and c[ny][nx] == 0:
                 if lake[ny][nx] == ".":
                     q.append((ny, nx))
@@ -92,7 +90,7 @@ def melt():
         if lake[y][x] == "X": lake[y][x] = "."
         for i in range(4):
             ny = y + move[i][0]
-            nx = x + move[i][0]
+            nx = x + move[i][1]
             if 0 <= ny < R and 0 <= nx < C and wc[ny][nx] == 0:
                 if lake[ny][nx] == ".":
                     wq.append((ny, nx))
@@ -108,6 +106,14 @@ while True:
     q, wq = q_temp, wq_temp  # change (next)
     q_temp, wq_temp = deque(), deque()  # reset
     cnt += 1
+"""
+
+# 11401
+
+import sys
+input = sys.stdin.readline
+
+
 
 
 
