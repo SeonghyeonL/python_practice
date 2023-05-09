@@ -44,57 +44,70 @@ for _ in range(N):
 # 3197
 
 import sys
+from collections import deque
 sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
 inf = sys.maxsize
 R, C = map(int, input().split())
-visit = [[False for _ in range(C)] for _ in range(R)]
-day = [[0 for _ in range(C)] for _ in range(R)]
-bird = []
+c = [[0 for _ in range(C)] for _ in range(R)]
+wc = [[0 for _ in range(C)] for _ in range(R)]
+lake, swan = [], []
+q, q_temp, wq, wq_temp = deque(), deque(), deque(), deque()  # 백조큐, 물큐
 move = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-for r in range(R):
-    line = input().strip()
-    for c in range(C):
-        if line[c] == "L":
-            bird.append((r, c))
-            visit[r][c] = True
-        elif line[c] == ".":
-            visit[r][c] = True
-
-def ice(y, x):
-    ans = inf
-    for dy, dx in move:
-        ny = y + dy
-        nx = x + dx
-        if 0 <= ny < R and 0 <= nx < C and visit[ny][nx] == True:
-            ans = min(ans, day[ny][nx] + 1)
-    day[y][x] = ans
 
 for r in range(R):
-    for c in range(C):
-        if visit[r][c] == False:
-            ice(r, c)
-            visit[r][c] = True
+    line = list(input().strip())
+    lake.append(line)
+    for cc in range(C):
+        if line[cc] == "L":
+            swan.append((r, cc))
+            wq.append((r, cc))
+        elif line[cc] == ".":
+            wc[r][cc] = 1
+            wq.append((r, cc))
 
-def solving(y, x, maxi):
-    if y == bird[1][0] and x == bird[1][1]:
-        global mini
-        mini = min(mini, maxi)
-    else:
-        for dy, dx in move:
-            ny = y + dy
-            nx = x + dx
-            if 0 <= ny < R and 0 <= nx < C and visit[ny][nx] == False:
-                visit[ny][nx] = True
-                maxi = max(maxi, day[ny][nx])
-                solving(ny, nx, maxi)
-                visit[ny][nx] = False
+q.append(swan[0])
+lake[swan[0][0]][swan[0][1]], lake[swan[1][0]][swan[1][1]] = ".", "."
+c[swan[0][0]][swan[0][1]] = 1
+cnt = 0
 
-mini = inf
-visit = [[False for _ in range(C)] for _ in range(R)]
-visit[bird[0][0]][bird[0][1]] = True
-solving(bird[0][0], bird[0][1], 0)
-print(mini)
+def bfs():
+    while len(q) > 0:
+        y, x = q.popleft()
+        if y == swan[1][0] and x == swan[1][1]: return True
+        for i in range(4):
+            ny = y + move[i][0]
+            nx = x + move[i][0]
+            if 0 <= ny < R and 0 <= nx < C and c[ny][nx] == 0:
+                if lake[ny][nx] == ".":
+                    q.append((ny, nx))
+                else:  # lake[ny][nx] == "X"
+                    q_temp.append((ny, nx))
+                c[ny][nx] = 1
+    return False
+
+def melt():
+    while len(wq) > 0:
+        y, x = wq.popleft()
+        if lake[y][x] == "X": lake[y][x] = "."
+        for i in range(4):
+            ny = y + move[i][0]
+            nx = x + move[i][0]
+            if 0 <= ny < R and 0 <= nx < C and wc[ny][nx] == 0:
+                if lake[ny][nx] == ".":
+                    wq.append((ny, nx))
+                else:  # lake[ny][nx] == "X"
+                    wq_temp.append((ny, nx))
+                wc[ny][nx] = 1
+
+while True:
+    melt()
+    if bfs() == True:
+        print(cnt)
+        break
+    q, wq = q_temp, wq_temp  # change (next)
+    q_temp, wq_temp = deque(), deque()  # reset
+    cnt += 1
 
 
 
