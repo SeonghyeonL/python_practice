@@ -106,9 +106,73 @@ while True:
     q, wq = q_temp, wq_temp  # change (next)
     q_temp, wq_temp = deque(), deque()  # reset
     cnt += 1
-"""
+
 
 # 11401
+
+import sys
+input = sys.stdin.readline
+N, K = map(int, input().split())
+p = 1000000007
+A, B = 1, 1
+for i in range(1, N + 1): A = (A * i) % p  # n!
+for i in range(1, K + 1): B = (B * i) % p  # k!
+for i in range(1, N - K + 1): B = (B * i) % p  # (n-k)!
+
+def cal(x, y):
+    if y == 1: return x % p
+    elif y % 2 == 0: return (cal(x, y//2) ** 2) % p
+    else: return ((cal(x, y//2) ** 2) * x) % p
+
+print((A * cal(B, p - 2)) % p)
+
+
+# 10830
+
+import sys
+input = sys.stdin.readline
+N, B = map(int, input().split())
+A = []
+for _ in range(N): A.append(list(map(int, input().split())))
+for i in range(N):
+    for j in range(N):
+        A[i][j] = A[i][j] % 1000
+# A를 B제곱한 결과
+
+def cal(x):
+    if x == 1:
+        return A
+    else:  # x % 2 == 0 and x % 2 == 1
+        half = cal(x//2)
+        a = []
+        for i in range(N):
+            line = []
+            for j in range(N):
+                temp = 0
+                for k in range(N):
+                    temp += half[i][k] * half[k][j]
+                line.append(temp % 1000)
+            a.append(line)
+        if x % 2 == 0:
+            return a
+        else:  # x % 2 == 1
+            b = []
+            for i in range(N):
+                line = []
+                for j in range(N):
+                    temp = 0
+                    for k in range(N):
+                        temp += a[i][k] * A[k][j]
+                    line.append(temp % 1000)
+                b.append(line)
+            return b
+
+ans = cal(B)
+for i in range(N):
+    print(' '.join(map(str, ans[i])))
+"""
+
+# 2933
 
 import sys
 input = sys.stdin.readline
