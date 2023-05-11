@@ -176,8 +176,11 @@ for i in range(N):
 
 import sys
 input = sys.stdin.readline
-
-
+R, C = map(int, input().split())
+for _ in range(R):
+    cs = input().strip()  # '.'는 빈 칸, 'x'는 미네랄
+N = int(input())
+height = list(map(int, input().split()))
 
 
 
