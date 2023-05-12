@@ -170,17 +170,79 @@ def cal(x):
 ans = cal(B)
 for i in range(N):
     print(' '.join(map(str, ans[i])))
-"""
+
 
 # 2933
 
 import sys
+from collections import deque
 input = sys.stdin.readline
+move = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 R, C = map(int, input().split())
+maps = []
 for _ in range(R):
-    cs = input().strip()  # '.'는 빈 칸, 'x'는 미네랄
+    cs = [i for i in input().strip()]  # '.'는 빈 칸, 'x'는 미네랄
+    maps.append(cs)
 N = int(input())
 height = list(map(int, input().split()))
+
+def BFS(x_in, y_in):
+    result = [(x_in, y_in)]  # 클러스터 구성원
+    visit = [[False for _ in range(C)] for _ in range(R)]  # 방문 표시
+    visit[y_in][x_in] = True
+    q = deque([(x_in, y_in)])
+    maps[y_in][x_in] = "."
+    while len(q) > 0:
+        x, y = q.popleft()
+        for j in range(4):
+            my = y + move[j][0]
+            mx = x + move[j][1]
+            if 0 <= my < R and 0 <= mx < C and maps[my][mx] == "x" and visit[my][mx] == False:
+                result.append((mx, my))
+                visit[my][mx] = True
+                q.append((mx, my))
+                maps[my][mx] = "."
+    fall_num = 0
+    flag = True
+    while flag:
+        fall_num += 1
+        for x, y in result:
+            my = y + fall_num
+            if my == R or maps[my][x] == "x":
+                flag = False
+                break  # 더 이상 못 내려감
+    for x, y in result:
+        maps[y + fall_num - 1][x] = "x"
+
+for idx in range(len(height)):
+    target_y = R - height[idx]
+    for target_x in range(C) if idx % 2 == 0 else range(C-1, -1, -1):
+        if maps[target_y][target_x] == "x":
+            maps[target_y][target_x] = "."
+            for i in range(4):
+                ny = target_y + move[i][0]
+                nx = target_x + move[i][1]
+                if 0 <= ny < R and 0 <= nx < C and maps[ny][nx] == "x":
+                    BFS(nx, ny)
+            break  # 막대가 미네랄 만남
+
+for line in maps:
+    print(''.join(map(str, line)))
+"""
+
+# 2749
+
+import sys
+input = sys.stdin.readline
+n = int(input())
+num = 1000000
+# n번째 피보나치 수를 1,000,000으로 나눈 나머지를 출력
+# 단, 0번째 피보나치 수는 0이고 1번째 피보나치 수는 1이고 2번째부터는 앞의 두 개 합
+# 아주 큰 수의 피보나치를 빠르게 구하기 위해서는 분할정복을 이용한 '행렬의 거듭제곱'을 사용해야 함
+
+
+
+
 
 
 
