@@ -247,5 +247,5 @@ num = 1000000
 
 
 
-
+# 0513 bad condition
 # https://www.acmicpc.net/workbook/view/4349
