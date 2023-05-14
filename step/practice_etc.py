@@ -228,7 +228,7 @@ for idx in range(len(height)):
 
 for line in maps:
     print(''.join(map(str, line)))
-"""
+
 
 # 2749
 
@@ -236,9 +236,51 @@ import sys
 input = sys.stdin.readline
 n = int(input())
 num = 1000000
+A = [[1, 1], [1, 0]]
 # n번째 피보나치 수를 1,000,000으로 나눈 나머지를 출력
 # 단, 0번째 피보나치 수는 0이고 1번째 피보나치 수는 1이고 2번째부터는 앞의 두 개 합
 # 아주 큰 수의 피보나치를 빠르게 구하기 위해서는 분할정복을 이용한 '행렬의 거듭제곱'을 사용해야 함
+# (Fn+1 Fn    = (1 1
+#  Fn   Fn-1)    1 0) ^ n for 자연수 n
+
+def cal(x):
+    if x == 1:
+        return A
+    else:  # x % 2 == 0 and x % 2 == 1
+        half = cal(x//2)
+        a = [[0, 0], [0, 0]]
+        a[0][0] = (half[0][0] * half[0][0] + half[0][1] * half[1][0]) % num
+        a[1][0] = (half[1][0] * half[0][0] + half[1][1] * half[1][0]) % num
+        a[0][1] = (half[0][0] * half[0][1] + half[0][1] * half[1][1]) % num
+        a[1][1] = (half[1][0] * half[0][1] + half[1][1] * half[1][1]) % num
+        if x % 2 == 0:
+            return a
+        else:  # x % 2 == 1
+            b = [[0, 0], [0, 0]]
+            b[0][0] = (a[0][0] * A[0][0] + a[0][1] * A[1][0]) % num
+            b[1][0] = (a[1][0] * A[0][0] + a[1][1] * A[1][0]) % num
+            b[0][1] = (a[0][0] * A[0][1] + a[0][1] * A[1][1]) % num
+            b[1][1] = (a[1][0] * A[0][1] + a[1][1] * A[1][1]) % num
+            return b
+
+if n == 1: print(A[0][0])
+else: print(cal(n - 1)[0][0])
+"""
+
+# 9376
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+for _ in range(T):
+    h, w = map(int, input().split())
+    for _ in range(h):
+        line = input().strip()  # 빈 공간 '.', 지나갈 수 없는 벽 '*', 문 '#', 죄수 '$'
+
+    # 두 죄수를 탈옥시키기 위해서 열어야 하는 문의 최솟값 출력
+
+
+
 
 
 
