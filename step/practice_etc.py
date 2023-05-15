@@ -267,17 +267,60 @@ if n == 1: print(A[0][0])
 else: print(cal(n - 1)[0][0])
 """
 
-# 9376
+# 9376 (0-1 BFS)
 
 import sys
+from collections import deque
 input = sys.stdin.readline
+inf = sys.maxsize
 T = int(input())
+move = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+def one_zero_bfs(a, b):
+    visited = [[-1 for _ in range(w + 2)] for _ in range(h + 2)]
+    q = deque([(a, b)])
+    visited[a][b] = 0
+    while len(q) > 0:
+        a, b = q.popleft()
+        for x in range(4):
+            na = a + move[x][0]
+            nb = b + move[x][1]
+            if 0 <= na < h + 2 and 0 <= nb < w + 2:
+                if visited[na][nb] == -1:
+                    if mapp[na][nb] == "." or mapp[na][nb] == "$":  # 문 안 열기
+                        visited[na][nb] = visited[a][b]
+                        q.appendleft((na, nb))
+                    elif mapp[na][nb] == "#":  # 문 열기
+                        visited[na][nb] = visited[a][b] + 1
+                        q.append((na, nb))
+    return visited
+
 for _ in range(T):
     h, w = map(int, input().split())
-    for _ in range(h):
-        line = input().strip()  # 빈 공간 '.', 지나갈 수 없는 벽 '*', 문 '#', 죄수 '$'
+    mapp = [['.' for _ in range(w + 2)]]
+    prisoner = []
+    for i in range(h):
+        line = list('.' + input().strip() + '.')  # 빈 공간 '.', 지나갈 수 없는 벽 '*', 문 '#', 죄수 '$'
+        for j in range(w + 2):
+            if line[j] == "$":
+                prisoner.append((i + 1, j))
+        mapp.append(line)
+    mapp.append(['.' for _ in range(w + 2)])
 
-    # 두 죄수를 탈옥시키기 위해서 열어야 하는 문의 최솟값 출력
+    one = one_zero_bfs(prisoner[0][0], prisoner[0][1])
+    two = one_zero_bfs(prisoner[1][0], prisoner[1][1])
+    three = one_zero_bfs(0, 0)
+
+    answer = inf
+    for i in range(h + 2):
+        for j in range(w + 2):
+            if one[i][j] != -1 and two[i][j] != -1 and three[i][j] != -1:
+                result = one[i][j] + two[i][j] + three[i][j]  # 해당 위치에서 문을 여는 개수
+                if mapp[i][j] == "*": continue  # 벽은 제외
+                if mapp[i][j] == "#": result -= 2  # 한 명만 열어도 되기 때문에 나머지 둘이 연 개수 빼줌
+                answer = min(answer, result)
+
+    print(answer)  # 두 죄수를 탈옥시키기 위해서 열어야 하는 문의 최솟값 출력
 
 
 
