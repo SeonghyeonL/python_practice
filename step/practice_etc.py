@@ -265,7 +265,7 @@ def cal(x):
 
 if n == 1: print(A[0][0])
 else: print(cal(n - 1)[0][0])
-"""
+
 
 # 9376 (0-1 BFS)
 
@@ -322,6 +322,51 @@ for _ in range(T):
 
     print(answer)  # 두 죄수를 탈옥시키기 위해서 열어야 하는 문의 최솟값 출력
 
+
+# 6549
+
+import sys
+input = sys.stdin.readline
+hist = list(map(int, input().split()))
+
+def findmax(a, b):  # 왼쪽 끝, 오른쪽 끝
+    if a == b: return hist[a]  # 너비 = 1, 높이 = hist[a]
+    # else (a != b)
+    mid = (a + b) // 2  # 가운데 (기준)
+    bound_h = min(hist[mid], hist[mid + 1])  # 가운데 높이 (최소)
+    bound_max = 2 * bound_h  # 가운데 높이 * width
+    bound_l = mid  # 가운데 기준 왼쪽 끝
+    bound_r = mid + 1  # 가운데 기준 오른쪽 끝
+    width = 2  # 너비는 2 이상
+    while True:
+        if (hist[bound_l] == 0 or bound_l == a) and (hist[bound_r] == 0 or bound_r == b):
+            break  # 왼쪽, 오른쪽 모두 여유가 없으면 탈출
+        elif hist[bound_l] == 0 or bound_l == a:  # 왼쪽에 여유가 없음
+            if hist[bound_r + 1] < bound_h: bound_h = hist[bound_r + 1]  # 작은 높이로 바꾸기
+            bound_r += 1  # 오른쪽으로 한 칸
+        elif hist[bound_r] == 0 or bound_r == b:  # 오른쪽에 여유가 없음
+            if hist[bound_l - 1] < bound_h: bound_h = hist[bound_l - 1]  # 작은 높이로 바꾸기
+            bound_l -= 1  # 왼쪽으로 한 칸
+        else:  # 왼쪽, 오른쪽 모두 여유가 있을 때
+            if hist[bound_l - 1] < hist[bound_r + 1]:  # 더 높은 오른쪽으로 확장
+                if hist[bound_r + 1] < bound_h: bound_h = hist[bound_r + 1]
+                bound_r += 1
+            else:  # 더 높은 왼쪽으로 확장
+                if hist[bound_l - 1] < bound_h: bound_h = hist[bound_l - 1]
+                bound_l -= 1
+        width += 1  # 확장했으므로 너비 증가
+        bound_max = max(bound_max, bound_h * width)  # 가운데 기준 최대 넓이
+    return max(findmax(a, mid), findmax(mid + 1, b), bound_max)  # 좌, 우, 가운데 중 최대
+
+while hist != [0]:
+    print(findmax(1, len(hist) - 1))
+    hist = list(map(int, input().split()))
+"""
+
+# 6087
+
+import sys
+input = sys.stdin.readline
 
 
 
