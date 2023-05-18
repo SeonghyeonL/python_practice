@@ -379,4 +379,5 @@ input = sys.stdin.readline
 
 # 0513 bad condition
 # 0517 hackerrank
+# 0518 interview (samsung)
 # https://www.acmicpc.net/workbook/view/4349
