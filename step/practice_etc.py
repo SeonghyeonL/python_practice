@@ -381,5 +381,6 @@ input = sys.stdin.readline
 # 0517 hackerrank
 # 0518 interview (samsung)
 # 0519 hackerrank
-# 0520 test (kt)
+# 0520 test (kt + kakaobrain)
+# 0521 rest
 # https://www.acmicpc.net/workbook/view/4349
