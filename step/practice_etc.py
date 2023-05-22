@@ -366,9 +366,38 @@ while hist != [0]:
 # 6087
 
 import sys
+from collections import deque
 input = sys.stdin.readline
-
-
+inf = sys.maxsize
+move = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+W, H = map(int, input().split())
+C = []
+maps = []
+for h in range(H):
+    temp = input().strip()
+    maps.append(temp)
+    for w in range(W):
+        if temp[w] == "C": C.append((h, w))
+# bfs
+check = [[inf for _ in range(W)] for _ in range(H)]
+check[C[0][0]][C[0][1]] = -1
+q = deque([(C[0][0], C[0][1])])
+while len(q) > 0:
+    y, x = q.popleft()
+    if y == C[1][0] and x == C[1][1]:  # 도착했으면 출력 후 종료
+        print(check[y][x])
+        break
+    for i in range(4):
+        ny = y + move[i][0]
+        nx = x + move[i][1]
+        while True:
+            if 0 <= ny < H and 0 <= nx < W and maps[ny][nx] != "*" and maps[ny][nx] >= maps[y][x] + 1:
+                # 범위 안에 있고, 벽도 아니고, 현재+1보다 그 값이 크거나 같을 때만 갱신
+                q.append((ny, nx))
+                maps[ny][nx] = maps[y][x] + 1
+                # 동일한 방향으로 계속 이동
+                ny += move[i][0]
+                nx += move[i][1]
 
 
 
