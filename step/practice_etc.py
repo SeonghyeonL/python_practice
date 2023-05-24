@@ -407,16 +407,65 @@ for i in range(4):
     if check[ty][tx][i] > -1:
         mini = min(mini, check[ty][tx][i])
 print(mini - 1)
-"""
+
 
 # 11066
 
 import sys
 input = sys.stdin.readline
+inf = sys.maxsize
 T = int(input())
 for _ in range(T):
     K = int(input())
     file = list(map(int, input().split()))
+    sums = [0, file[0]]
+    for k in range(1, K): sums.append(sums[k] + file[k])  # 연속합
+    find_min = [[0 for _ in range(K + 1)] for _ in range(K + 1)]
+    for size in range(1, K):  # 1 ~ K - 1
+        for start in range(1, K + 1 - size):
+            end = start + size  # 2 ~ K
+            temp = inf
+            for k in range(start, end):
+                # 어떤 구간의 최소 비용 구하기
+                # 좌측 그룹의 최소 비용 + 우측 그룹의 최소 비용 + 좌측 압축 수 + 우측 압축 수
+                # 이때, 좌측 압축 수 + 우측 압축 수 = 그 구간의 모든 수의 합
+                temp = min(temp, find_min[start][k] + find_min[k + 1][end] + sums[end] - sums[start - 1])
+            find_min[start][end] = temp
+    print(find_min[1][K])
+
+
+# 11049
+
+import sys
+input = sys.stdin.readline
+inf = sys.maxsize
+N = int(input())
+matrix = []
+for _ in range(N):
+    r, c = map(int, input().split())
+    matrix.append((r, c))
+find_min = [[0 for _ in range(N)] for _ in range(N)]  # 연산 횟수 합, r, c
+for size in range(1, N):
+    for start in range(N - size):
+        end = start + size  # 1 ~ N - 1
+        temp = inf
+        for i in range(start, end):
+            # 어떤 구간의 최소 횟수 구하기
+            # 왼쪽 최소 횟수 + 오른쪽 최소 횟수 + 왼쪽 r * 왼쪽 c * 오른쪽 c
+            temp = min(temp, find_min[start][i] + find_min[i + 1][end] +
+                       matrix[start][0] * matrix[i][1] * matrix[end][1])
+        find_min[start][end] = temp
+print(find_min[0][N - 1])
+"""
+
+# 4991
+
+import sys
+input = sys.stdin.readline
+
+
+
+
 
 
 
