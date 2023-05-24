@@ -361,7 +361,7 @@ def findmax(a, b):  # 왼쪽 끝, 오른쪽 끝
 while hist != [0]:
     print(findmax(1, len(hist) - 1))
     hist = list(map(int, input().split()))
-"""
+
 
 # 6087
 
@@ -380,31 +380,43 @@ for h in range(H):
             if fy == -1 and fx == -1: fy, fx = h, w
             else: ty, tx = h, w
 # bfs
-check = [[inf for _ in range(W)] for _ in range(H)]
-check[fy][fx] = -1
-q = deque([(fy, fx)])
+# check 배열에는 방문 여부 + 이동 방향의 변경 횟수
+check = [[[-1 for _ in range(4)] for _ in range(W)] for _ in range(H)]
+for i in range(4): check[fy][fx][i] = 0
+q = deque([(fy, fx, -1)])  # 좌표, 방향 - 나중에 결과에서 1 빼줄 것
 while len(q) > 0:
-    y, x = q.popleft()
-    if y == ty and x == tx:  # 도착했으면 종료
-        print(check[ty][tx])
-        break
+    y, x, d = q.popleft()
     for i in range(4):
-        ny = y
-        nx = x
-        while True:
-            # 동일한 방향으로 계속 이동
-            ny += move[i][0]
-            nx += move[i][1]
-            # 범위 안에 있고, 벽도 아니고, 현재+1보다 값이 크거나 같을 때만 갱신
-            if not (0 <= ny < H and 0 <= nx < W): break
-            if maps[ny][nx] == "*": break
-            if check[ny][nx] < check[y][x] + 1: break
-            q.append((ny, nx))
-            check[ny][nx] = check[y][x] + 1
-        # 시간 단축
-        if check[ty][tx] != inf: break
-    if check[ty][tx] != inf: break
-print(check[ty][tx])
+        ny = y + move[i][0]
+        nx = x + move[i][1]
+        # 범위 안에 있고, 벽도 아닐 때만 갱신
+        if not (0 <= ny < H and 0 <= nx < W): continue
+        if maps[ny][nx] == "*": continue
+        if d == i:  # 방향 일치
+            # 방문을 안 했었거나, 방문했었으나 변경 횟수가 더 많은 경우
+            if check[ny][nx][i] == -1 or check[ny][nx][i] > check[y][x][d]:
+                check[ny][nx][i] = check[y][x][d]
+                q.append((ny, nx, i))
+        else:  # 방향 불일치
+            # 방문을 안 했었거나, 방문했었으나 변경 횟수가 1 더한 것보다 더 많은 경우
+            if check[ny][nx][i] == -1 or check[ny][nx][i] > check[y][x][d] + 1:
+                check[ny][nx][i] = check[y][x][d] + 1
+                q.append((ny, nx, i))
+mini = inf
+for i in range(4):
+    if check[ty][tx][i] > -1:
+        mini = min(mini, check[ty][tx][i])
+print(mini - 1)
+"""
+
+# 11066
+
+import sys
+input = sys.stdin.readline
+T = int(input())
+for _ in range(T):
+    K = int(input())
+    file = list(map(int, input().split()))
 
 
 
@@ -413,10 +425,10 @@ print(check[ty][tx])
 
 
 
-# 0513 bad condition
+# 0513 condition
 # 0517 hackerrank
 # 0518 interview (samsung)
 # 0519 hackerrank
 # 0520 test (kt + kakaobrain)
-# 0521 rest
+# 0521 condition
 # https://www.acmicpc.net/workbook/view/4349
