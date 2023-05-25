@@ -461,8 +461,59 @@ print(find_min[0][N - 1])
 # 4991
 
 import sys
+from collections import deque
 input = sys.stdin.readline
+inf = sys.maxsize
+move = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
+while True:
+    w, h = map(int, input().split())
+    if w == 0 and h == 0: break
+    room = []
+    robot = (0, 0)
+    trash = []
+    for _ in range(h): room.append(list(input().strip()))
+    for a in range(h):
+        for b in range(w):
+            if room[a][b] == "o": robot = (a, b)
+            elif room[a][b] == "*": trash.append((a, b))
+
+    # 2 ** len(trash) + 1 경우의 수만큼의 3차원 배열 (for 비트마스킹)
+    visit = [[[inf for _ in range(w)] for _ in range(h)] for _ in range(2 ** len(trash) + 1)]
+
+    # bfs
+    ans = inf
+    q = deque([(robot[0], robot[1], 0, 0, 0)])
+    while len(q) > 0:
+        row, col, cnt, time, dirty_status = q.popleft()
+        if cnt == len(trash):
+            ans = min(ans, time)
+
+        for i in range(4):
+            nrow = row + move[i][0]
+            ncol = col + move[i][1]
+            if 0 <= nrow < h and 0 <= ncol < w:
+                # 깨끗한 칸 또는 청소기 시작 위치
+                if room[nrow][ncol] == "." or room[nrow][ncol] == "o":
+                    # 현재의 쓰레기 상태에서 방문 여부 확인 후, 방문하지 않았으면 방문 처리
+                    if visit[dirty_status][nrow][ncol] > time + 1:
+                        visit[dirty_status][nrow][ncol] = time + 1
+                        q.append((nrow, ncol, cnt, time + 1, dirty_status))
+                # 더러운 칸
+                elif room[nrow][ncol] == "*":
+                    # 처음 만난 쓰레기라면, 쓰레기 상태 업데이트 후 방문 처리
+                    if dirty_status & 2 ** trash.index((nrow, ncol)) == 0:
+                        dirty_status = dirty_status | 2 ** trash.index((nrow, ncol))
+                        visit[dirty_status][nrow][ncol] = time + 1
+                        q.append((nrow, ncol, cnt + 1, time + 1, dirty_status))
+                    # 치웠던 쓰레기라면, 현재의 쓰레기 상태에서 방문 여부 확인 후, 방문하지 않았으면 방문 처리
+                    else:
+                        if visit[dirty_status][nrow][ncol] > time + 1:
+                            visit[dirty_status][nrow][ncol] = time + 1
+                            q.append((nrow, ncol, cnt, time + 1, dirty_status))
+
+    if ans == inf: print(-1)
+    else: print(ans)
 
 
 
