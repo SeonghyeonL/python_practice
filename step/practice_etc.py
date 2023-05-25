@@ -456,7 +456,7 @@ for size in range(1, N):
                        matrix[start][0] * matrix[i][1] * matrix[end][1])
         find_min[start][end] = temp
 print(find_min[0][N - 1])
-"""
+
 
 # 4991
 
@@ -503,9 +503,9 @@ while True:
                 elif room[nrow][ncol] == "*":
                     # 처음 만난 쓰레기라면, 쓰레기 상태 업데이트 후 방문 처리
                     if dirty_status & 2 ** trash.index((nrow, ncol)) == 0:
-                        dirty_status = dirty_status | 2 ** trash.index((nrow, ncol))
-                        visit[dirty_status][nrow][ncol] = time + 1
-                        q.append((nrow, ncol, cnt + 1, time + 1, dirty_status))
+                        next_dirty_status = dirty_status | 2 ** trash.index((nrow, ncol))
+                        visit[next_dirty_status][nrow][ncol] = time + 1
+                        q.append((nrow, ncol, cnt + 1, time + 1, next_dirty_status))
                     # 치웠던 쓰레기라면, 현재의 쓰레기 상태에서 방문 여부 확인 후, 방문하지 않았으면 방문 처리
                     else:
                         if visit[dirty_status][nrow][ncol] > time + 1:
@@ -514,10 +514,16 @@ while True:
 
     if ans == inf: print(-1)
     else: print(ans)
+"""
 
+# 7579
 
-
-
+import sys
+input = sys.stdin.readline
+N, M = map(int, input().split())  # N개의 앱, 메모리 M 바이트 확보
+m = list(map(int, input().split()))  # 사용 중인 메모리의 바이트 수
+c = list(map(int, input().split()))  # 비활성화 하기 위한 비용
+# M 바이트를 확보하기 위한 앱 비활성화의 최소의 비용 출력
 
 
 
