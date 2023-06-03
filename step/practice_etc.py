@@ -538,5 +538,6 @@ c = list(map(int, input().split()))  # 비활성화 하기 위한 비용
 # 0520 test (kt + kakaobrain)
 # 0521 condition
 # 0527 condition
-# 0528,29,30,31,1,2,3 test review
+# 0528,29,30,31 test review
+# 0601,2,3 test review
 # https://www.acmicpc.net/workbook/view/4349
