@@ -539,5 +539,5 @@ c = list(map(int, input().split()))  # 비활성화 하기 위한 비용
 # 0521 condition
 # 0527 condition
 # 0528,29,30,31 test review
-# 0601,2,3,4,5,6 test review
+# 0601,2,3,4,5,6,7 test review
 # https://www.acmicpc.net/workbook/view/4349
