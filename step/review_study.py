@@ -1,4 +1,5 @@
-import sys
+"""
+#
 
 line = [[2, -1, 4], [-2, -1, 4], [0, -1, 1], [5, -8, -12], [5, 8, 12]]
 
@@ -31,3 +32,38 @@ for i in range(len(answer_a)):
     answer.append(now)
 
 print(answer)
+
+
+#
+
+babbling = ["aya", "yee", "u", "maa", "wyeoo"]
+answer = 0
+for bab in babbling:
+    bab_list = list(bab)
+    last = len(bab_list)
+    idx = 0
+    while True:
+        if idx == last:
+            answer += 1
+            break
+        if idx <= last - 3:
+            if bab_list[idx] == "a" and bab_list[idx + 1] == "y" and bab_list[idx + 2] == "a":
+                idx += 3
+                continue
+            elif bab_list[idx] == "w" and bab_list[idx + 1] == "o" and bab_list[idx + 2] == "o":
+                idx += 3
+                continue
+        if idx <= last - 2:
+            if bab_list[idx] == "y" and bab_list[idx + 1] == "e":
+                idx += 2
+                continue
+            elif bab_list[idx] == "m" and bab_list[idx + 1] == "a":
+                idx += 2
+                continue
+        break
+
+print(answer)
+"""
+
+#
+
