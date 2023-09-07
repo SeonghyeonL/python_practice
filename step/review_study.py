@@ -63,7 +63,82 @@ for bab in babbling:
         break
 
 print(answer)
+
+
+#
+
+def solution(A, B):
+    for cnt in range(len(A)):
+        if A == B:
+            return cnt
+        A = A[-1] + A[:-1]
+
+    return -1
+
+
+#
+
+def solution(A, B):
+    A, B = list(A), list(B)
+
+    for cnt in range(len(A)):
+        if A == B:
+            return cnt
+
+        A.insert(0, A.pop())
+
+    return -1
+
+
+#
+
+from collections import deque
+
+def solution(A, B):
+    A, B = deque(A), deque(B)
+
+    for cnt in range(len(A)):
+        if A == B:
+            return cnt
+
+        A.rotate()
+
+    return -1
+
+
+#
+
+def solution(A,B):
+    BB = B*2
+    return BB.find(A)
+
+
+#
+
+board = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 1, 0, 0], [0, 0, 0, 0, 0]]
+n = len(board)
+for i in range(n):
+    for j in range(n):
+        if board[i][j] == 1:
+            if i - 1 >= 0 and board[i - 1][j] == 0: board[i - 1][j] = 2
+            if i + 1 < n and board[i + 1][j] == 0: board[i + 1][j] = 2
+            if j - 1 >= 0 and board[i][j - 1] == 0: board[i][j - 1] = 2
+            if j + 1 < n and board[i][j + 1] == 0: board[i][j + 1] = 2
+            if i - 1 >= 0 and j - 1 >= 0 and board[i - 1][j - 1] == 0:
+                board[i - 1][j - 1] = 2
+            if i - 1 >= 0 and j + 1 < n and board[i - 1][j + 1] == 0:
+                board[i - 1][j + 1] = 2
+            if i + 1 < n and j - 1 >= 0 and board[i + 1][j - 1] == 0:
+                board[i + 1][j - 1] = 2
+            if i + 1 < n and j + 1 < n and board[i + 1][j + 1] == 0:
+                board[i + 1][j + 1] = 2
+answer = 0
+for i in range(n):
+    for j in range(n):
+        if board[i][j] == 0: answer += 1
+print(answer)
 """
 
 #
+
 
