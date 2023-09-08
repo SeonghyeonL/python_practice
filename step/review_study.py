@@ -137,8 +137,53 @@ for i in range(n):
     for j in range(n):
         if board[i][j] == 0: answer += 1
 print(answer)
+
+
+#
+
+numer1, denom1, numer2, denom2 = 5, 5, 5, 5
+numer = numer1 * denom2 + numer2 * denom1
+denom = denom1 * denom2
+gcd = 1
+if numer > denom:
+    if numer % denom == 0:
+        gcd = denom
+    else:
+        for i in range(int(numer ** 0.5), 1, -1):
+            if numer % i == 0 and denom % i == 0:
+                gcd = i
+                break
+else:
+    if denom % numer == 0:
+        gcd = numer
+    else:
+        for i in range(int(denom ** 0.5), 1, -1):
+            if numer % i == 0 and denom % i == 0:
+                gcd = i
+                break
+answer = [numer // gcd, denom // gcd]
+print(answer)
+
+
+#
+
+spell = ["p", "o", "s"]
+dic = ["sod", "eocd", "qixm", "adio", "soo"]
+for d in dic:
+    if len(d) == len(spell):
+        s = spell.copy()
+        for i in range(len(d)):
+            if d[i] in s:
+                s.remove(d[i])
+            elif d[i] not in s:
+                break
+            if i == len(d) - 1:
+                print(1)
+print(2)
 """
 
 #
+
+
 
 
