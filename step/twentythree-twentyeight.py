@@ -1320,7 +1320,7 @@ while len(queue) > 0:
                 visit[x][y][1] = visit[temp[0]][temp[1]][temp[2]] + 1
                 queue.append([x, y, 1])
 print(-1)
-"""
+
 
 # 1707
 
@@ -1357,6 +1357,6 @@ for _ in range(K):
         if goall == True and cal(i) == False: goall = False
     if goall: print("YES")
     else: print("NO")
-
+"""
 
 

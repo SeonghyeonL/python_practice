@@ -180,10 +180,21 @@ for d in dic:
             if i == len(d) - 1:
                 print(1)
 print(2)
-"""
+
 
 #
 
+n = 40
+cnt = 0
+now = 1
+while True:
+    if now % 3 == 0 or now // 100 == 3 or (now % 100) // 10 == 3 or now % 10 == 3:
+        now += 1
+        continue
+    cnt += 1
+    if cnt == n: break
+    now += 1
+print(now)
+"""
 
-
-
+#

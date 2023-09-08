@@ -458,7 +458,7 @@ for n in range(N):
                 tf[ord(word[i])-ord('a')] = True
         if i == len(word) - 1: cnt += 1
 print(cnt)
-"""
+
 
 # 25206
 
@@ -480,5 +480,5 @@ for i in range(20):
     elif grade == 'D0': sum += 1.0 * int_time
     elif grade == 'P': time_sum -= int_time
 print(sum / time_sum)
-
+"""
 
